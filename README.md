@@ -18,12 +18,12 @@ dependencies:
 ```crystal
 require "awscr-s3"
 ```
-**Creating a `Presigned::Form`.**
+## **Creating a `Presigned::Form`.**
 
 ```crystal
 form = Awscr::S3::Presigned::Form.build("us-east-1", "access key", "secret key") do |form|
   form.expiration(Time.epoch(Time.now.epoch + 1000))
-  form.condition("bucket", BUCKET)
+  form.condition("bucket", "mybucket")
   form.condition("acl", "public-read")
   form.condition("key", SecureRandom.uuid)
   form.condition("Content-Type", "text/plain")
@@ -43,7 +43,7 @@ puts form.to_html
 form.submit(IO::Memory.new("Hello, S3!"))
 ```
 
-**Creating a `Presigned::Url`.**
+## **Creating a `Presigned::Url`.**
 
 ```crystal
 options = Awscr::S3::Presigned::Url::Options.new(
@@ -59,6 +59,5 @@ options = Awscr::S3::Presigned::Url::Options.new(
 url = Awscr::S3::Presigned::Url.new(options)
 p url.for(:put)
 ```
- 
 [Examples](https://github.com/taylorfinnell/awscr-s3/tree/master/examples)
 
