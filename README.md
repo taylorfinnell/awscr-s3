@@ -37,10 +37,11 @@ end
 puts form.to_html
 ```
 
-**Submitting the form via `HTTP::Client`.**
+**Submitting the form.**
 
 ```crystal
-form.submit(IO::Memory.new("Hello, S3!"))
+data = IO::Memory.new("Hello, S3!")
+form.submit(data)
 ```
 
 ## **Creating a `Presigned::Url`.**
