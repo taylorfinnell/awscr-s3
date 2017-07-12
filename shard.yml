@@ -1,0 +1,18 @@
+name: awscr-s3
+version: 0.1.0
+
+authors:
+  - Taylor Finnell <tmfinnell@gmail.com>
+
+crystal: 0.22.0
+
+license: MIT
+
+dependencies:
+  awscr-signer:
+    github: taylorfinnell/awscr-signer
+    version: 0.3.4
+
+development_dependencies:
+  timecop:
+    github: waterlink/timecop.cr
