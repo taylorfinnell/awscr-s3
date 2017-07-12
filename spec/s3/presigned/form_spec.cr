@@ -22,8 +22,10 @@ module Awscr
       describe Form do
         describe ".build" do
           it "builds a form" do
-            creds = Signer::Credentials.new("test", "test")
-            form = Form.build("us-east-1", creds) do |f|
+            form = Form.build(
+              region: "us-east-1",
+              aws_access_key: "test",
+              aws_secret_key: "test") do |f|
               f.condition("bucket", "2")
             end
 
@@ -34,9 +36,12 @@ module Awscr
 
         describe "fields" do
           it "is a field collection" do
-            creds = Signer::Credentials.new("test", "test")
-            post = Post.new("us-east-1", creds)
-            form = Form.new(post, HTTP::Client.new(""))
+            post = Post.new(
+              region: "us-east-1",
+              aws_access_key: "test",
+              aws_secret_key: "test"
+            )
+            form = Form.new(post, FakeClient.new("host"))
 
             form.fields.should be_a(FieldCollection)
           end
@@ -44,9 +49,12 @@ module Awscr
 
         describe "to_html" do
           it "returns an html printer" do
-            creds = Signer::Credentials.new("test", "test")
-            post = Post.new("us-east-1", creds)
-            form = Form.new(post, HTTP::Client.new(""))
+            post = Post.new(
+              region: "us-east-1",
+              aws_access_key: "test",
+              aws_secret_key: "test"
+            )
+            form = Form.new(post, FakeClient.new("host"))
 
             form.to_html.should be_a(HtmlPrinter)
           end
@@ -54,8 +62,11 @@ module Awscr
 
         describe "submit" do
           it "sends a reasonable request over http" do
-            creds = Signer::Credentials.new("test", "test")
-            post = Presigned::Post.new("us-east-1", creds)
+            post = Post.new(
+              region: "us-east-1",
+              aws_access_key: "test",
+              aws_secret_key: "test"
+            )
             time = Time.epoch(1)
 
             post.build do |builder|

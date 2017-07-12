@@ -14,7 +14,7 @@ module Awscr
         # Building a `Form`
         #
         # ```
-        # Awscr::Signer::Presigned::Form.build(REGION, creds) do |form|
+        # Awscr::S3::Presigned::Form.build(REGION, key, secert) do |form|
         #   form.expiration(Time.epoch(Time.now.epoch + 1000))
         #   form.condition("bucket", BUCKET)
         #   form.condition("acl", "public-read")
@@ -23,8 +23,8 @@ module Awscr
         #   form.condition("success_action_status", "201")
         # end
         # ```
-        def self.build(region, credentials, &block)
-          post = Post.new(region, credentials)
+        def self.build(region, aws_access_key, aws_secret_key, &block)
+          post = Post.new(region, aws_access_key, aws_secret_key)
           post.build do |p|
             yield p
           end

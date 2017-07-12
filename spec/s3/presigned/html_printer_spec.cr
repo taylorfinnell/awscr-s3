@@ -4,11 +4,22 @@ module Awscr
   module S3
     module Presigned
       describe HtmlPrinter do
-        it "generates the same html each call" do
-          creds = Signer::Credentials.new("test", "test")
-          time = Time.epoch(1)
+        Spec.before_each do
+          Timecop.freeze(Time.epoch(1))
+        end
 
-          post = Presigned::Post.new("region", creds, time)
+        Spec.after_each do
+          Timecop.reset
+        end
+
+        it "generates the same html each call" do
+          time = Time.epoch(1)
+          post = Post.new(
+            region: "us-east-1",
+            aws_access_key: "test",
+            aws_secret_key: "test"
+          )
+
           post.build do |b|
             b.expiration(time)
             b.condition("bucket", "test")
@@ -21,10 +32,14 @@ module Awscr
         end
 
         it "prints html" do
-          creds = Signer::Credentials.new("test", "test")
           time = Time.epoch(1)
 
-          post = Presigned::Post.new("region", creds, time)
+          post = Post.new(
+            region: "region",
+            aws_access_key: "test",
+            aws_secret_key: "test"
+          )
+
           post.build do |b|
             b.expiration(time)
             b.condition("bucket", "test")

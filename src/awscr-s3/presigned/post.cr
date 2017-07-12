@@ -6,10 +6,11 @@ module Awscr
       # Represents the URL and fields required to send a HTTP form POST to S3
       # for object uploading.
       class Post
-        def initialize(region : String, credentials : Signer::Credentials, time : Time = Time.utc_now)
+        def initialize(region : String, aws_access_key : String,
+                       aws_secret_key : String, time : Time = Time.utc_now)
           @scope = Signer::Scope.new(region, "s3", time)
           @policy = Policy.new
-          @credentials = credentials
+          @credentials = Signer::Credentials.new(aws_access_key, aws_secret_key)
         end
 
         # Build a post object by adding fields
