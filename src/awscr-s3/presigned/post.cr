@@ -10,7 +10,7 @@ module Awscr
                        aws_secret_key : String, time : Time = Time.utc_now)
           @scope = Signer::Scope.new(region, "s3", time)
           @policy = Policy.new
-          @credentials = Signer::Credentials.new(aws_access_key, aws_access_key)
+          @credentials = Signer::Credentials.new(aws_access_key, aws_secret_key)
         end
 
         # Build a post object by adding fields
