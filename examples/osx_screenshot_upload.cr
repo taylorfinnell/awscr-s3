@@ -10,9 +10,7 @@ KEY    = ENV["AWS_KEY"]
 SECRET = ENV["AWS_SECRET"]
 REGION = ENV["AWS_REGION"]
 
-creds = Awscr::Signer::Credentials.new(KEY, SECRET)
-
-form = Awscr::Signer::Presigned::Form.build(REGION, creds) do |form|
+form = Awscr::S3::Presigned::Form.build(REGION, KEY, SECRET) do |form|
   form.expiration(Time.epoch(Time.now.epoch + 1000))
   form.condition("bucket", BUCKET)
   form.condition("acl", "public-read")

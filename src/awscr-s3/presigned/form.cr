@@ -14,7 +14,7 @@ module Awscr
         # Building a `Form`
         #
         # ```
-        # Awscr::Signer::Presigned::Form.build(REGION, creds) do |form|
+        # Awscr::S3::Presigned::Form.build(REGION, key, secert) do |form|
         #   form.expiration(Time.epoch(Time.now.epoch + 1000))
         #   form.condition("bucket", BUCKET)
         #   form.condition("acl", "public-read")
