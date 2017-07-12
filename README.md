@@ -21,7 +21,7 @@ require "awscr-s3"
 **Creating a `Presigned::Form`.**
 
 ```crystal
-form = Awscr::S3::Presigned::Form.build("us-east-1", credentials) do |form|
+form = Awscr::S3::Presigned::Form.build("us-east-1", "access key", "secret key") do |form|
   form.expiration(Time.epoch(Time.now.epoch + 1000))
   form.condition("bucket", BUCKET)
   form.condition("acl", "public-read")
@@ -46,12 +46,18 @@ form.submit(IO::Memory.new("Hello, S3!"))
 **Creating a `Presigned::Url`.**
 
 ```crystal
-options = Awscr::S3::Presigned::Url::Options.new(object: "test.txt", bucket: "mybucket", additional_options: {
+options = Awscr::S3::Presigned::Url::Options.new(
+   aws_access_key: "key",
+   aws_secret_key: "secret",
+   region: "us-east-1",
+   object: "test.txt",
+   bucket: "mybucket",
+   additional_options: {
   "Content-Type" => "image/png"
 })
 
-url = Awscr::S3::Presigned::Url.new(credentials, options)
-url.for(:put)
+url = Awscr::S3::Presigned::Url.new(options)
+p url.for(:put)
 ```
  
 [Examples](https://github.com/taylorfinnell/awscr-s3/tree/master/examples)
