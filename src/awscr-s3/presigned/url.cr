@@ -29,7 +29,7 @@ module Awscr
         end
 
         def initialize(@region : String, @credentials : Signer::Credentials, @options : Options)
-          @scope = Signer::Scope.new(@region, "s3", Time.now)
+          @scope = Signer::Scope.new(@region, "s3")
         end
 
         # Create a Presigned::Url link.
