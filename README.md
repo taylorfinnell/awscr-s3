@@ -1,4 +1,5 @@
 # awscr-s3
+[![CircleCI](https://circleci.com/gh/taylorfinnell/awscr-s3.svg?style=svg)](https://circleci.com/gh/taylorfinnell/awscr-s3)
 
 S3 access via Crystal
 
