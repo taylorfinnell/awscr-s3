@@ -53,5 +53,5 @@ url = Awscr::S3::Presigned::Url.new(credentials, options)
 url.for(:put)
 ```
  
-[Examples](https://github.com/taylorfinnell/awscr-signer/tree/master/examples)
+[Examples](https://github.com/taylorfinnell/awscr-s3/tree/master/examples)
 
