@@ -11,14 +11,14 @@ object = "/#{SecureRandom.uuid}"
 
 options = Awscr::S3::Presigned::Url::Options.new(
   region: REGION,
-  object: object, 
-  bucket: BUCKET, 
+  object: object,
+  bucket: BUCKET,
   aws_access_key: KEY,
   aws_secret_key: SECRET,
   additional_options: {
-  "x-amz-acl"    => "public-read",
-  "Content-Type" => "image/png",
-})
+    "x-amz-acl"    => "public-read",
+    "Content-Type" => "image/png",
+  })
 
 url = Awscr::S3::Presigned::Url.new(options)
 

@@ -1,3 +1,8 @@
 module Awscr::S3
-  VERSION = "0.1.0"
+  MAJOR = "0"
+  MINOR = "1"
+  PATCH = "0"
+
+  # Current version of Awscr::S3.
+  VERSION = [MAJOR, MINOR, PATCH].join(".")
 end

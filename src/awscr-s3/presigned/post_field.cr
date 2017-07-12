@@ -1,11 +1,14 @@
 module Awscr
   module S3
     module Presigned
-      # a field in a `Presigned::Post`
+      # A field in a `Presigned::Post`
       abstract class PostField
         include Comparable(PostField)
 
+        # The key of the field
         getter key
+
+        # The value of the field
         getter value
 
         def initialize(@key : String, @value : String)

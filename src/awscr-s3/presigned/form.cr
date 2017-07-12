@@ -14,11 +14,11 @@ module Awscr
         # Building a `Form`
         #
         # ```
-        # Awscr::S3::Presigned::Form.build(REGION, key, secert) do |form|
+        # Awscr::S3::Presigned::Form.build("us-east-1", "aws key", "aws secret") do |form|
         #   form.expiration(Time.epoch(Time.now.epoch + 1000))
-        #   form.condition("bucket", BUCKET)
+        #   form.condition("bucket", "my bucket")
         #   form.condition("acl", "public-read")
-        #   form.condition("key", "key")
+        #   form.condition("key", "helloworld.png")
         #   form.condition("Content-Type", "image/png")
         #   form.condition("success_action_status", "201")
         # end
@@ -37,7 +37,7 @@ module Awscr
           @client = client
         end
 
-        # Submit the form
+        # Submit the `Form`.
         def submit(io : IO)
           @client.post("/", headers, body(io).to_s)
         end
@@ -47,12 +47,12 @@ module Awscr
           HtmlPrinter.new(self)
         end
 
-        # The url of the form
+        # The url of the form.
         def url
           @post.url
         end
 
-        # The fields of the form
+        # The fields of the form.
         def fields
           @post.fields
         end

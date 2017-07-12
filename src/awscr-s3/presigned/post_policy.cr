@@ -7,7 +7,10 @@ module Awscr
       class Policy
         @expiration : Time?
 
+        # The expiration time of this policy
         getter expiration
+
+        # The policy fields
         getter fields
 
         def initialize
