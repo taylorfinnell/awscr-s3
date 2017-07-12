@@ -1,6 +1,6 @@
 # awscr-s3
 
-TODO: Write a description here
+S3 access via Crystal
 
 ## Installation
 
@@ -9,7 +9,7 @@ Add this to your application's `shard.yml`:
 ```yaml
 dependencies:
   awscr-s3:
-    github: [your-github-name]/awscr-s3
+    github: taylorfinnell/awscr-s3
 ```
 
 ## Usage
@@ -17,21 +17,41 @@ dependencies:
 ```crystal
 require "awscr-s3"
 ```
+**Creating a `Presigned::Form`.**
 
-TODO: Write usage instructions here
+```crystal
+form = Awscr::S3::Presigned::Form.build("us-east-1", credentials) do |form|
+  form.expiration(Time.epoch(Time.now.epoch + 1000))
+  form.condition("bucket", BUCKET)
+  form.condition("acl", "public-read")
+  form.condition("key", SecureRandom.uuid)
+  form.condition("Content-Type", "text/plain")
+  form.condition("success_action_status", "201")
+end
+```
 
-## Development
+**Converting the form to raw HTML (for browser uploads, etc).**
 
-TODO: Write development instructions here
+```crystal
+puts form.to_html
+```
 
-## Contributing
+**Submitting the form via `HTTP::Client`.**
 
-1. Fork it ( https://github.com/[your-github-name]/awscr-s3/fork )
-2. Create your feature branch (git checkout -b my-new-feature)
-3. Commit your changes (git commit -am 'Add some feature')
-4. Push to the branch (git push origin my-new-feature)
-5. Create a new Pull Request
+```crystal
+form.submit(IO::Memory.new("Hello, S3!"))
+```
 
-## Contributors
+**Creating a `Presigned::Url`.**
 
-- [[your-github-name]](https://github.com/[your-github-name]) Taylor Finnell - creator, maintainer
+```crystal
+options = Awscr::S3::Presigned::Url::Options.new(object: "test.txt", bucket: "mybucket", additional_options: {
+  "Content-Type" => "image/png"
+})
+
+url = Awscr::S3::Presigned::Url.new(credentials, options)
+url.for(:put)
+```
+ 
+[Examples](https://github.com/taylorfinnell/awscr-signer/tree/master/examples)
+
