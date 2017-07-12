@@ -9,4 +9,3 @@ struct Time
 end
 
 require "../src/awscr-s3"
-

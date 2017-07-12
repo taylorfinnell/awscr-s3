@@ -4,26 +4,43 @@ module Awscr
   module S3
     module Presigned
       describe Post do
+        Spec.before_each do
+          Timecop.freeze(Time.epoch(1))
+        end
+
+        Spec.after_each do
+          Timecop.reset
+        end
+
         describe "valid?" do
           it "returns true if bucket and policy are valid" do
-            creds = Signer::Credentials.new("test", "test")
-            post = Post.new("us-east-1", creds)
+            post = Post.new(
+              region: "us-east-1",
+              aws_access_key: "test",
+              aws_secret_key: "test"
+            )
             post.build { |b| b.condition("bucket", "t"); b.expiration(Time.now) }
 
             post.valid?.should be_true
           end
 
           it "returns false if bucket is missing" do
-            creds = Signer::Credentials.new("test", "test")
-            post = Post.new("us-east-1", creds)
+            post = Post.new(
+              region: "us-east-1",
+              aws_access_key: "test",
+              aws_secret_key: "test"
+            )
             post.build { |b| b.expiration(Time.now) }
 
             post.valid?.should be_false
           end
 
           it "returns false if policy is not valid" do
-            creds = Signer::Credentials.new("test", "test")
-            post = Post.new("us-east-1", creds)
+            post = Post.new(
+              region: "us-east-1",
+              aws_access_key: "test",
+              aws_secret_key: "test"
+            )
             post.build { |b| b.condition("bucket", "t") }
 
             post.valid?.should be_false
@@ -33,8 +50,11 @@ module Awscr
         describe "fields" do
           it "generates the same fields each time" do
             time = Time.epoch(1)
-            creds = Signer::Credentials.new("test", "test")
-            post = Post.new("us-east-1", creds, time)
+            post = Post.new(
+              region: "us-east-1",
+              aws_access_key: "test",
+              aws_secret_key: "test",
+            )
             post.build { |b| b.condition("bucket", "t"); b.expiration(time) }
 
             post.fields.to_a.should eq(post.fields.to_a)
@@ -42,8 +62,11 @@ module Awscr
 
           it "contains the policy field" do
             time = Time.epoch(1)
-            creds = Signer::Credentials.new("test", "test")
-            post = Post.new("us-east-1", creds, time)
+            post = Post.new(
+              region: "us-east-1",
+              aws_access_key: "test",
+              aws_secret_key: "test",
+            )
             post.build { |b| b.condition("bucket", "t"); b.expiration(time) }
 
             field = post.fields.select { |f| f.key == "policy" }
@@ -53,8 +76,11 @@ module Awscr
 
           it "contains the signature field" do
             time = Time.epoch(1)
-            creds = Signer::Credentials.new("test", "test")
-            post = Post.new("us-east-1", creds, time)
+            post = Post.new(
+              region: "us-east-1",
+              aws_access_key: "test",
+              aws_secret_key: "test"
+            )
             post.build { |b| b.condition("bucket", "t"); b.expiration(time) }
 
             field = post.fields.select { |f| f.key == "x-amz-signature" }
@@ -64,8 +90,11 @@ module Awscr
 
           it "contains the credential field" do
             time = Time.epoch(1)
-            creds = Signer::Credentials.new("test", "test")
-            post = Post.new("us-east-1", creds, time)
+            post = Post.new(
+              region: "us-east-1",
+              aws_access_key: "test",
+              aws_secret_key: "test"
+            )
             post.build { |b| b.condition("bucket", "t"); b.expiration(time) }
 
             field = post.fields.select { |f| f.key == "x-amz-credential" }
@@ -75,8 +104,11 @@ module Awscr
 
           it "contains the algorithm field" do
             time = Time.epoch(1)
-            creds = Signer::Credentials.new("test", "test")
-            post = Post.new("us-east-1", creds, time)
+            post = Post.new(
+              region: "us-east-1",
+              aws_access_key: "test",
+              aws_secret_key: "test"
+            )
             post.build { |b| b.condition("bucket", "t"); b.expiration(time) }
 
             field = post.fields.select { |f| f.key == "x-amz-algorithm" }
@@ -86,8 +118,11 @@ module Awscr
 
           it "contains the date field" do
             time = Time.epoch(1)
-            creds = Signer::Credentials.new("test", "test")
-            post = Post.new("us-east-1", creds, time)
+            post = Post.new(
+              region: "us-east-1",
+              aws_access_key: "test",
+              aws_secret_key: "test"
+            )
             post.build { |b| b.condition("bucket", "t"); b.expiration(time) }
 
             field = post.fields.select { |f| f.key == "x-amz-date" }
@@ -96,8 +131,11 @@ module Awscr
           end
 
           it "is a field collection" do
-            creds = Signer::Credentials.new("test", "test")
-            post = Post.new("us-east-1", creds)
+            post = Post.new(
+              region: "us-east-1",
+              aws_access_key: "test",
+              aws_secret_key: "test"
+            )
 
             post.fields.should be_a(FieldCollection)
           end
@@ -105,8 +143,11 @@ module Awscr
 
         describe "url" do
           it "raises if no bucket field" do
-            creds = Signer::Credentials.new("test", "test")
-            post = Post.new("us-east-1", creds)
+            post = Post.new(
+              region: "us-east-1",
+              aws_access_key: "test",
+              aws_secret_key: "test"
+            )
             post.build { |b| b.expiration(Time.now) }
 
             expect_raises do
@@ -115,8 +156,11 @@ module Awscr
           end
 
           it "includes the bucket field" do
-            creds = Signer::Credentials.new("test", "test")
-            post = Post.new("us-east-1", creds)
+            post = Post.new(
+              region: "us-east-1",
+              aws_access_key: "test",
+              aws_secret_key: "test"
+            )
             post.build { |b| b.expiration(Time.now); b.condition("bucket", "test") }
 
             post.url.should eq("http://test.s3.amazonaws.com")
@@ -125,8 +169,11 @@ module Awscr
 
         describe "fields" do
           it "has fields" do
-            creds = Signer::Credentials.new("test", "test")
-            post = Post.new("us-east-1", creds)
+            post = Post.new(
+              region: "us-east-1",
+              aws_access_key: "test",
+              aws_secret_key: "test"
+            )
             post.build { |b| b.expiration(Time.now) }
 
             post.fields.should be_a(FieldCollection)

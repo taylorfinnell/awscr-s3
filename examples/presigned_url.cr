@@ -12,8 +12,8 @@ creds = Awscr::Signer::Credentials.new(KEY, SECRET)
 object = "/#{SecureRandom.uuid}"
 
 options = Awscr::S3::Presigned::Url::Options.new(object: object, bucket: BUCKET, additional_options: {
-  "x-amz-acl" => "public-read",
-  "Content-Type" => "image/png"
+  "x-amz-acl"    => "public-read",
+  "Content-Type" => "image/png",
 })
 
 url = Awscr::S3::Presigned::Url.new(REGION, creds, options)
