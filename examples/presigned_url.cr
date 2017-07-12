@@ -8,7 +8,6 @@ SECRET = ENV["AWS_SECRET"]
 REGION = ENV["AWS_REGION"]
 
 creds = Awscr::Signer::Credentials.new(KEY, SECRET)
-scope = Awscr::Signer::Scope.new(REGION, "s3")
 
 object = "/#{SecureRandom.uuid}"
 
@@ -17,7 +16,7 @@ options = Awscr::S3::Presigned::Url::Options.new(object: object, bucket: BUCKET,
   "Content-Type" => "image/png"
 })
 
-url = Awscr::S3::Presigned::Url.new(scope, creds, options)
+url = Awscr::S3::Presigned::Url.new(REGION, creds, options)
 
 HTTP::Client.put(url.for(:put), HTTP::Headers.new, body: "Howdy!")
 resp = HTTP::Client.get(url.for(:get))
