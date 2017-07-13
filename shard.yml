@@ -11,7 +11,7 @@ license: MIT
 dependencies:
   awscr-signer:
     github: taylorfinnell/awscr-signer
-    version: 0.3.5
+    version: 0.3.6
 
 development_dependencies:
   timecop:

@@ -6,22 +6,21 @@ module Awscr
       # Represents the URL and fields required to send a HTTP form POST to S3
       # for object uploading.
       class Post
-        def initialize(region : String, aws_access_key : String,
-                       aws_secret_key : String, time : Time = Time.utc_now)
-          @scope = Signer::Scope.new(region, "s3", time)
+        def initialize(@region : String, @aws_access_key : String, @aws_secret_key : String)
           @policy = Policy.new
-          @credentials = Signer::Credentials.new(aws_access_key, aws_secret_key)
         end
 
         # Build a post object by adding fields
         def build(&block)
           yield @policy
 
-          @policy.condition("x-amz-credential", "#{@credentials.key}/#{@scope.to_s}")
+          time = Time.utc_now
+          @policy.condition("x-amz-credential", credential_scope(time))
           @policy.condition("x-amz-algorithm", Signer::ALGORITHM)
-          @policy.condition("x-amz-date", @scope.date.iso8601)
+          @policy.condition("x-amz-date", time.to_s("%Y%m%dT%H%M%SZ"))
 
-          signer = Signer::Signers::V4.new(@scope, @credentials)
+          signer = Signer::Signers::V4.new("s3", @region,
+                                           @aws_access_key, @aws_secret_key)
           signature = signer.sign(@policy.to_s)
 
           # Add the final fields
@@ -44,6 +43,11 @@ module Awscr
         # Returns the fields, without signature fields
         def fields
           @policy.fields
+        end
+
+        # :nodoc:
+        private def credential_scope(time)
+          [@aws_access_key, time.to_s("%Y%m%d"), @region, "s3", "aws4_request"].join("/")
         end
 
         # :nodoc:
