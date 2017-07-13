@@ -6,41 +6,57 @@ module Awscr
       # A Presigned::URL, useful to share a link or create a link for a direct
       # PUT.
       class Url
-        def initialize(@options : Options)
-          @scope = Signer::Scope.new(@options.region, "s3")
+        @aws_access_key : String
+        @aws_secret_key : String
+        @region : String
 
-          @credentials = Signer::Credentials.new(
-            @options.aws_access_key,
-            @options.aws_secret_key
-          )
+        def initialize(@options : Options)
+          @aws_access_key = @options.aws_access_key
+          @aws_secret_key = @options.aws_secret_key
+          @region = @options.region
         end
 
         # Create a Presigned::Url link.
         def for(method : Symbol)
           raise "unsupported method #{method}" unless allowed_methods.includes?(method)
 
-          headers = HTTP::Headers.new
-          headers.add("Host", "s3.amazonaws.com")
-
-          request = HTTP::Request.new(method.to_s.upcase,
-            "/#{@options.bucket}#{@options.object}",
-            headers,
-            "UNSIGNED-PAYLOAD")
-
-          request.query_params.add("X-Amz-Expires", @options.expires.to_s)
+          request = build_request(method.to_s.upcase)
 
           @options.additional_options.each do |k, v|
             request.query_params.add(k, v)
           end
 
-          signer = Signer::Signers::V4.new(@scope, @credentials)
-          signer.presign(request)
+          presign_request(request)
 
           String.build do |str|
             str << "https://"
             str << request.host
             str << request.resource
           end
+        end
+
+        private def presign_request(request)
+          signer = Signer::Signers::V4.new(
+            "s3",
+            @region,
+            @aws_access_key,
+            @aws_secret_key
+          )
+          signer.presign(request)
+        end
+
+        private def build_request(method)
+          headers = HTTP::Headers{"Host" => "s3.amazonaws.com"}
+
+          request = HTTP::Request.new(
+            method,
+            "/#{@options.bucket}#{@options.object}",
+            headers,
+            "UNSIGNED-PAYLOAD"
+          )
+
+          request.query_params.add("X-Amz-Expires", @options.expires.to_s)
+          request
         end
 
         # :nodoc:
