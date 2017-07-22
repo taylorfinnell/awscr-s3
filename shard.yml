@@ -15,4 +15,8 @@ dependencies:
 
 development_dependencies:
   timecop:
-    github: waterlink/timecop.cr
+    github: taylorfinnell/timecop.cr
+    branch: support-utc
+  webmock:
+    github: manastech/webmock.cr
+    branch: master

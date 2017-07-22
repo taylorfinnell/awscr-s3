@@ -19,8 +19,8 @@ module Awscr
           @policy.condition("x-amz-algorithm", Signer::ALGORITHM)
           @policy.condition("x-amz-date", time.to_s("%Y%m%dT%H%M%SZ"))
 
-          signer = Signer::Signers::V4.new("s3", @region,
-                                           @aws_access_key, @aws_secret_key)
+          signer = Signer::Signers::V4.new(SERVICE_NAME, @region,
+            @aws_access_key, @aws_secret_key)
           signature = signer.sign(@policy.to_s)
 
           # Add the final fields
@@ -47,7 +47,7 @@ module Awscr
 
         # :nodoc:
         private def credential_scope(time)
-          [@aws_access_key, time.to_s("%Y%m%d"), @region, "s3", "aws4_request"].join("/")
+          [@aws_access_key, time.to_s("%Y%m%d"), @region, SERVICE_NAME, "aws4_request"].join("/")
         end
 
         # :nodoc:
