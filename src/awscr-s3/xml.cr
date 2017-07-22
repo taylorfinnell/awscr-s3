@@ -16,12 +16,6 @@ module Awscr::S3
         end
       end
 
-      def children
-        @node.children.each do |node|
-          yield NamespacedNode.new(node)
-        end
-      end
-
       private def build_path(path)
         anywhere = false
         if path.starts_with?("//")
