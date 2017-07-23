@@ -26,6 +26,13 @@ module Awscr::S3
       Response::PutObjectOutput.new(key,
                                       resp.headers["ETag"])
     end
+
+    def get_object(bucket, key : String)
+      resp = @http.get("/#{bucket}/#{key}")
+
+      Response::GetObjectOutput.new(key, resp.body)
+    end
+
     def list_objects(bucket, max_keys = nil, prefix = nil, continuation_token = nil)
       params = {
         "bucket"             => bucket,
