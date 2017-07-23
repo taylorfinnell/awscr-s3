@@ -2,6 +2,19 @@ require "../spec_helper"
 
 module Awscr::S3
   describe Client do
+    describe "put_object" do
+      it "can do a basic put" do
+        io = IO::Memory.new("Hello")
+
+        WebMock.stub(:put, "http://s3.amazonaws.com/mybucket/object.txt")
+               .with(body: "Hello")
+               .to_return(body: "")
+
+        client = Client.new("us-east-1", "key", "secret")
+        client.put_object("mybucket", "object.txt", io)
+      end
+    end
+
     describe "list_objects" do
       it "handles pagination" do
         resp = <<-RESP

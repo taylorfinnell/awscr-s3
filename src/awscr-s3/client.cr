@@ -20,6 +20,12 @@ module Awscr::S3
       true
     end
 
+    def put_object(bucket, key : String, io : IO | String)
+      resp = @http.put("/#{bucket}/#{key}", io)
+
+      Response::PutObjectOutput.new(key,
+                                      resp.headers["ETag"])
+    end
     def list_objects(bucket, max_keys = nil, prefix = nil, continuation_token = nil)
       params = {
         "bucket"             => bucket,
