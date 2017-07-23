@@ -1,6 +1,7 @@
 require "./responses/*"
 require "./paginators/*"
 require "uri"
+require "xml/builder"
 
 module Awscr::S3
   class Client
@@ -12,6 +13,50 @@ module Awscr::S3
       resp = @http.get("/")
 
       Response::ListAllMyBuckets.from_response(resp)
+    end
+
+    def start_multipart_upload(bucket : String, object : String)
+      resp = @http.post("/#{bucket}/#{object}?uploads")
+
+      Response::StartMultipartUpload.from_response(resp)
+    end
+
+    def upload_part(bucket : String, object : String,
+                    upload_id : String, part_number : Int32, part : IO | String)
+      resp = @http.put("/#{bucket}/#{object}?partNumber=#{part_number}&uploadId=#{upload_id}", part)
+
+      ouput = Response::UploadPartOutput.new(
+        resp.headers["ETag"],
+        part_number,
+        upload_id
+      )
+    end
+
+    def complete_multipart_upload(bucket : String, object : String, upload_id : String, parts : Array(Response::UploadPartOutput))
+      body = ::XML.build do |xml|
+        xml.element("CompleteMultipartUpload") do
+          parts.each do |output|
+            xml.element("Part") do
+              xml.element("PartNumber") do
+                xml.text(output.part_number.to_s)
+              end
+
+              xml.element("ETag") do
+                xml.text(output.etag)
+              end
+            end
+          end
+        end
+      end
+
+      resp = @http.post("/#{bucket}/#{object}?uploadId=#{upload_id}", body: body)
+      Response::CompleteMultipartUpload.from_response(resp)
+    end
+
+    def abort_multipart_upload(bucket : String, object : String, upload_id : String)
+      resp = @http.delete("/#{bucket}/#{object}?uploadId=#{upload_id}")
+
+      resp.status_code == 204
     end
 
     def head_bucket(bucket)

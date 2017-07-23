@@ -5,6 +5,14 @@ require "uri"
 module Awscr::S3
   class Http
     class ServerError < Exception
+      def self.from_response(response)
+        xml = XML.new(response.body)
+
+        code = xml.string("//Error/Code")
+        message = xml.string("//Error/Message")
+
+        new("#{code}: #{message}")
+      end
     end
 
     def initialize(@signer : Awscr::Signer::Signers::V4)
@@ -21,8 +29,14 @@ module Awscr::S3
       resp
     end
 
-    def put(path, body)
-      resp = @http.put(path, body: body)
+    def post(path, body = nil)
+      resp = @http.post(path, body: body)
+      handle_response!(resp)
+      resp
+    end
+
+    def put(path : String, body : IO | String)
+      resp = @http.put(path, headers: HTTP::Headers{"Content-Length" => body.size.to_s}, body: body)
       handle_response!(resp)
       resp
     end
@@ -46,7 +60,7 @@ module Awscr::S3
       # ok the server said what is wrong, if there is a body in the response we
       # can get a specific message, otherwise we reraise a server error
       if !response.body.empty?
-        raise ServerError.new(response.body)
+        raise ServerError.from_response(response)
       else
         raise ServerError.new("server error: #{response.status_code}")
       end

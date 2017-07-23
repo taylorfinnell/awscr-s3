@@ -2,6 +2,91 @@ require "../spec_helper"
 
 module Awscr::S3
   describe Client do
+    describe "abort_multipart_upload" do
+      it "aborts an upload" do
+        WebMock.stub(:delete, "http://s3.amazonaws.com/bucket/object?uploadId=upload_id")
+               .to_return(status: 204)
+
+        client = Client.new("us-east-1", "key", "secret")
+        result = client.abort_multipart_upload("bucket", "object", "upload_id")
+
+        result.should be_true
+      end
+    end
+
+    describe "start_multipart_upload" do
+      it "starts a multipart upload" do
+        resp = <<-RESP
+          <?xml version="1.0" encoding="UTF-8"?>
+          <InitiateMultipartUploadResult xmlns="http://s3.amazonaws.com/doc/2006-03-01/">
+            <Bucket>bucket</Bucket>
+            <Key>object</Key>
+            <UploadId>FxtGq8otGhDtYJa5VYLpPOBQo2niM2a1YR8wgcwqHJ1F1Djflj339mEfpm7NbYOoIg.6bIPeXl2RB82LuAnUkTQUEz_ReIu2wOwawGc0Z4SLERxoXospqANXDazuDmRF</UploadId>
+          </InitiateMultipartUploadResult>
+        RESP
+
+        WebMock.stub(:post, "http://s3.amazonaws.com/bucket/object?uploads")
+               .to_return(status: 200, body: resp)
+
+        client = Client.new("us-east-1", "key", "secret")
+        result = client.start_multipart_upload("bucket", "object")
+
+        result.should eq(Response::StartMultipartUpload.new(
+          "bucket",
+          "object",
+          "FxtGq8otGhDtYJa5VYLpPOBQo2niM2a1YR8wgcwqHJ1F1Djflj339mEfpm7NbYOoIg.6bIPeXl2RB82LuAnUkTQUEz_ReIu2wOwawGc0Z4SLERxoXospqANXDazuDmRF"
+        ))
+      end
+    end
+
+    describe "upload_part" do
+      it "uploads a part" do
+        WebMock.stub(:put, "http://s3.amazonaws.com/bucket2/obj2?partNumber=1&uploadId=123")
+               .with(body: "test")
+               .to_return(status: 200, body: "", headers: {"ETag" => "etag"})
+
+        client = Client.new("us-east-1", "key", "secret")
+        result = client.upload_part("bucket2", "obj2", "123", 1, "test")
+
+        result.should eq(
+          Response::UploadPartOutput.new("etag", 1, "123")
+        )
+      end
+    end
+
+    describe "complete_multipart_upload" do
+      it "completes a multipart upload" do
+        post_body = "<?xml version=\"1.0\"?>\n<CompleteMultipartUpload><Part><PartNumber>1</PartNumber><ETag>etag</ETag></Part></CompleteMultipartUpload>\n"
+
+        resp_body = <<-RESP_BODY
+        <?xml version="1.0" encoding="UTF-8"?>
+          <CompleteMultipartUploadResult xmlns="http://s3.amazonaws.com/doc/2006-03-01/">
+          <Location>http://s3.amazonaws.com/screensnapr-development/test</Location>
+          <Bucket>screensnapr-development</Bucket>
+          <Key>test</Key>
+          <ETag>&quot;7611c6414e4b58f22ff9f59a2c1767b7-2&quot;</ETag>
+        </CompleteMultipartUploadResult>
+        RESP_BODY
+
+        WebMock.stub(:post, "http://s3.amazonaws.com/bucket/object?uploadId=upload_id")
+               .with(body: post_body)
+               .to_return(status: 200, body: resp_body)
+
+        outputs = [Response::UploadPartOutput.new("etag", 1, "upload_id")]
+
+        client = Client.new("us-east-1", "key", "secret")
+        result = client.complete_multipart_upload("bucket", "object", "upload_id", outputs)
+
+        result.should eq(
+          Response::CompleteMultipartUpload.new(
+            "http://s3.amazonaws.com/screensnapr-development/test",
+            "test",
+            "\"7611c6414e4b58f22ff9f59a2c1767b7-2\""
+          )
+        )
+      end
+    end
+
     describe "delete_object" do
       it "returns true if object deleted" do
         WebMock.stub(:delete, "http://s3.amazonaws.com/blah/obj?")
