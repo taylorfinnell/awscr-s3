@@ -11,7 +11,7 @@ module Awscr::S3
     def list_buckets
       resp = @http.get("/")
 
-      Response::ListAllMyBuckets.from_xml(resp.body)
+      Response::ListAllMyBuckets.from_response(resp)
     end
 
     def head_bucket(bucket)
@@ -20,17 +20,22 @@ module Awscr::S3
       true
     end
 
+    def delete_object(bucket, key)
+      resp = @http.delete("/#{bucket}/#{key}")
+
+      resp.status_code == 204
+    end
+
     def put_object(bucket, key : String, io : IO | String)
       resp = @http.put("/#{bucket}/#{key}", io)
 
-      Response::PutObjectOutput.new(key,
-                                      resp.headers["ETag"])
+      Response::PutObjectOutput.from_response(resp)
     end
 
     def get_object(bucket, key : String)
       resp = @http.get("/#{bucket}/#{key}")
 
-      Response::GetObjectOutput.new(key, resp.body)
+      Response::GetObjectOutput.from_response(resp)
     end
 
     def list_objects(bucket, max_keys = nil, prefix = nil, continuation_token = nil)

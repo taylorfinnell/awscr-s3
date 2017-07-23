@@ -2,8 +2,8 @@ require "xml"
 
 module Awscr::S3::Response
   class ListAllMyBuckets
-    def self.from_xml(xml)
-      xml = XML.new(xml)
+    def self.from_response(response)
+      xml = XML.new(response.body)
 
       buckets = [] of Bucket
       xml.array("ListAllMyBucketsResult/Buckets/Bucket") do |bucket|
@@ -20,5 +20,7 @@ module Awscr::S3::Response
 
     def initialize(@buckets : Array(Bucket))
     end
+
+    def_equals @buckets
   end
 end

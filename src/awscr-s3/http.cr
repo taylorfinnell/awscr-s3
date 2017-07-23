@@ -15,6 +15,12 @@ module Awscr::S3
       end
     end
 
+    def delete(path)
+      resp = @http.delete(path)
+      handle_response!(resp)
+      resp
+    end
+
     def put(path, body)
       resp = @http.put(path, body: body)
       handle_response!(resp)

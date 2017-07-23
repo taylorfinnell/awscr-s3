@@ -8,8 +8,8 @@ module Awscr::S3::Response
     property client
     @client : S3::Client?
 
-    def self.from_xml(xml)
-      xml = XML.new(xml)
+    def self.from_response(response)
+      xml = XML.new(response.body)
 
       name = xml.string("//ListBucketResult/Name")
       prefix = xml.string("//ListBucketResult/Prefix")
@@ -43,5 +43,8 @@ module Awscr::S3::Response
     def truncated?
       @truncated
     end
+
+    def_equals @name, @prefix, @key_count, @max_keys, @truncated,
+      @continuation_token, @contents
   end
 end

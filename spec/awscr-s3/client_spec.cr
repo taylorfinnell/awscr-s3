@@ -2,16 +2,30 @@ require "../spec_helper"
 
 module Awscr::S3
   describe Client do
+    describe "delete_object" do
+      it "returns true if object deleted" do
+        WebMock.stub(:delete, "http://s3.amazonaws.com/blah/obj?")
+               .to_return(status: 204)
+
+        client = Client.new("us-east-1", "key", "secret")
+        result = client.delete_object("blah", "obj")
+
+        result.should be_true
+      end
+    end
+
     describe "put_object" do
       it "can do a basic put" do
         io = IO::Memory.new("Hello")
 
         WebMock.stub(:put, "http://s3.amazonaws.com/mybucket/object.txt")
                .with(body: "Hello")
-               .to_return(body: "")
+               .to_return(body: "", headers: {"ETag" => "etag"})
 
         client = Client.new("us-east-1", "key", "secret")
-        client.put_object("mybucket", "object.txt", io)
+        resp = client.put_object("mybucket", "object.txt", io)
+
+        resp.should eq(Response::PutObjectOutput.new("etag"))
       end
     end
 
@@ -62,16 +76,23 @@ module Awscr::S3
 
         client = Client.new("us-east-1", "key", "secret")
 
-        objects = [] of Array(Object)
+        objects = [] of Response::ListObjectsV2
         client.list_objects("bucket", max_keys: 1).each do |output|
-          objects << output.contents
+          objects << output
         end
 
-        objects.flatten.should eq([
+        expected_objects = [
           Object.new("my-image.jpg", 434234,
             "\"fba9dede5f27731c9771645a39863328\""),
           Object.new("key2", 1337,
             "\"fba9dede5f27731c9771645a39863329\""),
+        ]
+
+        objects.should eq([
+          Response::ListObjectsV2.new("bucket", "", 1, 1, true, "token",
+            [expected_objects.first]),
+          Response::ListObjectsV2.new("bucket", "", 1, 1, false, "",
+            [expected_objects.last]),
         ])
       end
 
@@ -79,7 +100,7 @@ module Awscr::S3
         resp = <<-RESP
         <?xml version="1.0" encoding="UTF-8"?>
         <ListBucketResult xmlns="http://s3.amazonaws.com/doc/2006-03-01/">
-          <Name>bucket</Name>
+          <Name>blah</Name>
           <Prefix/>
           <KeyCount>205</KeyCount>
           <MaxKeys>1000</MaxKeys>
@@ -104,15 +125,17 @@ module Awscr::S3
         WebMock.stub(:get, "http://s3.amazonaws.com/blah?list-type=2")
                .to_return(body: resp)
 
+        expected_objects = [
+          Object.new("my-image.jpg", 434234,
+            "\"fba9dede5f27731c9771645a39863328\""),
+          Object.new("key2", 1337,
+            "\"fba9dede5f27731c9771645a39863329\""),
+        ]
+
         client = Client.new("us-east-1", "key", "secret")
 
         objs = client.list_objects("blah").each do |output|
-          output.contents.should eq([
-            Object.new("my-image.jpg", 434234,
-              "\"fba9dede5f27731c9771645a39863328\""),
-            Object.new("key2", 1337,
-              "\"fba9dede5f27731c9771645a39863329\""),
-          ])
+          output.should eq(Response::ListObjectsV2.new("blah", "", 205, 1000, false, "", expected_objects))
         end
       end
     end
@@ -141,7 +164,9 @@ module Awscr::S3
         client = Client.new("us-east-1", "key", "secret")
         output = client.list_buckets
 
-        output.buckets.should eq([Bucket.new("quotes", "2006-02-03T16:45:09.000Z")])
+        output.should eq(Response::ListAllMyBuckets.new([
+          Bucket.new("quotes", "2006-02-03T16:45:09.000Z"),
+        ]))
       end
     end
 

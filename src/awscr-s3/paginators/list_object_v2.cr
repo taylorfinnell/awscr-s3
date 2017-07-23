@@ -17,7 +17,7 @@ module Awscr::S3::Paginator
       else
         @params["continuation-token"] = @last_output.not_nil!.next_token if @last_output
 
-        @last_output = Response::ListObjectsV2.from_xml(next_response.body)
+        @last_output = Response::ListObjectsV2.from_response(next_response)
       end
     end
 
