@@ -16,7 +16,7 @@ module Awscr
           @region = @options.region
         end
 
-        # Create a Presigned::Url link.
+        # Create a Presigned::Url link. Supports GET and PUT.
         def for(method : Symbol)
           raise "unsupported method #{method}" unless allowed_methods.includes?(method)
 
@@ -35,6 +35,7 @@ module Awscr
           end
         end
 
+        # :nodoc:
         private def presign_request(request)
           signer = Signer::Signers::V4.new(
             "s3",
@@ -45,8 +46,9 @@ module Awscr
           signer.presign(request)
         end
 
+        # :nodoc:
         private def build_request(method)
-          headers = HTTP::Headers{"Host" => "s3.amazonaws.com"}
+          headers = HTTP::Headers{"Host" => host}
 
           request = HTTP::Request.new(
             method,
@@ -57,6 +59,26 @@ module Awscr
 
           request.query_params.add("X-Amz-Expires", @options.expires.to_s)
           request
+        end
+
+        # :nodoc:
+        private def host
+          if host_name = @options.host_name
+            host_name
+          else
+            return default_host if @region == standard_us_region
+            "s3-#{@region}.amazonaws.com"
+          end
+        end
+
+        # :nodoc:
+        private def standard_us_region
+          "us-east-1"
+        end
+
+        # :nodoc:
+        private def default_host
+          "s3.amazonaws.com"
         end
 
         # :nodoc:

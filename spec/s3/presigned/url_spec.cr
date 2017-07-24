@@ -4,6 +4,33 @@ module Awscr
   module S3
     module Presigned
       describe Url do
+        it "uses region specific hosts" do
+          options = Url::Options.new(
+            region: "ap-northeast-1",
+            aws_access_key: "AKIAIOSFODNN7EXAMPLE",
+            aws_secret_key: "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY",
+            bucket: "examplebucket",
+            object: "/test.txt"
+          )
+          url = Url.new(options)
+
+          url.for(:get).should match(/https:\/\/s3-#{options.region}.amazonaws.com/)
+        end
+
+        it "allows host override" do
+          options = Url::Options.new(
+            region: "us-east-1",
+            aws_access_key: "AKIAIOSFODNN7EXAMPLE",
+            aws_secret_key: "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY",
+            bucket: "examplebucket",
+            object: "/test.txt",
+            host_name: "examplebucket.s3.amazonaws.com"
+          )
+          url = Url.new(options)
+
+          url.for(:get).should match(/https:\/\/examplebucket.s3.amazonaws.com/)
+        end
+
         it "raises on unsupported method" do
           options = Url::Options.new(
             region: "us-east-1",
