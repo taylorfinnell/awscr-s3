@@ -25,6 +25,9 @@ module Awscr
           # The Aws region
           getter region
 
+          # Optionally set the host name to use. The default is s3.amazonaws.com
+          getter host_name
+
           @expires : Int32
           @additional_options : Hash(String, String)
           @bucket : String
@@ -32,9 +35,10 @@ module Awscr
           @region : String
           @aws_access_key : String
           @aws_secret_key : String
+          @host_name : String?
 
           def initialize(@aws_access_key, @aws_secret_key, @region,
-                         @object, @bucket, @expires = 86_400,
+                         @object, @bucket, @expires = 86_400, @host_name = nil,
                          @additional_options = {} of String => String)
           end
         end
