@@ -2,7 +2,6 @@ require "../src/awscr-s3"
 require "secure_random"
 
 BUCKET = ENV["AWS_BUCKET"]
-HOST   = "#{BUCKET}.s3.amazonaws.com"
 KEY    = ENV["AWS_KEY"]
 SECRET = ENV["AWS_SECRET"]
 REGION = ENV["AWS_REGION"]
