@@ -35,4 +35,3 @@ final = client.complete_multipart_upload(
 )
 
 p final.inspect
-
