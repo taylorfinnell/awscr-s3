@@ -5,7 +5,7 @@ module Awscr::S3::Paginator
     @last_output : Response::ListObjectsV2?
     @bucket : String
 
-    def initialize(@http : S3::Http, @params : Hash(String, String?))
+    def initialize(@http : S3::Http, @params : Hash(String, String))
       @params = @params.reject { |_, v| v.nil? || v.empty? }
       @bucket = @params.delete("bucket").as(String)
       @last_output = nil

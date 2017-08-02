@@ -83,13 +83,12 @@ module Awscr::S3
       Response::GetObjectOutput.from_response(resp)
     end
 
-    def list_objects(bucket, max_keys = nil, prefix = nil, continuation_token = nil)
+    def list_objects(bucket, max_keys = nil, prefix = nil)
       params = {
         "bucket"             => bucket,
         "list-type"          => "2",
         "max-keys"           => max_keys.to_s,
-        "prefix"             => prefix.to_s,
-        "continuation-token" => continuation_token,
+        "prefix"             => prefix.to_s
       }
 
       Paginator::ListObjectsV2.new(@http, params)
