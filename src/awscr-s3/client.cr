@@ -65,20 +65,20 @@ module Awscr::S3
       true
     end
 
-    def delete_object(bucket, key)
-      resp = @http.delete("/#{bucket}/#{key}")
+    def delete_object(bucket, object)
+      resp = @http.delete("/#{bucket}/#{object}")
 
       resp.status_code == 204
     end
 
-    def put_object(bucket, key : String, io : IO | String)
-      resp = @http.put("/#{bucket}/#{key}", io)
+    def put_object(bucket, object : String, body : IO | String)
+      resp = @http.put("/#{bucket}/#{object}", body)
 
       Response::PutObjectOutput.from_response(resp)
     end
 
-    def get_object(bucket, key : String)
-      resp = @http.get("/#{bucket}/#{key}")
+    def get_object(bucket, object : String)
+      resp = @http.get("/#{bucket}/#{object}")
 
       Response::GetObjectOutput.from_response(resp)
     end
