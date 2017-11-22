@@ -1,7 +1,7 @@
 require "spec"
 require "timecop"
+require "webmock"
 
-# Monkey patch Time\Timecop
 struct Time
   def self.utc_now
     Timecop.now

@@ -1,5 +1,5 @@
 name: awscr-s3
-version: 0.1.1
+version: 0.1.2
 
 authors:
   - Taylor Finnell <tmfinnell@gmail.com>
@@ -16,3 +16,7 @@ dependencies:
 development_dependencies:
   timecop:
     github: waterlink/timecop.cr
+    branch: master
+  webmock:
+    github: manastech/webmock.cr
+    branch: master

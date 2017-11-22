@@ -38,7 +38,7 @@ module Awscr
         # :nodoc:
         private def presign_request(request)
           signer = Signer::Signers::V4.new(
-            "s3",
+            SERVICE_NAME,
             @region,
             @aws_access_key,
             @aws_secret_key
