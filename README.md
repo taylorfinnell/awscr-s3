@@ -1,7 +1,7 @@
 # awscr-s3
 [![CircleCI](https://circleci.com/gh/taylorfinnell/awscr-s3.svg?style=svg)](https://circleci.com/gh/taylorfinnell/awscr-s3)
 
-S3 access via Crystal
+A Crystal shard for S3.
 
 ## Installation
 
@@ -13,11 +13,60 @@ dependencies:
     github: taylorfinnell/awscr-s3
 ```
 
+## Examples
+
+[Examples](https://github.com/taylorfinnell/awscr-s3/tree/master/examples)
+
 ## Usage
 
 ```crystal
 require "awscr-s3"
 ```
+
+## **Creating a Client**
+
+```crystal
+client = Awscr::S3::Client.new("us-east1", "key", "secret")
+```
+## **List Buckets**
+
+```crystal
+resp = client.list_buckets
+resp.buckets # => ["bucket1", "bucket2"]
+```
+
+## **Put Object**
+
+```crystal
+resp = client.put_object("bucket_name", "object_key", "myobjectbody")
+resp.etag # => ...
+```
+
+## **Get Object**
+
+```crystal
+resp = client.put_object("bucket_name", "object_key")
+resp.body # => myobjectbody
+```
+
+## **List Objects**
+
+```crystal
+client.list_objects("bucket_name").each do |resp|
+  p resp.contents.map(&.key)
+end
+```
+
+## **Upload a file**
+
+```crystal
+uploader = Awscr::S3::FileUploader.new(client)
+
+File.open(File.expand_path("myfile"), "r") do |file|
+  puts uploader.upload("bucket_name", "someobjectkey", file)
+end
+```
+
 ## **Creating a `Presigned::Form`.**
 
 ```crystal
@@ -60,5 +109,3 @@ options = Awscr::S3::Presigned::Url::Options.new(
 url = Awscr::S3::Presigned::Url.new(options)
 p url.for(:put)
 ```
-[Examples](https://github.com/taylorfinnell/awscr-s3/tree/master/examples)
-
