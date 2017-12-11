@@ -14,6 +14,26 @@ module Awscr::S3
   BODY
 
   describe Http do
+    describe "initialize" do
+      it "sets the correct host" do
+        WebMock.stub(:get, "http://s3.amazonaws.com/")
+               .to_return(status: 200)
+
+        http = Http.new(SIGNER)
+
+        http.get("/").status_code.should eq 200
+      end
+
+      it "sets the correct host with a defined region" do
+        WebMock.stub(:get, "http://s3-eu-west-1.amazonaws.com/")
+               .to_return(status: 200)
+
+        http = Http.new(SIGNER, "eu-west-1")
+
+        http.get("/").status_code.should eq 200
+      end
+    end
+
     describe "get" do
       it "handles aws specific errors" do
         WebMock.stub(:get, "http://s3.amazonaws.com/sup?")

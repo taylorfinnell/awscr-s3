@@ -15,8 +15,9 @@ module Awscr::S3
       end
     end
 
-    def initialize(@signer : Awscr::Signer::Signers::V4)
-      @http = HTTP::Client.new("#{SERVICE_NAME}.amazonaws.com")
+    def initialize(@signer : Awscr::Signer::Signers::V4,
+                   @region : String = standard_us_region)
+      @http = HTTP::Client.new(host)
 
       @http.before_request do |request|
         @signer.sign(request)
@@ -56,6 +57,19 @@ module Awscr::S3
       else
         raise ServerError.new("server error: #{response.status_code}")
       end
+    end
+
+    private def host
+      return default_host if @region == standard_us_region
+      "#{SERVICE_NAME}-#{@region}.amazonaws.com"
+    end
+
+    private def standard_us_region
+      "us-east-1"
+    end
+
+    private def default_host
+      "#{SERVICE_NAME}.amazonaws.com"
     end
   end
 end
