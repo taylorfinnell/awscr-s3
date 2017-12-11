@@ -1,5 +1,5 @@
 # awscr-s3
-[![CircleCI](https://circleci.com/gh/taylorfinnell/awscr-s3.svg?style=svg)](https://circleci.com/gh/taylorfinnell/awscr-s3)
+[![Build Status](https://travis-ci.org/taylorfinnell/awscr-s3.svg?branch=master)](https://travis-ci.org/taylorfinnell/awscr-s3)
 
 A Crystal shard for S3.
 

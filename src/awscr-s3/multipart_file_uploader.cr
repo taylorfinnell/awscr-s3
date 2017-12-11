@@ -92,9 +92,9 @@ module Awscr::S3
 
     private def complete_upload
       client.complete_multipart_upload(
-        bucket, 
-        object, 
-        upload_id, 
+        bucket,
+        object,
+        upload_id,
         @parts.sort_by(&.part_number)
       )
     end
