@@ -103,7 +103,7 @@ module Awscr::S3
     end
 
     private def http
-      Http.new(signer)
+      Http.new(signer, @region)
     end
   end
 end
