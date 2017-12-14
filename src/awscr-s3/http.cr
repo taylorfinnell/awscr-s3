@@ -24,18 +24,21 @@ module Awscr::S3
       end
     end
 
-    def delete(path)
-      resp = @http.delete(path)
+    def delete(path, headers : Hash(String, String) = Hash(String, String).new)
+      headers = HTTP::Headers.new.merge!(headers)
+      resp = @http.delete(path, headers: headers)
       handle_response!(resp)
     end
 
-    def post(path, body = nil)
-      resp = @http.post(path, body: body)
+    def post(path, body = nil, headers : Hash(String, String) = Hash(String, String).new)
+      headers = HTTP::Headers.new.merge!(headers)
+      resp = @http.post(path, headers: headers, body: body)
       handle_response!(resp)
     end
 
-    def put(path : String, body : IO | String)
-      resp = @http.put(path, headers: HTTP::Headers{"Content-Length" => body.size.to_s}, body: body)
+    def put(path : String, body : IO | String, headers : Hash(String, String) = Hash(String, String).new)
+      headers = HTTP::Headers{"Content-Length" => body.size.to_s}.merge!(headers)
+      resp = @http.put(path, headers: headers, body: body)
       handle_response!(resp)
     end
 

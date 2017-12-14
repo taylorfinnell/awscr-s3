@@ -42,6 +42,12 @@ resp = client.put_object("bucket_name", "object_key", "myobjectbody")
 resp.etag # => ...
 ```
 
+You can also pass additional headers (e.g. metadata):
+
+```crystal
+client.put_object("bucket_name", "object_key", "myobjectbody", {"x-amz-meta-name" => "myobject"})
+```
+
 ## **Get Object**
 
 ```crystal
@@ -64,6 +70,14 @@ uploader = Awscr::S3::FileUploader.new(client)
 
 File.open(File.expand_path("myfile"), "r") do |file|
   puts uploader.upload("bucket_name", "someobjectkey", file)
+end
+```
+
+You can also pass additional headers (e.g. metadata):
+
+```crystal
+File.open(File.expand_path("myfile"), "r") do |file|
+  puts uploader.upload("bucket_name", "someobjectkey", file, {"x-amz-meta-name" => "myobject"})
 end
 ```
 

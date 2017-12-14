@@ -7,12 +7,12 @@ module Awscr::S3
     def initialize(@client : Client)
     end
 
-    def upload(bucket : String, object : String, io : IO)
+    def upload(bucket : String, object : String, io : IO, headers : Hash(String, String) = Hash(String, String).new)
       if io.size < UPLOAD_THRESHOLD
-        client.put_object(bucket, object, io)
+        client.put_object(bucket, object, io, headers)
       else
         uploader = MultipartFileUploader.new(client)
-        uploader.upload(bucket, object, io)
+        uploader.upload(bucket, object, io, headers)
       end
     end
   end

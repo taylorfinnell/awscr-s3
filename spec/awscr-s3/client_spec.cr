@@ -16,17 +16,8 @@ module Awscr::S3
 
     describe "start_multipart_upload" do
       it "starts a multipart upload" do
-        resp = <<-RESP
-          <?xml version="1.0" encoding="UTF-8"?>
-          <InitiateMultipartUploadResult xmlns="http://s3.amazonaws.com/doc/2006-03-01/">
-            <Bucket>bucket</Bucket>
-            <Key>object</Key>
-            <UploadId>FxtGq8otGhDtYJa5VYLpPOBQo2niM2a1YR8wgcwqHJ1F1Djflj339mEfpm7NbYOoIg.6bIPeXl2RB82LuAnUkTQUEz_ReIu2wOwawGc0Z4SLERxoXospqANXDazuDmRF</UploadId>
-          </InitiateMultipartUploadResult>
-        RESP
-
         WebMock.stub(:post, "http://s3.amazonaws.com/bucket/object?uploads")
-               .to_return(status: 200, body: resp)
+               .to_return(status: 200, body: Fixtures.start_multipart_upload_response)
 
         client = Client.new("us-east-1", "key", "secret")
         result = client.start_multipart_upload("bucket", "object")
@@ -36,6 +27,15 @@ module Awscr::S3
           "object",
           "FxtGq8otGhDtYJa5VYLpPOBQo2niM2a1YR8wgcwqHJ1F1Djflj339mEfpm7NbYOoIg.6bIPeXl2RB82LuAnUkTQUEz_ReIu2wOwawGc0Z4SLERxoXospqANXDazuDmRF"
         ))
+      end
+
+      it "passes additional headers, when provided" do
+        WebMock.stub(:post, "http://s3.amazonaws.com/bucket/object?uploads")
+               .with(headers: {"x-amz-meta-name" => "document"})
+               .to_return(status: 200, body: Fixtures.start_multipart_upload_response)
+
+        client = Client.new("us-east-1", "key", "secret")
+        client.start_multipart_upload("bucket", "object", headers: {"x-amz-meta-name" => "document"})
       end
     end
 
@@ -58,19 +58,9 @@ module Awscr::S3
       it "completes a multipart upload" do
         post_body = "<?xml version=\"1.0\"?>\n<CompleteMultipartUpload><Part><PartNumber>1</PartNumber><ETag>etag</ETag></Part></CompleteMultipartUpload>\n"
 
-        resp_body = <<-RESP_BODY
-        <?xml version="1.0" encoding="UTF-8"?>
-          <CompleteMultipartUploadResult xmlns="http://s3.amazonaws.com/doc/2006-03-01/">
-          <Location>http://s3.amazonaws.com/screensnapr-development/test</Location>
-          <Bucket>screensnapr-development</Bucket>
-          <Key>test</Key>
-          <ETag>&quot;7611c6414e4b58f22ff9f59a2c1767b7-2&quot;</ETag>
-        </CompleteMultipartUploadResult>
-        RESP_BODY
-
         WebMock.stub(:post, "http://s3.amazonaws.com/bucket/object?uploadId=upload_id")
                .with(body: post_body)
-               .to_return(status: 200, body: resp_body)
+               .to_return(status: 200, body: Fixtures.complete_multipart_upload_response)
 
         outputs = [Response::UploadPartOutput.new("etag", 1, "upload_id")]
 
@@ -97,6 +87,15 @@ module Awscr::S3
 
         result.should be_true
       end
+
+      it "passes additional headers, when provided" do
+        WebMock.stub(:delete, "http://s3.amazonaws.com/blah/obj?")
+               .with(headers: {"x-amz-mfa" => "123456"})
+               .to_return(status: 204)
+
+        client = Client.new("us-east-1", "key", "secret")
+        client.delete_object("blah", "obj", headers: {"x-amz-mfa" => "123456"})
+      end
     end
 
     describe "put_object" do
@@ -111,6 +110,17 @@ module Awscr::S3
         resp = client.put_object("mybucket", "object.txt", io)
 
         resp.should eq(Response::PutObjectOutput.new("etag"))
+      end
+
+      it "passes additional headers, when provided" do
+        io = IO::Memory.new("Hello")
+
+        WebMock.stub(:put, "http://s3.amazonaws.com/mybucket/object.txt")
+               .with(body: "Hello", headers: {"Content-Length" => "5", "x-amz-meta-name" => "object"})
+               .to_return(body: "", headers: {"ETag" => "etag"})
+
+        client = Client.new("us-east-1", "key", "secret")
+        client.put_object("mybucket", "object.txt", io, {"x-amz-meta-name" => "object"})
       end
     end
 

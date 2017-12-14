@@ -14,6 +14,7 @@ module Awscr::S3
     @upload_id : String?
     @bucket : String?
     @object : String?
+    @headers : Hash(String, String)?
 
     def initialize(@client : Client)
       @pending = [] of Part
@@ -21,9 +22,10 @@ module Awscr::S3
       @channel = Channel(Nil).new
     end
 
-    def upload(bucket : String, object : String, io : IO)
+    def upload(bucket : String, object : String, io : IO, headers : Hash(String, String) = Hash(String, String).new)
       @bucket = bucket
       @object = object
+      @headers = headers
       @upload_id = start_upload
 
       build_pending_parts(io)
@@ -100,7 +102,7 @@ module Awscr::S3
     end
 
     private def start_upload
-      resp = client.start_multipart_upload(bucket, object)
+      resp = client.start_multipart_upload(bucket, object, headers)
       resp.upload_id
     end
 
@@ -114,6 +116,10 @@ module Awscr::S3
 
     private def object
       @object.not_nil!
+    end
+
+    private def headers
+      @headers.not_nil!
     end
   end
 end

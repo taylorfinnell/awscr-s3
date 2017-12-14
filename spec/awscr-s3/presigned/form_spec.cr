@@ -3,22 +3,6 @@ require "../../spec_helper"
 module Awscr
   module S3
     module Presigned
-      class FakeClient < HTTP::Client
-        @last_request_path : String?
-        @last_request_headers : HTTP::Headers?
-        @last_request_body : String?
-
-        getter last_request_path
-        getter last_request_headers
-        getter last_request_body
-
-        def post(path, headers, body)
-          @last_request_path = path
-          @last_request_headers = headers
-          @last_request_body = body
-        end
-      end
-
       describe Form do
         describe ".build" do
           it "builds a form" do
@@ -41,7 +25,7 @@ module Awscr
               aws_access_key: "test",
               aws_secret_key: "test"
             )
-            form = Form.new(post, FakeClient.new("host"))
+            form = Form.new(post, HTTP::Client.new("host"))
 
             form.fields.should be_a(FieldCollection)
           end
@@ -54,7 +38,7 @@ module Awscr
               aws_access_key: "test",
               aws_secret_key: "test"
             )
-            form = Form.new(post, FakeClient.new("host"))
+            form = Form.new(post, HTTP::Client.new("host"))
 
             form.to_html.should be_a(HtmlPrinter)
           end
@@ -75,17 +59,17 @@ module Awscr
               builder.condition("key", "hi")
             end
 
-            client = FakeClient.new("fake host")
+            WebMock.stub(:post, "http://fake host/").to_return do |request|
+              request.headers.not_nil!["Content-Type"].nil?.should eq false
+              request.body.nil?.should eq false
+
+              HTTP::Client::Response.new(200, body: "")
+            end
+
+            client = HTTP::Client.new("fake host")
             io = IO::Memory.new("test")
             form = Form.new(post, client)
             resp = form.submit(io)
-
-            client.last_request_path.should eq "/"
-
-            headers = client.last_request_headers
-            headers.not_nil!["Content-Type"].nil?.should eq false
-
-            client.last_request_body.nil?.should eq false
           end
         end
       end

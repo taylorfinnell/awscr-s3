@@ -14,8 +14,9 @@ module Awscr::S3
       Response::ListAllMyBuckets.from_response(resp)
     end
 
-    def start_multipart_upload(bucket : String, object : String)
-      resp = http.post("/#{bucket}/#{object}?uploads")
+    def start_multipart_upload(bucket : String, object : String,
+                               headers : Hash(String, String) = Hash(String, String).new)
+      resp = http.post("/#{bucket}/#{object}?uploads", headers: headers)
 
       Response::StartMultipartUpload.from_response(resp)
     end
@@ -64,14 +65,15 @@ module Awscr::S3
       true
     end
 
-    def delete_object(bucket, object)
-      resp = http.delete("/#{bucket}/#{object}")
+    def delete_object(bucket, object, headers : Hash(String, String) = Hash(String, String).new)
+      resp = http.delete("/#{bucket}/#{object}", headers)
 
       resp.status_code == 204
     end
 
-    def put_object(bucket, object : String, body : IO | String)
-      resp = http.put("/#{bucket}/#{object}", body)
+    def put_object(bucket, object : String, body : IO | String,
+                   headers : Hash(String, String) = Hash(String, String).new)
+      resp = http.put("/#{bucket}/#{object}", body, headers)
 
       Response::PutObjectOutput.from_response(resp)
     end
