@@ -5,7 +5,7 @@ require "xml/builder"
 
 module Awscr::S3
   class Client
-    def initialize(@region : String, @aws_access_key : String, @aws_secret_key : String)
+    def initialize(@region : String, @aws_access_key : String, @aws_secret_key : String, @endpoint : String? = nil)
     end
 
     def list_buckets
@@ -105,7 +105,7 @@ module Awscr::S3
     end
 
     private def http
-      Http.new(signer, @region)
+      Http.new(signer, @region, @endpoint)
     end
   end
 end

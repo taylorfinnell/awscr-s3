@@ -1,7 +1,7 @@
 # awscr-s3
 [![Build Status](https://travis-ci.org/taylorfinnell/awscr-s3.svg?branch=master)](https://travis-ci.org/taylorfinnell/awscr-s3)
 
-A Crystal shard for S3.
+A Crystal shard for S3 and compatible services.
 
 ## Installation
 
@@ -28,6 +28,13 @@ require "awscr-s3"
 ```crystal
 client = Awscr::S3::Client.new("us-east1", "key", "secret")
 ```
+
+For S3 compatible services, like DigitalOcean Spaces or Minio, you'll need to set a custom endpoint:
+
+```crystal
+client = Awscr::S3::Client.new("nyc3", "key", "secret", endpoint: "https://nyc3.digitaloceanspaces.com")
+```
+
 ## **List Buckets**
 
 ```crystal
@@ -76,6 +83,8 @@ end
 You can also pass additional headers (e.g. metadata):
 
 ```crystal
+uploader = Awscr::S3::FileUploader.new(client)
+
 File.open(File.expand_path("myfile"), "r") do |file|
   puts uploader.upload("bucket_name", "someobjectkey", file, {"x-amz-meta-name" => "myobject"})
 end
