@@ -8,7 +8,7 @@ module Awscr::S3
     <Error>
       <Code>NoSuchKey</Code>
       <Message>The resource you requested does not exist</Message>
-      <Resource>/mybucket/myfoto.jpg</Resource> 
+      <Resource>/mybucket/myfoto.jpg</Resource>
       <RequestId>4442587FB7D0A2F9</RequestId>
     </Error>
   BODY
@@ -47,7 +47,7 @@ module Awscr::S3
       end
 
       it "handles bad responses" do
-        WebMock.stub(:get, "http://s3.amazonaws.com/?")
+        WebMock.stub(:get, "http://s3.amazonaws.com/sup?")
                .to_return(status: 404)
 
         http = Http.new(SIGNER)
@@ -104,9 +104,34 @@ module Awscr::S3
           http.put("/", "")
         end
       end
+
+      it "sets the Content-Length header by default" do
+        WebMock.stub(:put, "http://s3.amazonaws.com/document")
+               .with(body: "abcd", headers: {"Content-Length" => "4"})
+               .to_return(status: 200)
+
+        http = Http.new(SIGNER)
+        http.put("/document", "abcd")
+      end
+
+      it "passes additional headers, when provided" do
+        WebMock.stub(:put, "http://s3.amazonaws.com/document")
+               .with(body: "abcd", headers: {"Content-Length" => "4", "x-amz-meta-name" => "document"})
+               .to_return(status: 200)
+
+        http = Http.new(SIGNER)
+        http.put("/document", "abcd", {"x-amz-meta-name" => "document"})
+      end
     end
 
     describe "post" do
+      it "passes additional headers, when provided" do
+        WebMock.stub(:post, "http://s3.amazonaws.com/?")
+               .with(headers: {"x-amz-meta-name" => "document"})
+
+        Http.new(SIGNER).post("/", headers: {"x-amz-meta-name" => "document"})
+      end
+
       it "handles aws specific errors" do
         WebMock.stub(:post, "http://s3.amazonaws.com/?")
                .to_return(status: 404, body: ERROR_BODY)
@@ -131,6 +156,13 @@ module Awscr::S3
     end
 
     describe "delete" do
+      it "passes additional headers, when provided" do
+        WebMock.stub(:delete, "http://s3.amazonaws.com/?")
+               .with(headers: {"x-amz-mfa" => "123456"})
+
+        Http.new(SIGNER).delete("/", headers: {"x-amz-mfa" => "123456"})
+      end
+
       it "handles aws specific errors" do
         WebMock.stub(:delete, "http://s3.amazonaws.com/?")
                .to_return(status: 404, body: ERROR_BODY)
