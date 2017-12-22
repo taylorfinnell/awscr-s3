@@ -12,13 +12,13 @@ module Awscr::S3::Paginator
     end
 
     def next
-      if @last_output && @last_output.not_nil!.truncated? == false
-        stop
-      else
-        @params["continuation-token"] = @last_output.not_nil!.next_token if @last_output
+      return stop if (lo = @last_output) && !lo.truncated?
 
-        @last_output = Response::ListObjectsV2.from_response(next_response)
+      if lo = @last_output
+        @params["continuation-token"] = lo.next_token
       end
+
+      @last_output = Response::ListObjectsV2.from_response(next_response)
     end
 
     private def next_response

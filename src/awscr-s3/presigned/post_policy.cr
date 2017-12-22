@@ -30,7 +30,7 @@ module Awscr
 
         # Adds a `Condition` to the `Policy`.
         def condition(key : String, value : String | Int32)
-          @fields.push(SimpleCondition.new(key, value))
+          @fields.push(PostField.new(key, value))
           self
         end
 

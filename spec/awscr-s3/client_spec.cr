@@ -181,7 +181,7 @@ module Awscr::S3
         end
 
         expected_objects = [
-          Object.new("my-image.jpg", 434234,
+          Object.new("my-image.jpg", 434_234,
             "\"fba9dede5f27731c9771645a39863328\""),
           Object.new("key2", 1337,
             "\"fba9dede5f27731c9771645a39863329\""),
@@ -225,7 +225,7 @@ module Awscr::S3
                .to_return(body: resp)
 
         expected_objects = [
-          Object.new("my-image.jpg", 434234,
+          Object.new("my-image.jpg", 434_234,
             "\"fba9dede5f27731c9771645a39863328\""),
           Object.new("key2", 1337,
             "\"fba9dede5f27731c9771645a39863329\""),

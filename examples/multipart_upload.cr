@@ -24,7 +24,7 @@ uploaded_part = client.upload_part(
   object: object,
   upload_id: upload.upload_id,
   part_number: 1,
-  part: IO::Memory.new("A" * 5000001) # 5mb min
+  part: IO::Memory.new("A" * 5_000_001) # 5mb min
 )
 
 final = client.complete_multipart_upload(
