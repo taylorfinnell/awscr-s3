@@ -17,6 +17,10 @@ dependencies:
 
 [Examples](https://github.com/taylorfinnell/awscr-s3/tree/master/examples)
 
+## Documentation
+
+[Documentation](https://taylorfinnell.github.io/awscr-s3/)
+
 ## Usage
 
 ```crystal
