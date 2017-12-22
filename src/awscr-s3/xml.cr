@@ -2,6 +2,7 @@ require "xml"
 
 module Awscr::S3
   class XML
+    # :nodoc:
     struct NamespacedNode
       def initialize(@node : ::XML::Node)
       end
@@ -16,6 +17,7 @@ module Awscr::S3
         end
       end
 
+      # :nodoc:
       private def build_path(path)
         anywhere = false
         if path.starts_with?("//")
@@ -32,6 +34,7 @@ module Awscr::S3
         (parts).join("/")
       end
 
+      # :nodoc:
       private def namespace
         if namespaces.empty?
           ""
@@ -40,6 +43,7 @@ module Awscr::S3
         end
       end
 
+      # :nodoc:
       private def namespaces
         @node.root.not_nil!.namespaces
       end

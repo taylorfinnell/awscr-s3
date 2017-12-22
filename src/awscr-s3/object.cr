@@ -1,4 +1,5 @@
 module Awscr::S3
+  # An object on S3
   class Object
     getter key
     getter size

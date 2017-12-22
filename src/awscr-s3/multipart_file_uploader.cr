@@ -1,4 +1,5 @@
 module Awscr::S3
+  # :nodoc:
   private class Part
     getter offset
     getter size
@@ -8,6 +9,7 @@ module Awscr::S3
     end
   end
 
+  # :nodoc:
   private class MultipartFileUploader
     getter client
 
