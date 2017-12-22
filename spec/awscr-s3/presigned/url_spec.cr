@@ -61,18 +61,18 @@ module Awscr
           it "generates correct url for v2" do
             time = Time.epoch(1)
             Timecop.freeze(time)
-              options = Url::Options.new(
-                region: "us-east-1",
-                aws_access_key: "AKIAIOSFODNN7EXAMPLE",
-                aws_secret_key: "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY",
-                bucket: "examplebucket",
-                object: "/test.txt",
-                signer: :v2
-              )
-              url = Url.new(options)
+            options = Url::Options.new(
+              region: "us-east-1",
+              aws_access_key: "AKIAIOSFODNN7EXAMPLE",
+              aws_secret_key: "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY",
+              bucket: "examplebucket",
+              object: "/test.txt",
+              signer: :v2
+            )
+            url = Url.new(options)
 
-              url.for(:get)
-                 .should eq("https://s3.amazonaws.com/examplebucket/test.txt?Expires=86401&AWSAccessKeyId=AKIAIOSFODNN7EXAMPLE&Signature=KP7uBvqYauy%2Fzj1Rb9LgL7e87VY%3D")
+            url.for(:get)
+               .should eq("https://s3.amazonaws.com/examplebucket/test.txt?Expires=86401&AWSAccessKeyId=AKIAIOSFODNN7EXAMPLE&Signature=KP7uBvqYauy%2Fzj1Rb9LgL7e87VY%3D")
           end
 
           it "generates a correct url for v4" do

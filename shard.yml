@@ -20,3 +20,6 @@ development_dependencies:
   webmock:
     github: manastech/webmock.cr
     branch: master
+  ameba:
+    github: veelenga/ameba
+    branch: master

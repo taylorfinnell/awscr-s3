@@ -24,7 +24,7 @@ module Awscr
 
           <<-HTML
           <form action="#{@form.url}" method="post" enctype="multipart/form-data">
-          #{inputs.join(br)}
+            #{inputs.join(br)}
 
             <input type="file"   name="file" /> #{br}
             <input type="submit" name="submit" value="Upload" />

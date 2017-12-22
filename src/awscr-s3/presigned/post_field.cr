@@ -2,7 +2,7 @@ module Awscr
   module S3
     module Presigned
       # A field in a `Presigned::Post`
-      abstract class PostField
+      class PostField
         include Comparable(PostField)
 
         # The key of the field
@@ -14,7 +14,9 @@ module Awscr
         def initialize(@key : String, @value : String)
         end
 
-        abstract def serialize
+        def serialize
+          {@key => @value}
+        end
 
         def <=>(field : PostField)
           if @key == field.key && @value == field.value
@@ -22,13 +24,6 @@ module Awscr
           else
             -1
           end
-        end
-      end
-
-      # A field in the `Post` object
-      class SimpleCondition < PostField
-        def serialize
-          {@key => @value}
         end
       end
     end

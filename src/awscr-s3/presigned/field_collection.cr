@@ -35,12 +35,7 @@ module Awscr
         # Access a key, by name, from the field collection. Returns the key if
         # found, otherwise returns nil.
         def [](key)
-          fields = self.select { |field| clean_key(field.key) == clean_key(key) }
-          if fields.empty?
-            nil
-          else
-            fields.first.value
-          end
+          self.find { |field| clean_key(field.key) == clean_key(key) }.try(&.value)
         end
 
         # Convert the collection to a hash in the form of key => value.
