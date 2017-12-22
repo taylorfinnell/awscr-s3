@@ -4,6 +4,23 @@ require "uri"
 require "xml/builder"
 
 module Awscr::S3
+  # An S3 client for interacting with S3.
+  #
+  # Creating an S3 Client
+  #
+  # ```
+  # client = Client.new("region", "key", "secret")
+  # ```
+  #
+  # Client with custom endpoint
+  # ```
+  # client = Client.new("region", "key", "secret", endpoint: "http://test.com")
+  # ```
+  #
+  # Client with custom signer algorithm
+  # ```
+  # client = Client.new("region", "key", "secret", signer: :v2)
+  # ```
   class Client
     @signer : Awscr::Signer::Signers::Interface
 
@@ -16,12 +33,26 @@ module Awscr::S3
       )
     end
 
+    # List s3 buckets
+    #
+    # ```
+    # client = Client.new("region", "key", "secret", signer: :v2)
+    # resp = client.list_buckets
+    # p resp.buckets.map(&.name) # => ["bucket1", "bucket2"]
+    # ```
     def list_buckets
       resp = http.get("/")
 
       Response::ListAllMyBuckets.from_response(resp)
     end
 
+    # Start a multipart upload
+    #
+    # ```
+    # client = Client.new("region", "key", "secret", signer: :v2)
+    # resp = client.start_multipart_upload("bucket1", "obj")
+    # p resp.upload_id # => someid
+    # ```
     def start_multipart_upload(bucket : String, object : String,
                                headers : Hash(String, String) = Hash(String, String).new)
       resp = http.post("/#{bucket}/#{object}?uploads", headers: headers)
@@ -29,6 +60,13 @@ module Awscr::S3
       Response::StartMultipartUpload.from_response(resp)
     end
 
+    # Upload a part, for use in multipart uploading
+    #
+    # ```
+    # client = Client.new("region", "key", "secret", signer: :v2)
+    # resp = client.upload_part("bucket1", "obj", "someid", 123, "MY DATA")
+    # p resp.upload_id # => someid
+    # ```
     def upload_part(bucket : String, object : String,
                     upload_id : String, part_number : Int32, part : IO | String)
       resp = http.put("/#{bucket}/#{object}?partNumber=#{part_number}&uploadId=#{upload_id}", part)
@@ -40,6 +78,13 @@ module Awscr::S3
       )
     end
 
+    # Complete a multipart upload
+    #
+    # ```
+    # client = Client.new("region", "key", "secret", signer: :v2)
+    # resp = client.complete_multipart_upload("bucket1", "obj", "123", parts)
+    # p resp.key # => obj
+    # ```
     def complete_multipart_upload(bucket : String, object : String, upload_id : String, parts : Array(Response::UploadPartOutput))
       body = ::XML.build do |xml|
         xml.element("CompleteMultipartUpload") do
@@ -61,24 +106,55 @@ module Awscr::S3
       Response::CompleteMultipartUpload.from_response(resp)
     end
 
+    # Aborts a multi part upload. Returns true if the abort was a success, false
+    # otherwise.
+    #
+    # ```
+    # client = Client.new("region", "key", "secret", signer: :v2)
+    # resp = client.abort_multipart_upload("bucket1", "obj", "123")
+    # p resp # => true
+    # ```
     def abort_multipart_upload(bucket : String, object : String, upload_id : String)
       resp = http.delete("/#{bucket}/#{object}?uploadId=#{upload_id}")
 
       resp.status_code == 204
     end
 
+    # Get information about a bucket, useful for determining if a bucket exists.
+    # Raises a `Http::ServerError` if the bucket does not exist.
+    #
+    # ```
+    # client = Client.new("region", "key", "secret", signer: :v2)
+    # resp = client.head_bucket("bucket1")
+    # p resp # => true
+    # ```
     def head_bucket(bucket)
       http.head("/#{bucket}")
 
       true
     end
 
+    # Delete an object from a bucket, returns `true` if successful, `false`
+    # otherwise.
+    #
+    # ```
+    # client = Client.new("region", "key", "secret", signer: :v2)
+    # resp = client.delete_object("bucket1", "obj")
+    # p resp # => true
+    # ```
     def delete_object(bucket, object, headers : Hash(String, String) = Hash(String, String).new)
       resp = http.delete("/#{bucket}/#{object}", headers)
 
       resp.status_code == 204
     end
 
+    # Add an object to a bucket.
+    #
+    # ```
+    # client = Client.new("region", "key", "secret", signer: :v2)
+    # resp = client.put_object("bucket1", "obj", "MY DATA")
+    # p resp.key # => "obj"
+    # ```
     def put_object(bucket, object : String, body : IO | String,
                    headers : Hash(String, String) = Hash(String, String).new)
       resp = http.put("/#{bucket}/#{object}", body, headers)
@@ -86,12 +162,26 @@ module Awscr::S3
       Response::PutObjectOutput.from_response(resp)
     end
 
+    # Get the contents of an object in a bucket
+    #
+    # ```
+    # client = Client.new("region", "key", "secret", signer: :v2)
+    # resp = client.get_object("bucket1", "obj")
+    # p resp.body # => "MY DATA"
+    # ```
     def get_object(bucket, object : String)
       resp = http.get("/#{bucket}/#{object}")
 
       Response::GetObjectOutput.from_response(resp)
     end
 
+    # List all the items in a bucket
+    #
+    # ```
+    # client = Client.new("region", "key", "secret", signer: :v2)
+    # resp = client.list_objects("bucket1", prefix: "test")
+    # p resp.map(&.key) # => ["obj"]
+    # ```
     def list_objects(bucket, max_keys = nil, prefix = nil)
       params = {
         "bucket"    => bucket,
@@ -103,6 +193,7 @@ module Awscr::S3
       Paginator::ListObjectsV2.new(http, params)
     end
 
+    # :nodoc:
     private def http
       Http.new(@signer, @region, @endpoint)
     end
