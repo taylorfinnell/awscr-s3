@@ -181,7 +181,31 @@ module Awscr
         end
 
         describe "build" do
-          it "yields the policy" do
+          it "yields signed v2 policy" do
+            post = Post.new(
+              region: "us-east-1",
+              aws_access_key: "test",
+              aws_secret_key: "test",
+              signer: :v2
+            )
+            policy = nil
+            post.build { |p| p.expiration(Time.now); policy = p }
+
+            policy.should be_a(Policy)
+            policy.as(Policy).fields["Signature"].should eq("vI0Km7fxOL7B9BunXFKM2/GvS1A=")
+          end
+
+          it "yields the signed v4 policy" do
+            post = Post.new(
+              region: "us-east-1",
+              aws_access_key: "test",
+              aws_secret_key: "test"
+            )
+            policy = nil
+            post.build { |p| p.expiration(Time.now); policy = p }
+
+            policy.should be_a(Policy)
+            policy.as(Policy).fields["x-amz-signature"].should eq("7dc0bf8fe1dcc2344f8ceaf3148a8898fbac6f074ccbe4edfbfac545be693add")
           end
         end
       end

@@ -15,7 +15,7 @@ module Awscr::S3
       end
     end
 
-    def initialize(@signer : Awscr::Signer::Signers::V4,
+    def initialize(@signer : Awscr::Signer::Signers::Interface,
                    @region : String = standard_us_region,
                    @custom_endpoint : String? = nil)
       @http = HTTP::Client.new(endpoint)

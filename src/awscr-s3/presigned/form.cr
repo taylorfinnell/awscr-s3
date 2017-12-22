@@ -23,8 +23,8 @@ module Awscr
         #   form.condition("success_action_status", "201")
         # end
         # ```
-        def self.build(region, aws_access_key, aws_secret_key, &block)
-          post = Post.new(region, aws_access_key, aws_secret_key)
+        def self.build(region, aws_access_key, aws_secret_key, signer = :v4, &block)
+          post = Post.new(region, aws_access_key, aws_secret_key, signer)
           post.build do |p|
             yield p
           end

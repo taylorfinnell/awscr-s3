@@ -37,27 +37,28 @@ module Awscr
 
         # :nodoc:
         private def presign_request(request)
-          signer = Signer::Signers::V4.new(
-            SERVICE_NAME,
-            @region,
-            @aws_access_key,
-            @aws_secret_key
-          )
-          signer.presign(request)
+          @options.signer.presign(request)
         end
 
         # :nodoc:
         private def build_request(method)
           headers = HTTP::Headers{"Host" => host}
 
+          body = @options.signer_version == :v4 ? "UNSIGNED-PAYLOAD" : nil
+
           request = HTTP::Request.new(
             method,
             "/#{@options.bucket}#{@options.object}",
             headers,
-            "UNSIGNED-PAYLOAD"
+            body
           )
 
-          request.query_params.add("X-Amz-Expires", @options.expires.to_s)
+          if @options.signer_version == :v4
+            request.query_params.add("X-Amz-Expires", @options.expires.to_s)
+          else
+            request.query_params.add("Expires", (Time.utc_now.epoch + @options.expires).to_s)
+          end
+
           request
         end
 
