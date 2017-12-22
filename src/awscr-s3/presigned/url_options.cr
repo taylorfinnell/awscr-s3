@@ -39,7 +39,20 @@ module Awscr
 
           def initialize(@aws_access_key, @aws_secret_key, @region,
                          @object, @bucket, @expires = 86_400, @host_name = nil,
-                         @additional_options = {} of String => String)
+                         @additional_options = {} of String => String, @signer = :v4)
+          end
+
+          def signer_version
+            @signer
+          end
+
+          def signer
+            SignerFactory.get(
+              version: @signer,
+              region: @region,
+              aws_access_key: @aws_access_key,
+              aws_secret_key: @aws_secret_key
+            )
           end
         end
       end

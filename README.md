@@ -35,6 +35,12 @@ For S3 compatible services, like DigitalOcean Spaces or Minio, you'll need to se
 client = Awscr::S3::Client.new("nyc3", "key", "secret", endpoint: "https://nyc3.digitaloceanspaces.com")
 ```
 
+If you wish you wish to you version 2 request signing you may specify the signer
+
+```crystal
+client = Awscr::S3::Client.new("us-east1", "key", "secret", signer: :v2)
+```
+
 ## **List Buckets**
 
 ```crystal
@@ -103,6 +109,14 @@ form = Awscr::S3::Presigned::Form.build("us-east-1", "access key", "secret key")
 end
 ```
 
+You may use version 2 request signing via
+
+```crystal
+form = Awscr::S3::Presigned::Form.build("us-east-1", "access key", "secret key", signer: :v2) do |form|
+  ...
+end
+```
+
 **Converting the form to raw HTML (for browser uploads, etc).**
 
 ```crystal
@@ -131,4 +145,18 @@ options = Awscr::S3::Presigned::Url::Options.new(
 
 url = Awscr::S3::Presigned::Url.new(options)
 p url.for(:put)
+```
+
+You may use version 2 request signing via
+
+
+```crystal
+options = Awscr::S3::Presigned::Url::Options.new(
+   aws_access_key: "key",
+   aws_secret_key: "secret",
+   region: "us-east-1",
+   object: "test.txt",
+   bucket: "mybucket",
+   signer: :v2
+)
 ```

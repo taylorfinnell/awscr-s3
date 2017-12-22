@@ -5,7 +5,15 @@ require "xml/builder"
 
 module Awscr::S3
   class Client
-    def initialize(@region : String, @aws_access_key : String, @aws_secret_key : String, @endpoint : String? = nil)
+    @signer : Awscr::Signer::Signers::Interface
+
+    def initialize(@region : String, @aws_access_key : String, @aws_secret_key : String, @endpoint : String? = nil, signer : Symbol = :v4)
+      @signer = SignerFactory.get(
+        version: signer,
+        region: @region,
+        aws_access_key: @aws_access_key,
+        aws_secret_key: @aws_secret_key
+      )
     end
 
     def list_buckets
@@ -95,17 +103,8 @@ module Awscr::S3
       Paginator::ListObjectsV2.new(http, params)
     end
 
-    private def signer
-      Awscr::Signer::Signers::V4.new(
-        service: SERVICE_NAME,
-        region: @region,
-        aws_access_key: @aws_access_key,
-        aws_secret_key: @aws_secret_key
-      )
-    end
-
     private def http
-      Http.new(signer, @region, @endpoint)
+      Http.new(@signer, @region, @endpoint)
     end
   end
 end

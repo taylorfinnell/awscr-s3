@@ -2,6 +2,10 @@ require "../spec_helper"
 
 module Awscr::S3
   describe Client do
+    it "allows signer version" do
+      Client.new("adasd", "adasd", "adad", signer: :v2)
+    end
+
     describe "abort_multipart_upload" do
       it "aborts an upload" do
         WebMock.stub(:delete, "http://s3.amazonaws.com/bucket/object?uploadId=upload_id")

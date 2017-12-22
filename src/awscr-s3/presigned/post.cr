@@ -6,7 +6,8 @@ module Awscr
       # Represents the URL and fields required to send a HTTP form POST to S3
       # for object uploading.
       class Post
-        def initialize(@region : String, @aws_access_key : String, @aws_secret_key : String)
+        def initialize(@region : String, @aws_access_key : String,
+                       @aws_secret_key : String, @signer : Symbol = :v4)
           @policy = Policy.new
         end
 
@@ -14,18 +15,12 @@ module Awscr
         def build(&block)
           yield @policy
 
-          time = Time.utc_now
-          @policy.condition("x-amz-credential", credential_scope(time))
-          @policy.condition("x-amz-algorithm", Signer::ALGORITHM)
-          @policy.condition("x-amz-date", time.to_s("%Y%m%dT%H%M%SZ"))
+          add_fields_before_sign
 
-          signer = Signer::Signers::V4.new(SERVICE_NAME, @region,
-            @aws_access_key, @aws_secret_key)
           signature = signer.sign(@policy.to_s)
 
-          # Add the final fields
-          @policy.condition("policy", @policy.to_s)
-          @policy.condition("x-amz-signature", signature.to_s)
+          add_fields_after_sign(signature)
+
           self
         end
 
@@ -55,6 +50,39 @@ module Awscr
           if bucket = fields.find { |field| field.key == "bucket" }
             bucket.value
           end
+        end
+
+        private def add_fields_after_sign(signature)
+          @policy.condition("policy", @policy.to_s)
+
+          case @signer
+          when :v4
+            @policy.condition("x-amz-signature", signature.to_s)
+          when :v2
+            @policy.condition("AWSAccessKeyId", @aws_access_key)
+            @policy.condition("Signature", signature.to_s)
+          end
+        end
+
+        private def add_fields_before_sign
+          case @signer
+          when :v4
+            time = Time.utc_now
+            @policy.condition("x-amz-credential", credential_scope(time))
+            @policy.condition("x-amz-algorithm", Signer::ALGORITHM)
+            @policy.condition("x-amz-date", time.to_s("%Y%m%dT%H%M%SZ"))
+          when :v2
+            # do nothing
+          end
+        end
+
+        private def signer
+          SignerFactory.get(
+            version: @signer,
+            region: @region,
+            aws_access_key: @aws_access_key,
+            aws_secret_key: @aws_secret_key
+          )
         end
       end
     end
