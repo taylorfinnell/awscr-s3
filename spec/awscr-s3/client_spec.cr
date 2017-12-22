@@ -287,5 +287,33 @@ module Awscr::S3
         result.should be_true
       end
     end
+
+    describe "custom endpoint" do
+      it "can set a custom endpoint" do
+        io = IO::Memory.new("Hello")
+
+        WebMock.stub(:put, "https://nyc3.digitaloceanspaces.com/mybucket/object.txt")
+               .with(body: "Hello")
+               .to_return(body: "", headers: {"ETag" => "etag"})
+
+        client = Client.new("", "key", "secret", "https://nyc3.digitaloceanspaces.com")
+        resp = client.put_object("mybucket", "object.txt", io)
+
+        resp.should eq(Response::PutObjectOutput.new("etag"))
+      end
+
+      it "can set a custom endpoint with a port" do
+        io = IO::Memory.new("Hello")
+
+        WebMock.stub(:put, "http://127.0.0.1:9000/mybucket/object.txt")
+               .with(body: "Hello")
+               .to_return(body: "", headers: {"ETag" => "etag"})
+
+        client = Client.new("", "key", "secret", "http://127.0.0.1:9000")
+        resp = client.put_object("mybucket", "object.txt", io)
+
+        resp.should eq(Response::PutObjectOutput.new("etag"))
+      end
+    end
   end
 end
