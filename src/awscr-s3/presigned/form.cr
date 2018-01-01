@@ -1,6 +1,6 @@
 require "http"
 require "http/client"
-require "secure_random"
+require "uuid"
 require "./post"
 
 module Awscr
@@ -8,6 +8,7 @@ module Awscr
     module Presigned
       class Form
         @client : HTTP::Client
+        @boundary : String
 
         # Create a new `Form`
         #
@@ -33,7 +34,7 @@ module Awscr
 
         # Create a form with a Post object and an IO.
         def initialize(@post : Post, client : HTTP::Client)
-          @boundary = SecureRandom.uuid
+          @boundary = UUID.random.to_s
           @client = client
         end
 

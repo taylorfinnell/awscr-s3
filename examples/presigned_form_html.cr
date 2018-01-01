@@ -1,7 +1,7 @@
 # Get raw html for an S3 upload form
 
 require "../src/awscr-s3"
-require "secure_random"
+require "uuid"
 
 BUCKET = ENV["AWS_BUCKET"]
 HOST   = "#{BUCKET}.s3.amazonaws.com"
@@ -14,7 +14,7 @@ form = Awscr::S3::Presigned::Form.build(region: REGION, aws_access_key: KEY,
   form.expiration(Time.epoch(Time.now.epoch + 1000))
   form.condition("bucket", BUCKET)
   form.condition("acl", "public-read")
-  form.condition("key", SecureRandom.uuid)
+  form.condition("key", UUID.random.to_s)
   form.condition("Content-Type", "text/plain")
   form.condition("success_action_status", "201")
 end

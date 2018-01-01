@@ -1,5 +1,4 @@
 require "../src/awscr-s3"
-require "secure_random"
 
 BUCKET = ENV["AWS_BUCKET"]
 KEY    = ENV["AWS_KEY"]

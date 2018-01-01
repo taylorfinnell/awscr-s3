@@ -52,7 +52,7 @@ module Awscr
           )
           url = Url.new(options)
 
-          expect_raises do
+          expect_raises(Exception) do
             url.for(:test)
           end
         end
