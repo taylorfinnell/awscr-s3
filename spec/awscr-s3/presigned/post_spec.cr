@@ -150,7 +150,7 @@ module Awscr
             )
             post.build { |b| b.expiration(Time.now) }
 
-            expect_raises do
+            expect_raises(Exception) do
               post.url
             end
           end

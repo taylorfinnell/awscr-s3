@@ -276,7 +276,7 @@ module Awscr::S3
 
         client = Client.new("us-east-1", "key", "secret")
 
-        expect_raises do
+        expect_raises(Exception) do
           client.head_bucket("blah2")
         end
       end

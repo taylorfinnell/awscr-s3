@@ -1,5 +1,5 @@
 require "../src/awscr-s3"
-require "secure_random"
+require "uuid"
 
 BUCKET = ENV["AWS_BUCKET"]
 KEY    = ENV["AWS_KEY"]
@@ -12,7 +12,7 @@ client = Awscr::S3::Client.new(
   aws_secret_key: SECRET
 )
 
-object = SecureRandom.uuid
+object = UUID.random.to_s
 
 client.put_object(bucket: BUCKET, object: object, body: IO::Memory.new("Hey!"))
 

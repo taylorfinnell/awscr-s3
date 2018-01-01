@@ -1,7 +1,7 @@
 # Upload a screenshot to S3 by submiting a presigned form
 
 require "../src/awscr-s3"
-require "secure_random"
+require "uuid"
 require "tempfile"
 
 BUCKET = ENV["AWS_BUCKET"]
@@ -14,12 +14,12 @@ form = Awscr::S3::Presigned::Form.build(REGION, KEY, SECRET) do |form|
   form.expiration(Time.epoch(Time.now.epoch + 1000))
   form.condition("bucket", BUCKET)
   form.condition("acl", "public-read")
-  form.condition("key", "#{SecureRandom.uuid}.png"[0...8])
+  form.condition("key", "#{UUID.random}.png"[0...8])
   form.condition("Content-Type", "image/png")
   form.condition("success_action_status", "201")
 end
 
-path = "/tmp/#{SecureRandom.uuid}"
+path = "/tmp/#{UUID.random}"
 `screencapture -i #{path}`
 
 file = File.open(path)

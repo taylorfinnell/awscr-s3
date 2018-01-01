@@ -1,12 +1,12 @@
 require "../src/awscr-s3"
-require "secure_random"
+require "uuid"
 
 BUCKET = ENV["AWS_BUCKET"]
 KEY    = ENV["AWS_KEY"]
 SECRET = ENV["AWS_SECRET"]
 REGION = ENV["AWS_REGION"]
 
-object = "/#{SecureRandom.uuid}"
+object = "/#{UUID.random}"
 
 options = Awscr::S3::Presigned::Url::Options.new(
   region: REGION,
