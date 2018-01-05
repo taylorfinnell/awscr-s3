@@ -31,6 +31,18 @@ module Awscr::S3
       end
     end
 
+    describe "delete_bucket" do
+      it "returns true when buckest is deleted" do
+        WebMock.stub(:delete, "http://s3.amazonaws.com/bucket")
+          .to_return(body: "", status: 204)
+
+        client = Client.new("us-east-1", "key", "secret")
+        result = client.delete_bucket("bucket")
+
+        result.should be_true
+      end
+    end
+
     describe "abort_multipart_upload" do
       it "aborts an upload" do
         WebMock.stub(:delete, "http://s3.amazonaws.com/bucket/object?uploadId=upload_id")

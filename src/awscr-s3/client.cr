@@ -69,6 +69,19 @@ module Awscr::S3
       resp.status_code == 200
     end
 
+    # Delete a bucket, note: it must be empty
+    #
+    # ```
+    # client = Client.new("region", "key", "secret")
+    # resp = client.delete_bucket("test")
+    # p resp # => true
+    # ```
+    def delete_bucket(bucket)
+      resp = http.delete("/#{bucket}")
+
+      resp.status_code == 204
+    end
+
     # Start a multipart upload
     #
     # ```
