@@ -264,7 +264,7 @@ module Awscr::S3
         output = client.list_buckets
 
         output.should eq(Response::ListAllMyBuckets.new([
-          Bucket.new("quotes", "2006-02-03T16:45:09.000Z"),
+          Bucket.new("quotes", Time.parse("2006-02-03T16:45:09.000Z", Response::ListAllMyBuckets::DATE_FORMAT)),
         ]))
       end
     end

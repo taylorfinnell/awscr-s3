@@ -2,6 +2,9 @@ require "xml"
 
 module Awscr::S3::Response
   class ListAllMyBuckets
+    # :nodoc:
+    DATE_FORMAT = "%Y-%M-%dT%H:%M:%S.%z"
+
     def self.from_response(response)
       xml = XML.new(response.body)
 
@@ -10,7 +13,7 @@ module Awscr::S3::Response
         name = bucket.string("Name")
         creation_time = bucket.string("CreationDate")
 
-        buckets << Bucket.new(name, creation_time)
+        buckets << Bucket.new(name, Time.parse(creation_time, DATE_FORMAT))
       end
 
       new(buckets)
