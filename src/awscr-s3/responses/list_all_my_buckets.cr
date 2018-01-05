@@ -2,6 +2,8 @@ require "xml"
 
 module Awscr::S3::Response
   class ListAllMyBuckets
+    include Enumerable(Bucket)
+
     # :nodoc:
     DATE_FORMAT = "%Y-%M-%dT%H:%M:%S.%z"
 
@@ -25,6 +27,10 @@ module Awscr::S3::Response
     getter buckets
 
     def initialize(@buckets : Array(Bucket))
+    end
+
+    def each(&block)
+      @buckets.each { |b| yield b }
     end
 
     def_equals @buckets
