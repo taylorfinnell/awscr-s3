@@ -6,6 +6,31 @@ module Awscr::S3
       Client.new("adasd", "adasd", "adad", signer: :v2)
     end
 
+    describe "put_bucket" do
+      it "creates a bucket" do
+        WebMock.stub(:put, "http://s3.amazonaws.com/bucket")
+          .to_return(body: "")
+
+        client = Client.new("us-east-1", "key", "secret")
+        result = client.put_bucket("bucket")
+
+        result.should be_true
+      end
+
+      it "can create a bucket with a region" do
+        body = "<?xml version=\"1.0\"?>\n<CreateBucketConfiguration><LocationConstraint>us-west-2</LocationConstraint></CreateBucketConfiguration>\n"
+
+        WebMock.stub(:put, "http://s3.amazonaws.com/bucket2")
+          .with(body: body)
+          .to_return(body: "")
+
+        client = Client.new("us-east-1", "key", "secret")
+        result = client.put_bucket("bucket2", region: "us-west-2")
+
+        result.should be_true
+      end
+    end
+
     describe "abort_multipart_upload" do
       it "aborts an upload" do
         WebMock.stub(:delete, "http://s3.amazonaws.com/bucket/object?uploadId=upload_id")
