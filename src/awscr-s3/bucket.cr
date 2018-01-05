@@ -1,5 +1,7 @@
 module Awscr::S3
   class Bucket
+    getter name, creation_time
+
     # An S3 Bucket
     def initialize(@name : String, @creation_time : Time)
     end

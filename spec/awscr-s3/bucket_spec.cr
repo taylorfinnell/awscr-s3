@@ -13,5 +13,18 @@ module Awscr::S3
       bucket = Bucket.new("test2", time)
       (Bucket.new("test", Time.epoch(Time.now.epoch + 123)) == bucket).should eq(false)
     end
+
+    it "has a name" do
+      bucket = Bucket.new("name", Time.now)
+
+      bucket.name.should eq("name")
+    end
+
+    it "has a creation_time" do
+      time = Time.now
+      bucket = Bucket.new("name", time)
+
+      bucket.creation_time.should eq(time)
+    end
   end
 end
