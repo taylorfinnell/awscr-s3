@@ -8,12 +8,15 @@ module Awscr::S3::Response
     def self.from_response(response)
       xml = XML.new(response.body)
 
+      owner = xml.string("ListAllMyBucketsResult/Owner/DisplayName")
+
       buckets = [] of Bucket
       xml.array("ListAllMyBucketsResult/Buckets/Bucket") do |bucket|
         name = bucket.string("Name")
         creation_time = bucket.string("CreationDate")
 
-        buckets << Bucket.new(name, Time.parse(creation_time, DATE_FORMAT))
+        buckets << Bucket.new(name, Time.parse(creation_time, DATE_FORMAT),
+          owner)
       end
 
       new(buckets)
