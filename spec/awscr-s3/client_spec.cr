@@ -6,6 +6,43 @@ module Awscr::S3
       Client.new("adasd", "adasd", "adad", signer: :v2)
     end
 
+    describe "put_bucket" do
+      it "creates a bucket" do
+        WebMock.stub(:put, "http://s3.amazonaws.com/bucket")
+               .to_return(body: "")
+
+        client = Client.new("us-east-1", "key", "secret")
+        result = client.put_bucket("bucket")
+
+        result.should be_true
+      end
+
+      it "can create a bucket with a region" do
+        body = "<?xml version=\"1.0\"?>\n<CreateBucketConfiguration><LocationConstraint>us-west-2</LocationConstraint></CreateBucketConfiguration>\n"
+
+        WebMock.stub(:put, "http://s3.amazonaws.com/bucket2")
+               .with(body: body)
+               .to_return(body: "")
+
+        client = Client.new("us-east-1", "key", "secret")
+        result = client.put_bucket("bucket2", region: "us-west-2")
+
+        result.should be_true
+      end
+    end
+
+    describe "delete_bucket" do
+      it "returns true when buckest is deleted" do
+        WebMock.stub(:delete, "http://s3.amazonaws.com/bucket")
+               .to_return(body: "", status: 204)
+
+        client = Client.new("us-east-1", "key", "secret")
+        result = client.delete_bucket("bucket")
+
+        result.should be_true
+      end
+    end
+
     describe "abort_multipart_upload" do
       it "aborts an upload" do
         WebMock.stub(:delete, "http://s3.amazonaws.com/bucket/object?uploadId=upload_id")
@@ -264,7 +301,7 @@ module Awscr::S3
         output = client.list_buckets
 
         output.should eq(Response::ListAllMyBuckets.new([
-          Bucket.new("quotes", "2006-02-03T16:45:09.000Z"),
+          Bucket.new("quotes", Time.parse("2006-02-03T16:45:09.000Z", Response::ListAllMyBuckets::DATE_FORMAT)),
         ]))
       end
     end

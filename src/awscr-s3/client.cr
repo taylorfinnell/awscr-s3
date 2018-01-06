@@ -46,6 +46,42 @@ module Awscr::S3
       Response::ListAllMyBuckets.from_response(resp)
     end
 
+    # Create a bucket, optionally place it in a region.
+    #
+    # ```
+    # client = Client.new("region", "key", "secret")
+    # resp = client.create_bucket("test")
+    # p resp # => true
+    # ```
+    def put_bucket(bucket, region : String? = nil, headers : Hash(String, String) = Hash(String, String).new)
+      body = if region
+               ::XML.build do |xml|
+                 xml.element("CreateBucketConfiguration") do
+                   xml.element("LocationConstraint") do
+                     xml.text(region.to_s)
+                   end
+                 end
+               end
+             end
+
+      resp = http.put("/#{bucket}", body: body.to_s, headers: headers)
+
+      resp.status_code == 200
+    end
+
+    # Delete a bucket, note: it must be empty
+    #
+    # ```
+    # client = Client.new("region", "key", "secret")
+    # resp = client.delete_bucket("test")
+    # p resp # => true
+    # ```
+    def delete_bucket(bucket)
+      resp = http.delete("/#{bucket}")
+
+      resp.status_code == 204
+    end
+
     # Start a multipart upload
     #
     # ```
