@@ -52,6 +52,22 @@ resp = client.list_buckets
 resp.buckets # => ["bucket1", "bucket2"]
 ```
 
+## **Delete a bucket**
+
+```crystal
+client = Client.new("region", "key", "secret")
+resp = client.delete_bucket("test")
+resp # => true
+```
+
+## Create a bucket
+
+```crystal
+client = Client.new("region", "key", "secret")
+resp = client.create_bucket("test")
+resp # => true
+```
+
 ## **Put Object**
 
 ```crystal

@@ -3,11 +3,6 @@ require "uri"
 
 module Awscr::S3::Response
   class ListObjectsV2
-    include Iterator(Object)
-
-    property client
-    @client : S3::Client?
-
     def self.from_response(response)
       xml = XML.new(response.body)
 
