@@ -92,10 +92,31 @@ module Awscr::S3
         WebMock.stub(:put, "http://s3.amazonaws.com/bucket/object?")
                .with(body: "", headers: {"Content-Type" => "image/svg+xml"})
                .to_return(status: 200, body: "", headers: {"ETag" => "etag"})
-        
+
         client = Client.new("us-east-1", "key", "secret")
         uploader = FileUploader.new(client)
-        
+
+        tempfile = Tempfile.new("foo", ".svg")
+        file = File.open(tempfile.path)
+
+        uploader.upload("bucket", "object", file).should be_true
+        tempfile.unlink
+      end
+
+      it "doesn't assign a content-type header if config.with_content_types is false" do
+        WebMock.stub(:put, "http://s3.amazonaws.com/bucket/object?")
+               .to_return do |request|
+          # Note: Make sure the Content-Type header isn't there
+          request.headers.has_key?("Content-Type").should be_false
+
+          headers = HTTP::Headers.new.merge!({"ETag" => "etag"})
+          HTTP::Client::Response.new(200, body: "", headers: headers)
+        end
+
+        client = Client.new("us-east-1", "key", "secret")
+        options = FileUploader::Options.new(with_content_types: false)
+        uploader = FileUploader.new(client, options)
+
         tempfile = Tempfile.new("foo", ".svg")
         file = File.open(tempfile.path)
 
