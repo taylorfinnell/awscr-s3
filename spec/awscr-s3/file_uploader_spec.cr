@@ -1,4 +1,5 @@
 require "../../spec_helper"
+require "tempfile"
 
 module Awscr::S3
   describe FileUploader do
@@ -83,6 +84,23 @@ module Awscr::S3
         big_io = IO::Memory.new("a" * 5_500_000)
 
         uploader.upload("bucket", "object", big_io, {"x-amz-meta-name" => "myobject"}).should be_true
+      end
+    end
+
+    describe "when the input is a file" do
+      it "automatically assigns a content-type header" do
+        WebMock.stub(:put, "http://s3.amazonaws.com/bucket/object?")
+               .with(body: "", headers: {"Content-Type" => "image/svg+xml"})
+               .to_return(status: 200, body: "", headers: {"ETag" => "etag"})
+        
+        client = Client.new("us-east-1", "key", "secret")
+        uploader = FileUploader.new(client)
+        
+        tempfile = Tempfile.new("foo", ".svg")
+        file = File.open(tempfile.path)
+
+        uploader.upload("bucket", "object", file).should be_true
+        tempfile.unlink
       end
     end
   end
