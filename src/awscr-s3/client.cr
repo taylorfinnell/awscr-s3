@@ -2,6 +2,8 @@ require "./responses/*"
 require "./paginators/*"
 require "uri"
 require "xml/builder"
+require "digest"
+require "base64"
 
 module Awscr::S3
   # An S3 client for interacting with S3.
@@ -182,6 +184,44 @@ module Awscr::S3
       resp = http.delete("/#{bucket}/#{object}", headers)
 
       resp.status_code == 204
+    end
+
+    # Batch deletes a list of object keys in a single request. Returns true on
+    # success, false otherwise. Note: A return value of false could still have
+    # deleted some of the keys in the request.
+    #
+    # TODO: Track which keys were deleted and which failed in the delete request
+    # and use that as return object
+    #
+    # ```
+    # client = Client.new("region", "key", "secret", signer: :v2)
+    # resp = client.batch_delete("bucket1", ["obj", "obj2"])
+    # p resp # => true
+    # ```
+    def batch_delete(bucket, keys : Array(String), quiet = true)
+      raise "More than 1000 keys is not yet supported." if keys.size > 1_000
+
+      body = ::XML.build do |xml|
+        xml.element("Delete") do
+          xml.element("Quiet") { xml.text("true") } if quiet
+          keys.each do |key|
+            xml.element("Object") do
+              xml.element("Key") do
+                xml.text(key)
+              end
+            end
+          end
+        end
+      end
+
+      headers = {
+        "Content-MD5"    => Base64.strict_encode(Digest::MD5.digest(body)),
+        "Content-Length" => body.bytesize.to_s,
+      }
+
+      resp = http.post("/#{bucket}?delete", body: body, headers: headers)
+
+      resp.status_code == 200
     end
 
     # Add an object to a bucket.
