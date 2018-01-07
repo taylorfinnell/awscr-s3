@@ -186,7 +186,18 @@ module Awscr::S3
       resp.status_code == 204
     end
 
-    # Batch deletes a list of object keys in a single request
+    # Batch deletes a list of object keys in a single request. Returns true on
+    # success, false otherwise. Note: A return value of false could still have
+    # deleted some of the keys in the request.
+    #
+    # TODO: Track which keys were deleted and which failed in the delete request
+    # and use that as return object
+    #
+    # ```
+    # client = Client.new("region", "key", "secret", signer: :v2)
+    # resp = client.batch_delete("bucket1", ["obj", "obj2"])
+    # p resp # => true
+    # ```
     def batch_delete(bucket, keys : Array(String), quiet = true)
       raise "More than 1000 keys is not yet supported." if keys.size > 1_000
 
