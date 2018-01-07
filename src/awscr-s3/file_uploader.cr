@@ -8,11 +8,12 @@ module Awscr::S3
     def initialize(@client : Client)
     end
 
-    # Upload a file to a bucket
+    # Upload a file to a bucket. Returns true if successful, otherwise an
+    # `Http::ServerError` is thrown.
     #
     # ```
     # uploader = FileUpload.new(client)
-    # uploader.upload("bucket1", "obj", "DATA!")
+    # uploader.upload("bucket1", "obj", IO::Memory.new("DATA!"))
     # ```
     def upload(bucket : String, object : String, io : IO, headers : Hash(String, String) = Hash(String, String).new)
       if io.size < UPLOAD_THRESHOLD
@@ -21,6 +22,7 @@ module Awscr::S3
         uploader = MultipartFileUploader.new(@client)
         uploader.upload(bucket, object, io, headers)
       end
+      true
     end
   end
 end

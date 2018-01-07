@@ -12,7 +12,7 @@ module Awscr::S3
         uploader = FileUploader.new(client)
         small_io = IO::Memory.new("document")
 
-        uploader.upload("bucket", "object", small_io)
+        uploader.upload("bucket", "object", small_io).should be_true
       end
 
       it "passes additional headers, when provided" do
@@ -24,7 +24,7 @@ module Awscr::S3
         uploader = FileUploader.new(client)
         small_io = IO::Memory.new("document")
 
-        uploader.upload("bucket", "object", small_io, {"x-amz-meta-name" => "myobject"})
+        uploader.upload("bucket", "object", small_io, {"x-amz-meta-name" => "myobject"}).should be_true
       end
     end
 
@@ -54,7 +54,7 @@ module Awscr::S3
         uploader = FileUploader.new(client)
         big_io = IO::Memory.new("a" * 5_500_000)
 
-        uploader.upload("bucket", "object", big_io)
+        uploader.upload("bucket", "object", big_io).should be_true
       end
 
       it "passes additional headers, when provided" do
@@ -82,7 +82,7 @@ module Awscr::S3
         uploader = FileUploader.new(client)
         big_io = IO::Memory.new("a" * 5_500_000)
 
-        uploader.upload("bucket", "object", big_io, {"x-amz-meta-name" => "myobject"})
+        uploader.upload("bucket", "object", big_io, {"x-amz-meta-name" => "myobject"}).should be_true
       end
     end
   end
