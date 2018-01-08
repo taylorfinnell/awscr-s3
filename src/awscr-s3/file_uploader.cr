@@ -26,7 +26,7 @@ module Awscr::S3
     # uploader.upload("bucket1", "obj", IO::Memory.new("DATA!"))
     # ```
     def upload(bucket : String, object : String, io : IO, headers : Hash(String, String) = Hash(String, String).new)
-      headers = @options.with_content_types ? headers.merge!(content_type_header(io)) : headers
+      headers = @options.with_content_types ? headers.merge(content_type_header(io)) : headers
 
       if io.size < UPLOAD_THRESHOLD
         @client.put_object(bucket, object, io, headers)
