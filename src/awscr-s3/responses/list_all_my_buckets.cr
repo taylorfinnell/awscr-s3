@@ -7,6 +7,8 @@ module Awscr::S3::Response
     # :nodoc:
     DATE_FORMAT = "%Y-%M-%dT%H:%M:%S.%z"
 
+    # Create a `ListAllMyBuckets` response from an
+    # `HTTP::Client::Response` object
     def self.from_response(response)
       xml = XML.new(response.body)
 
@@ -24,11 +26,13 @@ module Awscr::S3::Response
       new(buckets)
     end
 
+    # The array of buckets
     getter buckets
 
     def initialize(@buckets : Array(Bucket))
     end
 
+    # Iterate over each bucket in the response
     def each(&block)
       @buckets.each { |b| yield b }
     end

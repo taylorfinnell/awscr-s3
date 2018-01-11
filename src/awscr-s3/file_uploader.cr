@@ -9,7 +9,8 @@ module Awscr::S3
 
     # Configurable options passed to a FileUploader instance
     struct Options
-      property with_content_types
+      # If true the uploader will automatically add a content type header
+      getter with_content_types
 
       def initialize(@with_content_types : Bool)
       end

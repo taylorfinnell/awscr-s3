@@ -38,7 +38,7 @@ module Awscr::S3
     # List s3 buckets
     #
     # ```
-    # client = Client.new("region", "key", "secret", signer: :v2)
+    # client = Client.new("region", "key", "secret")
     # resp = client.list_buckets
     # p resp.buckets.map(&.name) # => ["bucket1", "bucket2"]
     # ```
@@ -87,7 +87,7 @@ module Awscr::S3
     # Start a multipart upload
     #
     # ```
-    # client = Client.new("region", "key", "secret", signer: :v2)
+    # client = Client.new("region", "key", "secret")
     # resp = client.start_multipart_upload("bucket1", "obj")
     # p resp.upload_id # => someid
     # ```
@@ -101,7 +101,7 @@ module Awscr::S3
     # Upload a part, for use in multipart uploading
     #
     # ```
-    # client = Client.new("region", "key", "secret", signer: :v2)
+    # client = Client.new("region", "key", "secret")
     # resp = client.upload_part("bucket1", "obj", "someid", 123, "MY DATA")
     # p resp.upload_id # => someid
     # ```
@@ -119,7 +119,7 @@ module Awscr::S3
     # Complete a multipart upload
     #
     # ```
-    # client = Client.new("region", "key", "secret", signer: :v2)
+    # client = Client.new("region", "key", "secret")
     # resp = client.complete_multipart_upload("bucket1", "obj", "123", parts)
     # p resp.key # => obj
     # ```
@@ -148,7 +148,7 @@ module Awscr::S3
     # otherwise.
     #
     # ```
-    # client = Client.new("region", "key", "secret", signer: :v2)
+    # client = Client.new("region", "key", "secret")
     # resp = client.abort_multipart_upload("bucket1", "obj", "123")
     # p resp # => true
     # ```
@@ -162,7 +162,7 @@ module Awscr::S3
     # Raises a `Http::ServerError` if the bucket does not exist.
     #
     # ```
-    # client = Client.new("region", "key", "secret", signer: :v2)
+    # client = Client.new("region", "key", "secret")
     # resp = client.head_bucket("bucket1")
     # p resp # => true
     # ```
@@ -176,7 +176,7 @@ module Awscr::S3
     # otherwise.
     #
     # ```
-    # client = Client.new("region", "key", "secret", signer: :v2)
+    # client = Client.new("region", "key", "secret")
     # resp = client.delete_object("bucket1", "obj")
     # p resp # => true
     # ```
@@ -194,7 +194,7 @@ module Awscr::S3
     # and use that as return object
     #
     # ```
-    # client = Client.new("region", "key", "secret", signer: :v2)
+    # client = Client.new("region", "key", "secret")
     # resp = client.batch_delete("bucket1", ["obj", "obj2"])
     # p resp # => true
     # ```
@@ -227,7 +227,7 @@ module Awscr::S3
     # Add an object to a bucket.
     #
     # ```
-    # client = Client.new("region", "key", "secret", signer: :v2)
+    # client = Client.new("region", "key", "secret")
     # resp = client.put_object("bucket1", "obj", "MY DATA")
     # p resp.key # => "obj"
     # ```
@@ -241,7 +241,7 @@ module Awscr::S3
     # Get the contents of an object in a bucket
     #
     # ```
-    # client = Client.new("region", "key", "secret", signer: :v2)
+    # client = Client.new("region", "key", "secret")
     # resp = client.get_object("bucket1", "obj")
     # p resp.body # => "MY DATA"
     # ```
@@ -254,7 +254,7 @@ module Awscr::S3
     # List all the items in a bucket
     #
     # ```
-    # client = Client.new("region", "key", "secret", signer: :v2)
+    # client = Client.new("region", "key", "secret")
     # resp = client.list_objects("bucket1", prefix: "test")
     # p resp.map(&.key) # => ["obj"]
     # ```
