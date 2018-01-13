@@ -24,6 +24,7 @@ module Awscr::S3
       @channel = Channel(Nil).new
     end
 
+    # Uploads an *object* to a *bucket*, in multiple parts
     def upload(bucket : String, object : String, io : IO, headers : Hash(String, String) = Hash(String, String).new)
       @bucket = bucket
       @object = object

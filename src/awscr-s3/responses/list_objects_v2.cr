@@ -3,6 +3,8 @@ require "uri"
 
 module Awscr::S3::Response
   class ListObjectsV2
+    # Create a `ListObjectsV2` response from an
+    # `HTTP::Client::Response` object
     def self.from_response(response)
       xml = XML.new(response.body)
 
@@ -25,16 +27,19 @@ module Awscr::S3::Response
       new(name, prefix, key_count.to_i, max_keys.to_i, truncated == "true", token, objects)
     end
 
+    # The list of obects
     getter contents
 
     def initialize(@name : String, @prefix : String, @key_count : Int32,
                    @max_keys : Int32, @truncated : Bool, @continuation_token : String, @contents : Array(Object))
     end
 
+    # The continuation token for the subsequent response, if any
     def next_token
       @continuation_token
     end
 
+    # Returns true if the response is truncated, false otherwise
     def truncated?
       @truncated
     end

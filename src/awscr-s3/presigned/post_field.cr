@@ -14,6 +14,7 @@ module Awscr
         def initialize(@key : String, @value : String)
         end
 
+        # Serialize the key into the format required for a `Presigned::Post`
         def serialize
           {@key => @value}
         end

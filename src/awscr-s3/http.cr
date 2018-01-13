@@ -7,6 +7,7 @@ module Awscr::S3
     # Exception raised when S3 gives us a non 200 http status code. The error
     # will have a specific message from S3.
     class ServerError < Exception
+      # Creates a `ServerError` from an `HTTP::Client::Response`
       def self.from_response(response)
         xml = XML.new(response.body)
 

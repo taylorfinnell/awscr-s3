@@ -1,4 +1,5 @@
 module Awscr::S3::Paginator
+  # Paginates a `Response::ListObjectsV2` based on the continuation-token.
   class ListObjectsV2
     include Iterator(Response::ListObjectsV2)
 
@@ -11,6 +12,7 @@ module Awscr::S3::Paginator
       @last_output = nil
     end
 
+    # :nodoc:
     def next
       return stop if (lo = @last_output) && !lo.truncated?
 
@@ -21,10 +23,12 @@ module Awscr::S3::Paginator
       @last_output = Response::ListObjectsV2.from_response(next_response)
     end
 
+    # :nodoc:
     private def next_response
       @http.get("/#{@bucket}?#{query_string}")
     end
 
+    # :nodoc:
     private def query_string
       @params.map { |k, v| "#{k}=#{URI.escape(v.to_s)}" }.join("&")
     end

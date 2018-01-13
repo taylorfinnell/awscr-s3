@@ -1,6 +1,13 @@
 module Awscr::S3
   class Bucket
-    getter name, creation_time, owner
+    # The name of the bucket
+    getter name
+
+    # The time the bucket was created
+    getter creation_time
+
+    # The owner of the bucket
+    getter owner
 
     # An S3 Bucket
     def initialize(@name : String, @creation_time : Time, @owner : String? = nil)

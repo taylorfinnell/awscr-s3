@@ -1,8 +1,10 @@
 module Awscr::S3
   # Determines the Content-Type of IO
   class ContentType
+    # The default content type if one can not be determined from the filename
     DEFAULT = "binary/octet-stream"
 
+    # :nodoc:
     TYPES = {
       ".aac"   => "audio/aac",
       ".abw"   => "application/x-abiword",
@@ -72,6 +74,8 @@ module Awscr::S3
       ".7z"    => "application/x-7z-compressed",
     }
 
+    # Gets a content type based on the file extesion, if there is no file
+    # extension it uses the default content type
     def self.get(io : IO) : String
       case io
       when .responds_to?(:path)

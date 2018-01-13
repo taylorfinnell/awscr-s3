@@ -53,6 +53,7 @@ module Awscr::S3
       @xml = NamespacedNode.new(::XML.parse(xml))
     end
 
+    # :nodoc:
     forward_missing_to @xml
   end
 end
