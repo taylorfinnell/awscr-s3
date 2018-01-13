@@ -1,13 +1,19 @@
 module Awscr::S3::Response
   class BatchDeleteOutput
     class DeletedObject
+      # The key of the deleted object
       getter key
+
+      # The failure code
       getter code
+
+      # Human friendly failure message
       getter message
 
       def initialize(@key : String, @code : String, @message : String)
       end
 
+      # Returns true of object was deleted, false otherwise
       def deleted?
         @code.empty?
       end
@@ -40,14 +46,17 @@ module Awscr::S3::Response
       @objects = objects
     end
 
+    # Returns true if all objects were deleted, false otherwise.
     def success?
       !@objects.map(&.deleted?).includes?(false)
     end
 
+    # Returns an array of objects that were successfully deleted
     def deleted_objects
       @objects.select(&.deleted?)
     end
 
+    # Returns an array of objects that failed to be deleted
     def failed_objects
       @objects.reject(&.deleted?)
     end
