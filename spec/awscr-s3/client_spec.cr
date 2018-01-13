@@ -7,14 +7,52 @@ module Awscr::S3
     end
 
     describe "batch_delete" do
-      it "can delete in a batch" do
-        WebMock.stub(:post, "http://s3.amazonaws.com/bucket?delete=")
-               .with(body: "<?xml version=\"1.0\"?>\n<Delete><Quiet>true</Quiet><Object><Key>testkey</Key></Object></Delete>\n", headers: {"Content-MD5" => "VPj86Nj4doLPK9/K3DJ+cg==", "Content-Length" => "94"})
+      it "can can fail to delete items" do
+        xml = <<-XML
+          <?xml version="1.0" encoding="UTF-8"?>
+          <DeleteResult xmlns="http://s3.amazonaws.com/doc/2006-03-01/">
+            <Deleted>
+              <Key>testkey</Key>
+              <Code>AccessDenied</Code>
+              <Message>Access Denied</Message>
+            </Deleted>
+          </DeleteResult>
+        XML
+
+        WebMock.stub(:post, "http://s3.amazonaws.com/bucket?delete")
+               .with(body: "<?xml version=\"1.0\"?>\n<Delete><Object><Key>testkey</Key></Object></Delete>\n", headers: {"Content-MD5" => "Slga5acph5mH0Gagq5P2BQ==", "Content-Length" => "75"})
+               .to_return(body: xml)
 
         client = Client.new("us-east-1", "key", "secret")
         result = client.batch_delete("bucket", ["testkey"])
 
-        result.should be_true
+        result.should be_a(Response::BatchDeleteOutput)
+        result.success?.should be_false
+        result.deleted_objects.should eq([] of Response::BatchDeleteOutput::DeletedObject)
+        result.failed_objects.should eq([Response::BatchDeleteOutput::DeletedObject.new("testkey", "AccessDenied", "Access Denied")])
+      end
+
+      it "can can successfully delete items" do
+        xml = <<-XML
+          <?xml version="1.0" encoding="UTF-8"?>
+          <DeleteResult xmlns="http://s3.amazonaws.com/doc/2006-03-01/">
+            <Deleted>
+              <Key>testkey</Key>
+            </Deleted>
+          </DeleteResult>
+        XML
+
+        WebMock.stub(:post, "http://s3.amazonaws.com/bucket?delete")
+               .with(body: "<?xml version=\"1.0\"?>\n<Delete><Object><Key>testkey</Key></Object></Delete>\n", headers: {"Content-MD5" => "Slga5acph5mH0Gagq5P2BQ==", "Content-Length" => "75"})
+               .to_return(body: xml)
+
+        client = Client.new("us-east-1", "key", "secret")
+        result = client.batch_delete("bucket", ["testkey"])
+
+        result.should be_a(Response::BatchDeleteOutput)
+        result.success?.should be_true
+        result.failed_objects.should eq([] of Response::BatchDeleteOutput::DeletedObject)
+        result.deleted_objects.should eq([Response::BatchDeleteOutput::DeletedObject.new("testkey", "", "")])
       end
 
       it "raises if too many keys" do
