@@ -186,9 +186,7 @@ module Awscr::S3
       resp.status_code == 204
     end
 
-    # Batch deletes a list of object keys in a single request. Returns true on
-    # success, false otherwise. Note: A return value of false could still have
-    # deleted some of the keys in the request.
+    # Batch deletes a list of object keys in a single request.
     #
     # ```
     # client = Client.new("region", "key", "secret")
