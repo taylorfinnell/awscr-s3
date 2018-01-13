@@ -81,6 +81,22 @@ You can also pass additional headers (e.g. metadata):
 client.put_object("bucket_name", "object_key", "myobjectbody", {"x-amz-meta-name" => "myobject"})
 ```
 
+## **Delete Object**
+
+```crystal
+resp = client.delete_object("bucket_name", "object_key")
+resp # => true
+```
+
+## **Check Bucket Existence**
+
+```crystal
+resp = client.head_bucket("bucket_name")
+resp # => true
+```
+
+Raises an exception if bucket does not exist.
+
 ## **Batch Delete Objects**
 
 ```crystal
