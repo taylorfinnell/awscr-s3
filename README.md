@@ -81,6 +81,13 @@ You can also pass additional headers (e.g. metadata):
 client.put_object("bucket_name", "object_key", "myobjectbody", {"x-amz-meta-name" => "myobject"})
 ```
 
+## **Batch Delete Objects**
+
+```crystal
+resp = client.batch_delete("bucket_name", ["key1", "key2"])
+resp.success? # => true
+```
+
 ## **Get Object**
 
 ```crystal

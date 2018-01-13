@@ -190,20 +190,16 @@ module Awscr::S3
     # success, false otherwise. Note: A return value of false could still have
     # deleted some of the keys in the request.
     #
-    # TODO: Track which keys were deleted and which failed in the delete request
-    # and use that as return object
-    #
     # ```
     # client = Client.new("region", "key", "secret")
     # resp = client.batch_delete("bucket1", ["obj", "obj2"])
-    # p resp # => true
+    # p resp.success? # => true
     # ```
-    def batch_delete(bucket, keys : Array(String), quiet = true)
+    def batch_delete(bucket, keys : Array(String))
       raise "More than 1000 keys is not yet supported." if keys.size > 1_000
 
       body = ::XML.build do |xml|
         xml.element("Delete") do
-          xml.element("Quiet") { xml.text("true") } if quiet
           keys.each do |key|
             xml.element("Object") do
               xml.element("Key") do
@@ -221,7 +217,7 @@ module Awscr::S3
 
       resp = http.post("/#{bucket}?delete", body: body, headers: headers)
 
-      resp.status_code == 200
+      Response::BatchDeleteOutput.from_response(resp)
     end
 
     # Add an object to a bucket.
