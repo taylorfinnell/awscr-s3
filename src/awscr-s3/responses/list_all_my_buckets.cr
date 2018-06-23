@@ -5,7 +5,7 @@ module Awscr::S3::Response
     include Enumerable(Bucket)
 
     # :nodoc:
-    DATE_FORMAT = "%Y-%M-%dT%H:%M:%S.%z"
+    DATE_FORMAT = "%Y-%M-%dT%H:%M:%S %z"
 
     # Create a `ListAllMyBuckets` response from an
     # `HTTP::Client::Response` object
@@ -19,6 +19,8 @@ module Awscr::S3::Response
         name = bucket.string("Name")
         creation_time = bucket.string("CreationDate")
 
+        # @hack
+        creation_time = "#{creation_time.split(".")[0]} +00:00"
         buckets << Bucket.new(name, Time.parse(creation_time, DATE_FORMAT),
           owner)
       end

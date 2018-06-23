@@ -100,7 +100,7 @@ module Awscr::S3
         file = File.open(tempfile.path)
 
         uploader.upload("bucket", "object", file).should be_true
-        tempfile.unlink
+        tempfile.delete
       end
 
       it "doesn't assign a content-type header if config.with_content_types is false" do
@@ -121,7 +121,7 @@ module Awscr::S3
         file = File.open(tempfile.path)
 
         uploader.upload("bucket", "object", file).should be_true
-        tempfile.unlink
+        tempfile.delete
       end
     end
   end
