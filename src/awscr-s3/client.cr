@@ -109,7 +109,7 @@ module Awscr::S3
                     upload_id : String, part_number : Int32, part : IO | String)
       resp = http.put("/#{bucket}/#{object}?partNumber=#{part_number}&uploadId=#{upload_id}", part)
 
-      ouput = Response::UploadPartOutput.new(
+      Response::UploadPartOutput.new(
         resp.headers["ETag"],
         part_number,
         upload_id

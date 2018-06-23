@@ -10,13 +10,13 @@ SECRET = ENV["AWS_SECRET"]
 REGION = ENV["AWS_REGION"]
 
 form = Awscr::S3::Presigned::Form.build(region: REGION, aws_access_key: KEY,
-  aws_secret_key: SECRET) do |form|
-  form.expiration(Time.epoch(Time.now.epoch + 1000))
-  form.condition("bucket", BUCKET)
-  form.condition("acl", "public-read")
-  form.condition("key", UUID.random.to_s)
-  form.condition("Content-Type", "text/plain")
-  form.condition("success_action_status", "201")
+  aws_secret_key: SECRET) do |f|
+  f.expiration(Time.epoch(Time.now.epoch + 1000))
+  f.condition("bucket", BUCKET)
+  f.condition("acl", "public-read")
+  f.condition("key", UUID.random.to_s)
+  f.condition("Content-Type", "text/plain")
+  f.condition("success_action_status", "201")
 end
 
 # The following HTML represents a valid form. Try writing the

@@ -20,8 +20,8 @@ module Awscr::S3
         XML
 
         WebMock.stub(:post, "http://s3.amazonaws.com/bucket?delete")
-               .with(body: "<?xml version=\"1.0\"?>\n<Delete><Object><Key>testkey</Key></Object></Delete>\n", headers: {"Content-MD5" => "Slga5acph5mH0Gagq5P2BQ==", "Content-Length" => "75"})
-               .to_return(body: xml)
+          .with(body: "<?xml version=\"1.0\"?>\n<Delete><Object><Key>testkey</Key></Object></Delete>\n", headers: {"Content-MD5" => "Slga5acph5mH0Gagq5P2BQ==", "Content-Length" => "75"})
+          .to_return(body: xml)
 
         client = Client.new("us-east-1", "key", "secret")
         result = client.batch_delete("bucket", ["testkey"])
@@ -43,8 +43,8 @@ module Awscr::S3
         XML
 
         WebMock.stub(:post, "http://s3.amazonaws.com/bucket?delete")
-               .with(body: "<?xml version=\"1.0\"?>\n<Delete><Object><Key>testkey</Key></Object></Delete>\n", headers: {"Content-MD5" => "Slga5acph5mH0Gagq5P2BQ==", "Content-Length" => "75"})
-               .to_return(body: xml)
+          .with(body: "<?xml version=\"1.0\"?>\n<Delete><Object><Key>testkey</Key></Object></Delete>\n", headers: {"Content-MD5" => "Slga5acph5mH0Gagq5P2BQ==", "Content-Length" => "75"})
+          .to_return(body: xml)
 
         client = Client.new("us-east-1", "key", "secret")
         result = client.batch_delete("bucket", ["testkey"])
@@ -69,7 +69,7 @@ module Awscr::S3
     describe "put_bucket" do
       it "creates a bucket" do
         WebMock.stub(:put, "http://s3.amazonaws.com/bucket")
-               .to_return(body: "")
+          .to_return(body: "")
 
         client = Client.new("us-east-1", "key", "secret")
         result = client.put_bucket("bucket")
@@ -81,8 +81,8 @@ module Awscr::S3
         body = "<?xml version=\"1.0\"?>\n<CreateBucketConfiguration><LocationConstraint>us-west-2</LocationConstraint></CreateBucketConfiguration>\n"
 
         WebMock.stub(:put, "http://s3.amazonaws.com/bucket2")
-               .with(body: body)
-               .to_return(body: "")
+          .with(body: body)
+          .to_return(body: "")
 
         client = Client.new("us-east-1", "key", "secret")
         result = client.put_bucket("bucket2", region: "us-west-2")
@@ -94,7 +94,7 @@ module Awscr::S3
     describe "delete_bucket" do
       it "returns true when buckest is deleted" do
         WebMock.stub(:delete, "http://s3.amazonaws.com/bucket")
-               .to_return(body: "", status: 204)
+          .to_return(body: "", status: 204)
 
         client = Client.new("us-east-1", "key", "secret")
         result = client.delete_bucket("bucket")
@@ -106,7 +106,7 @@ module Awscr::S3
     describe "abort_multipart_upload" do
       it "aborts an upload" do
         WebMock.stub(:delete, "http://s3.amazonaws.com/bucket/object?uploadId=upload_id")
-               .to_return(status: 204)
+          .to_return(status: 204)
 
         client = Client.new("us-east-1", "key", "secret")
         result = client.abort_multipart_upload("bucket", "object", "upload_id")
@@ -118,7 +118,7 @@ module Awscr::S3
     describe "start_multipart_upload" do
       it "starts a multipart upload" do
         WebMock.stub(:post, "http://s3.amazonaws.com/bucket/object?uploads")
-               .to_return(status: 200, body: Fixtures.start_multipart_upload_response)
+          .to_return(status: 200, body: Fixtures.start_multipart_upload_response)
 
         client = Client.new("us-east-1", "key", "secret")
         result = client.start_multipart_upload("bucket", "object")
@@ -132,8 +132,8 @@ module Awscr::S3
 
       it "passes additional headers, when provided" do
         WebMock.stub(:post, "http://s3.amazonaws.com/bucket/object?uploads")
-               .with(headers: {"x-amz-meta-name" => "document"})
-               .to_return(status: 200, body: Fixtures.start_multipart_upload_response)
+          .with(headers: {"x-amz-meta-name" => "document"})
+          .to_return(status: 200, body: Fixtures.start_multipart_upload_response)
 
         client = Client.new("us-east-1", "key", "secret")
         client.start_multipart_upload("bucket", "object", headers: {"x-amz-meta-name" => "document"})
@@ -143,8 +143,8 @@ module Awscr::S3
     describe "upload_part" do
       it "uploads a part" do
         WebMock.stub(:put, "http://s3.amazonaws.com/bucket2/obj2?partNumber=1&uploadId=123")
-               .with(body: "test")
-               .to_return(status: 200, body: "", headers: {"ETag" => "etag"})
+          .with(body: "test")
+          .to_return(status: 200, body: "", headers: {"ETag" => "etag"})
 
         client = Client.new("us-east-1", "key", "secret")
         result = client.upload_part("bucket2", "obj2", "123", 1, "test")
@@ -160,8 +160,8 @@ module Awscr::S3
         post_body = "<?xml version=\"1.0\"?>\n<CompleteMultipartUpload><Part><PartNumber>1</PartNumber><ETag>etag</ETag></Part></CompleteMultipartUpload>\n"
 
         WebMock.stub(:post, "http://s3.amazonaws.com/bucket/object?uploadId=upload_id")
-               .with(body: post_body)
-               .to_return(status: 200, body: Fixtures.complete_multipart_upload_response)
+          .with(body: post_body)
+          .to_return(status: 200, body: Fixtures.complete_multipart_upload_response)
 
         outputs = [Response::UploadPartOutput.new("etag", 1, "upload_id")]
 
@@ -181,7 +181,7 @@ module Awscr::S3
     describe "delete_object" do
       it "returns true if object deleted" do
         WebMock.stub(:delete, "http://s3.amazonaws.com/blah/obj?")
-               .to_return(status: 204)
+          .to_return(status: 204)
 
         client = Client.new("us-east-1", "key", "secret")
         result = client.delete_object("blah", "obj")
@@ -191,8 +191,8 @@ module Awscr::S3
 
       it "passes additional headers, when provided" do
         WebMock.stub(:delete, "http://s3.amazonaws.com/blah/obj?")
-               .with(headers: {"x-amz-mfa" => "123456"})
-               .to_return(status: 204)
+          .with(headers: {"x-amz-mfa" => "123456"})
+          .to_return(status: 204)
 
         client = Client.new("us-east-1", "key", "secret")
         client.delete_object("blah", "obj", headers: {"x-amz-mfa" => "123456"})
@@ -204,8 +204,8 @@ module Awscr::S3
         io = IO::Memory.new("Hello")
 
         WebMock.stub(:put, "http://s3.amazonaws.com/mybucket/object.txt")
-               .with(body: "Hello")
-               .to_return(body: "", headers: {"ETag" => "etag"})
+          .with(body: "Hello")
+          .to_return(body: "", headers: {"ETag" => "etag"})
 
         client = Client.new("us-east-1", "key", "secret")
         resp = client.put_object("mybucket", "object.txt", io)
@@ -217,8 +217,8 @@ module Awscr::S3
         io = IO::Memory.new("Hello")
 
         WebMock.stub(:put, "http://s3.amazonaws.com/mybucket/object.txt")
-               .with(body: "Hello", headers: {"Content-Length" => "5", "x-amz-meta-name" => "object"})
-               .to_return(body: "", headers: {"ETag" => "etag"})
+          .with(body: "Hello", headers: {"Content-Length" => "5", "x-amz-meta-name" => "object"})
+          .to_return(body: "", headers: {"ETag" => "etag"})
 
         client = Client.new("us-east-1", "key", "secret")
         client.put_object("mybucket", "object.txt", io, {"x-amz-meta-name" => "object"})
@@ -265,10 +265,10 @@ module Awscr::S3
         RESP
 
         WebMock.stub(:get, "http://s3.amazonaws.com/bucket?list-type=2&max-keys=1&continuation-token=token")
-               .to_return(body: resp2)
+          .to_return(body: resp2)
 
         WebMock.stub(:get, "http://s3.amazonaws.com/bucket?list-type=2&max-keys=1")
-               .to_return(body: resp)
+          .to_return(body: resp)
 
         client = Client.new("us-east-1", "key", "secret")
 
@@ -319,7 +319,7 @@ module Awscr::S3
         RESP
 
         WebMock.stub(:get, "http://s3.amazonaws.com/blah?list-type=2")
-               .to_return(body: resp)
+          .to_return(body: resp)
 
         expected_objects = [
           Object.new("my-image.jpg", 434_234,
@@ -330,7 +330,7 @@ module Awscr::S3
 
         client = Client.new("us-east-1", "key", "secret")
 
-        objs = client.list_objects("blah").each do |output|
+        client.list_objects("blah").each do |output|
           output.should eq(Response::ListObjectsV2.new("blah", "", 205, 1000, false, "", expected_objects))
         end
       end
@@ -355,13 +355,13 @@ module Awscr::S3
         RESP
 
         WebMock.stub(:get, "http://s3.amazonaws.com/?")
-               .to_return(body: resp)
+          .to_return(body: resp)
 
         client = Client.new("us-east-1", "key", "secret")
         output = client.list_buckets
 
         output.should eq(Response::ListAllMyBuckets.new([
-          Bucket.new("quotes", Time.parse("2006-02-03T16:45:09.000Z", Response::ListAllMyBuckets::DATE_FORMAT)),
+          Bucket.new("quotes", Time.parse("2006-02-03T16:45:09 +00:00", Response::ListAllMyBuckets::DATE_FORMAT)),
         ]))
       end
     end
@@ -369,7 +369,7 @@ module Awscr::S3
     describe "head_bucket" do
       it "raises if bucket does not exist" do
         WebMock.stub(:head, "http://s3.amazonaws.com/blah2?")
-               .to_return(status: 404)
+          .to_return(status: 404)
 
         client = Client.new("us-east-1", "key", "secret")
 
@@ -380,7 +380,7 @@ module Awscr::S3
 
       it "returns true if bucket exists" do
         WebMock.stub(:head, "http://s3.amazonaws.com/blah?")
-               .to_return(status: 200)
+          .to_return(status: 200)
 
         client = Client.new("us-east-1", "key", "secret")
         result = client.head_bucket("blah")
@@ -394,8 +394,8 @@ module Awscr::S3
         io = IO::Memory.new("Hello")
 
         WebMock.stub(:put, "https://nyc3.digitaloceanspaces.com/mybucket/object.txt")
-               .with(body: "Hello")
-               .to_return(body: "", headers: {"ETag" => "etag"})
+          .with(body: "Hello")
+          .to_return(body: "", headers: {"ETag" => "etag"})
 
         client = Client.new("", "key", "secret", "https://nyc3.digitaloceanspaces.com")
         resp = client.put_object("mybucket", "object.txt", io)
@@ -407,8 +407,8 @@ module Awscr::S3
         io = IO::Memory.new("Hello")
 
         WebMock.stub(:put, "http://127.0.0.1:9000/mybucket/object.txt")
-               .with(body: "Hello")
-               .to_return(body: "", headers: {"ETag" => "etag"})
+          .with(body: "Hello")
+          .to_return(body: "", headers: {"ETag" => "etag"})
 
         client = Client.new("", "key", "secret", "http://127.0.0.1:9000")
         resp = client.put_object("mybucket", "object.txt", io)

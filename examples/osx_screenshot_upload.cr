@@ -10,13 +10,13 @@ KEY    = ENV["AWS_KEY"]
 SECRET = ENV["AWS_SECRET"]
 REGION = ENV["AWS_REGION"]
 
-form = Awscr::S3::Presigned::Form.build(REGION, KEY, SECRET) do |form|
-  form.expiration(Time.epoch(Time.now.epoch + 1000))
-  form.condition("bucket", BUCKET)
-  form.condition("acl", "public-read")
-  form.condition("key", "#{UUID.random}.png"[0...8])
-  form.condition("Content-Type", "image/png")
-  form.condition("success_action_status", "201")
+form = Awscr::S3::Presigned::Form.build(REGION, KEY, SECRET) do |f|
+  f.expiration(Time.epoch(Time.now.epoch + 1000))
+  f.condition("bucket", BUCKET)
+  f.condition("acl", "public-read")
+  f.condition("key", "#{UUID.random}.png"[0...8])
+  f.condition("Content-Type", "image/png")
+  f.condition("success_action_status", "201")
 end
 
 path = "/tmp/#{UUID.random}"

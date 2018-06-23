@@ -87,7 +87,7 @@ module Awscr
             client = HTTP::Client.new("fake host")
             io = IO::Memory.new("test")
             form = Form.new(post, client)
-            resp = form.submit(io)
+            form.submit(io)
           end
 
           it "sends a reasonable request over http for v4" do
@@ -118,7 +118,7 @@ module Awscr
             client = HTTP::Client.new("fake host")
             io = IO::Memory.new("test")
             form = Form.new(post, client)
-            resp = form.submit(io)
+            form.submit(io)
           end
         end
       end

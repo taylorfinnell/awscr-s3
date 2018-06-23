@@ -17,7 +17,7 @@ module Awscr::S3
     describe "initialize" do
       it "sets the correct endpoint" do
         WebMock.stub(:get, "http://s3.amazonaws.com/")
-               .to_return(status: 200)
+          .to_return(status: 200)
 
         http = Http.new(SIGNER)
 
@@ -26,7 +26,7 @@ module Awscr::S3
 
       it "sets the correct endpoint with a defined region" do
         WebMock.stub(:get, "http://s3-eu-west-1.amazonaws.com/")
-               .to_return(status: 200)
+          .to_return(status: 200)
 
         http = Http.new(SIGNER, "eu-west-1")
 
@@ -35,7 +35,7 @@ module Awscr::S3
 
       it "can set a custom endpoint" do
         WebMock.stub(:get, "https://nyc3.digitaloceanspaces.com")
-               .to_return(status: 200)
+          .to_return(status: 200)
 
         http = Http.new(SIGNER, custom_endpoint: "https://nyc3.digitaloceanspaces.com")
 
@@ -44,7 +44,7 @@ module Awscr::S3
 
       it "can set a custom endpoint with a port" do
         WebMock.stub(:get, "http://127.0.0.1:9000")
-               .to_return(status: 200)
+          .to_return(status: 200)
 
         http = Http.new(SIGNER, custom_endpoint: "http://127.0.0.1:9000")
 
@@ -55,7 +55,7 @@ module Awscr::S3
     describe "get" do
       it "handles aws specific errors" do
         WebMock.stub(:get, "http://s3.amazonaws.com/sup?")
-               .to_return(status: 404, body: ERROR_BODY)
+          .to_return(status: 404, body: ERROR_BODY)
 
         http = Http.new(SIGNER)
 
@@ -66,7 +66,7 @@ module Awscr::S3
 
       it "handles bad responses" do
         WebMock.stub(:get, "http://s3.amazonaws.com/sup?")
-               .to_return(status: 404)
+          .to_return(status: 404)
 
         http = Http.new(SIGNER)
 
@@ -79,7 +79,7 @@ module Awscr::S3
     describe "head" do
       it "handles aws specific errors" do
         WebMock.stub(:head, "http://s3.amazonaws.com/?")
-               .to_return(status: 404, body: ERROR_BODY)
+          .to_return(status: 404, body: ERROR_BODY)
 
         http = Http.new(SIGNER)
 
@@ -90,7 +90,7 @@ module Awscr::S3
 
       it "handles bad responses" do
         WebMock.stub(:head, "http://s3.amazonaws.com/?")
-               .to_return(status: 404)
+          .to_return(status: 404)
 
         http = Http.new(SIGNER)
 
@@ -103,7 +103,7 @@ module Awscr::S3
     describe "put" do
       it "handles aws specific errors" do
         WebMock.stub(:put, "http://s3.amazonaws.com/?")
-               .to_return(status: 404, body: ERROR_BODY)
+          .to_return(status: 404, body: ERROR_BODY)
 
         http = Http.new(SIGNER)
 
@@ -114,7 +114,7 @@ module Awscr::S3
 
       it "handles bad responses" do
         WebMock.stub(:put, "http://s3.amazonaws.com/?")
-               .to_return(status: 404)
+          .to_return(status: 404)
 
         http = Http.new(SIGNER)
 
@@ -125,8 +125,8 @@ module Awscr::S3
 
       it "sets the Content-Length header by default" do
         WebMock.stub(:put, "http://s3.amazonaws.com/document")
-               .with(body: "abcd", headers: {"Content-Length" => "4"})
-               .to_return(status: 200)
+          .with(body: "abcd", headers: {"Content-Length" => "4"})
+          .to_return(status: 200)
 
         http = Http.new(SIGNER)
         http.put("/document", "abcd")
@@ -134,8 +134,8 @@ module Awscr::S3
 
       it "passes additional headers, when provided" do
         WebMock.stub(:put, "http://s3.amazonaws.com/document")
-               .with(body: "abcd", headers: {"Content-Length" => "4", "x-amz-meta-name" => "document"})
-               .to_return(status: 200)
+          .with(body: "abcd", headers: {"Content-Length" => "4", "x-amz-meta-name" => "document"})
+          .to_return(status: 200)
 
         http = Http.new(SIGNER)
         http.put("/document", "abcd", {"x-amz-meta-name" => "document"})
@@ -145,14 +145,14 @@ module Awscr::S3
     describe "post" do
       it "passes additional headers, when provided" do
         WebMock.stub(:post, "http://s3.amazonaws.com/?")
-               .with(headers: {"x-amz-meta-name" => "document"})
+          .with(headers: {"x-amz-meta-name" => "document"})
 
         Http.new(SIGNER).post("/", headers: {"x-amz-meta-name" => "document"})
       end
 
       it "handles aws specific errors" do
         WebMock.stub(:post, "http://s3.amazonaws.com/?")
-               .to_return(status: 404, body: ERROR_BODY)
+          .to_return(status: 404, body: ERROR_BODY)
 
         http = Http.new(SIGNER)
 
@@ -163,7 +163,7 @@ module Awscr::S3
 
       it "handles bad responses" do
         WebMock.stub(:post, "http://s3.amazonaws.com/?")
-               .to_return(status: 404)
+          .to_return(status: 404)
 
         http = Http.new(SIGNER)
 
@@ -176,14 +176,14 @@ module Awscr::S3
     describe "delete" do
       it "passes additional headers, when provided" do
         WebMock.stub(:delete, "http://s3.amazonaws.com/?")
-               .with(headers: {"x-amz-mfa" => "123456"})
+          .with(headers: {"x-amz-mfa" => "123456"})
 
         Http.new(SIGNER).delete("/", headers: {"x-amz-mfa" => "123456"})
       end
 
       it "handles aws specific errors" do
         WebMock.stub(:delete, "http://s3.amazonaws.com/?")
-               .to_return(status: 404, body: ERROR_BODY)
+          .to_return(status: 404, body: ERROR_BODY)
 
         http = Http.new(SIGNER)
 
@@ -194,7 +194,7 @@ module Awscr::S3
 
       it "handles bad responses" do
         WebMock.stub(:delete, "http://s3.amazonaws.com/?")
-               .to_return(status: 404)
+          .to_return(status: 404)
 
         http = Http.new(SIGNER)
 

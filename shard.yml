@@ -1,10 +1,10 @@
 name: awscr-s3
-version: 0.3.1
+version: 0.3.2
 
 authors:
   - Taylor Finnell <tmfinnell@gmail.com>
 
-crystal: 0.24.1
+crystal: 0.25.0
 
 license: MIT
 
@@ -22,4 +22,4 @@ development_dependencies:
     branch: master
   ameba:
     github: veelenga/ameba
-    version: ~> 0.4.0
+    version: ~> 0.7.0

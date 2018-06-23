@@ -16,7 +16,7 @@ module Awscr::S3
           tempfile = Tempfile.new("foo", ext)
           file = File.open(tempfile.path)
           ContentType.get(file).should be(ContentType::TYPES[ext])
-          tempfile.unlink
+          tempfile.delete
         end
       end
     end
@@ -26,7 +26,7 @@ module Awscr::S3
         tempfile = Tempfile.new("foo", ".spicy")
         file = File.open(tempfile.path)
         ContentType.get(file).should be(ContentType::DEFAULT)
-        tempfile.unlink
+        tempfile.delete
       end
     end
   end
