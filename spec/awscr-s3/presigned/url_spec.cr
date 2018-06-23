@@ -5,7 +5,7 @@ module Awscr
     module Presigned
       describe Url do
         it "allows signer versions" do
-          options = Url::Options.new(
+          Url::Options.new(
             region: "ap-northeast-1",
             aws_access_key: "AKIAIOSFODNN7EXAMPLE",
             aws_secret_key: "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY",

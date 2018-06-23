@@ -330,7 +330,7 @@ module Awscr::S3
 
         client = Client.new("us-east-1", "key", "secret")
 
-        objs = client.list_objects("blah").each do |output|
+        client.list_objects("blah").each do |output|
           output.should eq(Response::ListObjectsV2.new("blah", "", 205, 1000, false, "", expected_objects))
         end
       end

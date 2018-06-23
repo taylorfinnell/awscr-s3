@@ -26,7 +26,7 @@ module Awscr::S3::Response
     def self.from_response(response)
       xml = XML.new(response.body)
 
-      location = xml.string("//DeleteResult/Location")
+      xml.string("//DeleteResult/Location")
 
       objects = [] of DeletedObject
       xml.array("DeleteResult/Deleted") do |object|
