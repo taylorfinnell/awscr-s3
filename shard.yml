@@ -22,4 +22,4 @@ development_dependencies:
     branch: master
   ameba:
     github: veelenga/ameba
-    version: ~> 0.4.0
+    version: ~> 0.7.0
