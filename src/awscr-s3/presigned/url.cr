@@ -48,7 +48,7 @@ module Awscr
 
           request = HTTP::Request.new(
             method,
-            "/#{@options.bucket}#{@options.object}",
+            "/#{@options.bucket}/#{@options.object}",
             headers,
             body
           )
