@@ -21,7 +21,7 @@ module Awscr::S3::Response
 
         # @hack
         creation_time = "#{creation_time.split(".")[0]} +00:00"
-        buckets << Bucket.new(name, Time.parse(creation_time, DATE_FORMAT),
+        buckets << Bucket.new(name, Time.parse!(creation_time, DATE_FORMAT),
           owner)
       end
 
