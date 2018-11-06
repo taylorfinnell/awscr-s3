@@ -59,7 +59,7 @@ module Awscr
 
         describe "submit" do
           it "sends a reasonable request over http for v2" do
-            time = Time.epoch(1)
+            time = Time.unix(1)
             Timecop.freeze(time)
 
             post = Post.new(
@@ -91,7 +91,7 @@ module Awscr
           end
 
           it "sends a reasonable request over http for v4" do
-            time = Time.epoch(1)
+            time = Time.unix(1)
             Timecop.freeze(time)
 
             post = Post.new(

@@ -59,7 +59,7 @@ module Awscr
 
         describe "get" do
           it "generates correct url for v2" do
-            time = Time.epoch(1)
+            time = Time.unix(1)
             Timecop.freeze(time)
             options = Url::Options.new(
               region: "us-east-1",

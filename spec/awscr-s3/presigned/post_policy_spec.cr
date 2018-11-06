@@ -39,7 +39,7 @@ module Awscr
         describe "to_s" do
           it "returns policy as base64 encoded json" do
             policy = Policy.new
-            policy.expiration(Time.epoch(1_483_859_302))
+            policy.expiration(Time.unix(1_483_859_302))
             policy.condition("test", "test")
 
             policy.to_s.should eq("eyJleHBpcmF0aW9uIjoiMjAxNy0wMS0wOFQwNzowODoyMi4wMDBaIiwiY29uZGl0aW9ucyI6W3sidGVzdCI6InRlc3QifV19")
@@ -54,7 +54,7 @@ module Awscr
 
           it "can be a hash" do
             policy = Policy.new
-            policy.expiration(Time.epoch(1_483_859_302))
+            policy.expiration(Time.unix(1_483_859_302))
             policy.condition("test", "test")
 
             policy.to_hash.should eq({

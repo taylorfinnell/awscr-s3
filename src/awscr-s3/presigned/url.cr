@@ -56,7 +56,7 @@ module Awscr
           if @options.signer_version == :v4
             request.query_params.add("X-Amz-Expires", @options.expires.to_s)
           else
-            request.query_params.add("Expires", (Time.utc_now.epoch + @options.expires).to_s)
+            request.query_params.add("Expires", (Time.utc_now.to_unix + @options.expires).to_s)
           end
 
           request
