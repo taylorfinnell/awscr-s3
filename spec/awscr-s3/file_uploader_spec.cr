@@ -1,5 +1,4 @@
 require "../../spec_helper"
-require "tempfile"
 
 module Awscr::S3
   describe FileUploader do
@@ -96,7 +95,7 @@ module Awscr::S3
         client = Client.new("us-east-1", "key", "secret")
         uploader = FileUploader.new(client)
 
-        tempfile = Tempfile.new("foo", ".svg")
+        tempfile = File.tempfile("foo", ".svg")
         file = File.open(tempfile.path)
 
         uploader.upload("bucket", "object", file).should be_true
@@ -117,7 +116,7 @@ module Awscr::S3
         options = FileUploader::Options.new(with_content_types: false)
         uploader = FileUploader.new(client, options)
 
-        tempfile = Tempfile.new("foo", ".svg")
+        tempfile = File.tempfile("foo", ".svg")
         file = File.open(tempfile.path)
 
         uploader.upload("bucket", "object", file).should be_true

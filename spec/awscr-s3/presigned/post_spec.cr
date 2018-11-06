@@ -5,7 +5,7 @@ module Awscr
     module Presigned
       describe Post do
         Spec.before_each do
-          Timecop.freeze(Time.epoch(1))
+          Timecop.freeze(Time.unix(1))
         end
 
         Spec.after_each do
@@ -49,7 +49,7 @@ module Awscr
 
         describe "fields" do
           it "generates the same fields each time" do
-            time = Time.epoch(1)
+            time = Time.unix(1)
             post = Post.new(
               region: "us-east-1",
               aws_access_key: "test",
@@ -61,7 +61,7 @@ module Awscr
           end
 
           it "contains the policy field" do
-            time = Time.epoch(1)
+            time = Time.unix(1)
             post = Post.new(
               region: "us-east-1",
               aws_access_key: "test",
@@ -75,7 +75,7 @@ module Awscr
           end
 
           it "contains the signature field" do
-            time = Time.epoch(1)
+            time = Time.unix(1)
             post = Post.new(
               region: "us-east-1",
               aws_access_key: "test",
@@ -89,7 +89,7 @@ module Awscr
           end
 
           it "contains the credential field" do
-            time = Time.epoch(1)
+            time = Time.unix(1)
             post = Post.new(
               region: "us-east-1",
               aws_access_key: "test",
@@ -103,7 +103,7 @@ module Awscr
           end
 
           it "contains the algorithm field" do
-            time = Time.epoch(1)
+            time = Time.unix(1)
             post = Post.new(
               region: "us-east-1",
               aws_access_key: "test",
@@ -117,7 +117,7 @@ module Awscr
           end
 
           it "contains the date field" do
-            time = Time.epoch(1)
+            time = Time.unix(1)
             post = Post.new(
               region: "us-east-1",
               aws_access_key: "test",

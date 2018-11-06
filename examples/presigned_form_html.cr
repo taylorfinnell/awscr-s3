@@ -11,7 +11,7 @@ REGION = ENV["AWS_REGION"]
 
 form = Awscr::S3::Presigned::Form.build(region: REGION, aws_access_key: KEY,
   aws_secret_key: SECRET) do |f|
-  f.expiration(Time.epoch(Time.now.epoch + 1000))
+  f.expiration(Time.unix(Time.now.to_unix + 1000))
   f.condition("bucket", BUCKET)
   f.condition("acl", "public-read")
   f.condition("key", UUID.random.to_s)

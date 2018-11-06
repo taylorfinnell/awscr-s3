@@ -2,7 +2,6 @@
 
 require "../src/awscr-s3"
 require "uuid"
-require "tempfile"
 
 BUCKET = ENV["AWS_BUCKET"]
 HOST   = "#{BUCKET}.s3.amazonaws.com"
@@ -11,7 +10,7 @@ SECRET = ENV["AWS_SECRET"]
 REGION = ENV["AWS_REGION"]
 
 form = Awscr::S3::Presigned::Form.build(REGION, KEY, SECRET) do |f|
-  f.expiration(Time.epoch(Time.now.epoch + 1000))
+  f.expiration(Time.unix(Time.now.to_unix + 1000))
   f.condition("bucket", BUCKET)
   f.condition("acl", "public-read")
   f.condition("key", "#{UUID.random}.png"[0...8])

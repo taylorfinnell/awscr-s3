@@ -5,7 +5,7 @@ module Awscr
     module Presigned
       describe HtmlPrinter do
         Spec.before_each do
-          Timecop.freeze(Time.epoch(1))
+          Timecop.freeze(Time.unix(1))
         end
 
         Spec.after_each do
@@ -13,7 +13,7 @@ module Awscr
         end
 
         it "generates the same html each call" do
-          time = Time.epoch(1)
+          time = Time.unix(1)
           post = Post.new(
             region: "us-east-1",
             aws_access_key: "test",
@@ -32,7 +32,7 @@ module Awscr
         end
 
         it "prints html" do
-          time = Time.epoch(1)
+          time = Time.unix(1)
 
           post = Post.new(
             region: "region",

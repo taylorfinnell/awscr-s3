@@ -143,7 +143,7 @@ end
 
 ```crystal
 form = Awscr::S3::Presigned::Form.build("us-east-1", "access key", "secret key") do |form|
-  form.expiration(Time.epoch(Time.now.epoch + 1000))
+  form.expiration(Time.unix(Time.now.to_unix + 1000))
   form.condition("bucket", "mybucket")
   form.condition("acl", "public-read")
   form.condition("key", SecureRandom.uuid)
