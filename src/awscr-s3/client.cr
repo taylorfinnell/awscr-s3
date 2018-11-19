@@ -245,6 +245,20 @@ module Awscr::S3
       Response::GetObjectOutput.from_response(resp)
     end
 
+    # Get the contents of an object in a bucket as an IO object
+    #
+    # ```
+    # client = Client.new("region", "key", "secret")
+    # client.get_object("bucket1", "obj") do |resp|
+    #   IO.copy(resp.body.as(IO), STDOUT) # => "MY DATA"
+    # end
+    # ```
+    def get_object(bucket, object : String)
+      http.get("/#{bucket}/#{object}") do |resp|
+        yield Response::GetObjectOutput.from_response(resp)
+      end
+    end
+
     # List all the items in a bucket
     #
     # ```
