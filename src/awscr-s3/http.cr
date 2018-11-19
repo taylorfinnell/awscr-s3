@@ -9,7 +9,7 @@ module Awscr::S3
     class ServerError < Exception
       # Creates a `ServerError` from an `HTTP::Client::Response`
       def self.from_response(response)
-        xml = XML.new(response.body)
+        xml = XML.new(response.body || response.body_io)
 
         code = xml.string("//Error/Code")
         message = xml.string("//Error/Message")
@@ -86,11 +86,26 @@ module Awscr::S3
       handle_response!(resp)
     end
 
+    # Issue a GET request to the *path*
+    #
+    # ```
+    # http = Http.new(signer)
+    # http.get("/") do |resp|
+    #   pp resp
+    # end
+    # ```
+    def get(path)
+      @http.get(path) do |resp|
+        handle_response!(resp)
+        yield resp
+      end
+    end
+
     # :nodoc:
     private def handle_response!(response)
       return response if (200..299).includes?(response.status_code)
 
-      if !response.body.empty?
+      if response.body_io? || !response.body?.try(&.empty?)
         raise ServerError.from_response(response)
       else
         raise ServerError.new("server error: #{response.status_code}")

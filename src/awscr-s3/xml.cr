@@ -49,7 +49,7 @@ module Awscr::S3
       end
     end
 
-    def initialize(xml : String)
+    def initialize(xml : String | IO)
       @xml = NamespacedNode.new(::XML.parse(xml))
     end
 
