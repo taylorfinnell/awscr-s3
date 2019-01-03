@@ -24,7 +24,7 @@ module Awscr::S3::Response
         objects << Object.new(key, size, etag)
       end
 
-      new(name, prefix, key_count.to_i, max_keys.to_i, truncated == "true", token, objects)
+      new(name, prefix, key_count.to_i? || 0, max_keys.to_i, truncated == "true", token, objects)
     end
 
     # The list of obects
