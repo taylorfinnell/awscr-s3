@@ -107,7 +107,7 @@ resp.success? # => true
 ## **Get Object**
 
 ```crystal
-resp = client.put_object("bucket_name", "object_key")
+resp = client.get_object("bucket_name", "object_key")
 resp.body # => myobjectbody
 ```
 
