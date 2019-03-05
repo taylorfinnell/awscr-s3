@@ -20,8 +20,9 @@ module Awscr::S3::Response
         key = object.string("Key")
         size = object.string("Size").to_i
         etag = object.string("ETag")
+        last_modified = object.string("LastModified")
 
-        objects << Object.new(key, size, etag)
+        objects << Object.new(key, size, etag, last_modified)
       end
 
       new(name, prefix, key_count.to_i? || 0, max_keys.to_i, truncated == "true", token, objects)

@@ -238,7 +238,7 @@ module Awscr::S3
           <NextContinuationToken>token</NextContinuationToken
           <Contents>
               <Key>my-image.jpg</Key>
-              <LastModified>2009-10-12T17:50:30.000Z</LastModified>
+              <LastModified>2009-09-11T17:50:30.000Z</LastModified>
               <ETag>"fba9dede5f27731c9771645a39863328"</ETag>
               <Size>434234</Size>
               <StorageClass>STANDARD</StorageClass>
@@ -279,9 +279,9 @@ module Awscr::S3
 
         expected_objects = [
           Object.new("my-image.jpg", 434_234,
-            "\"fba9dede5f27731c9771645a39863328\""),
+            "\"fba9dede5f27731c9771645a39863328\"", "2009-10-12T17:50:30.000Z"),
           Object.new("key2", 1337,
-            "\"fba9dede5f27731c9771645a39863329\""),
+            "\"fba9dede5f27731c9771645a39863329\"", "2009-10-12T17:50:30.000Z"),
         ]
 
         objects.should eq([
@@ -303,7 +303,7 @@ module Awscr::S3
           <IsTruncated>false</IsTruncated>
           <Contents>
               <Key>my-image.jpg</Key>
-              <LastModified>2009-10-12T17:50:30.000Z</LastModified>
+              <LastModified>2009-09-11T17:50:30.000Z</LastModified>
               <ETag>&quot;fba9dede5f27731c9771645a39863328&quot;</ETag>
               <Size>434234</Size>
               <StorageClass>STANDARD</StorageClass>
@@ -323,14 +323,17 @@ module Awscr::S3
 
         expected_objects = [
           Object.new("my-image.jpg", 434_234,
-            "\"fba9dede5f27731c9771645a39863328\""),
+            "\"fba9dede5f27731c9771645a39863328\"", "2009-09-11T17:50:30.000Z"),
           Object.new("key2", 1337,
-            "\"fba9dede5f27731c9771645a39863329\""),
+            "\"fba9dede5f27731c9771645a39863329\"", "2009-10-12T17:50:30.000Z"),
         ]
 
         client = Client.new("us-east-1", "key", "secret")
 
         client.list_objects("blah").each do |output|
+          ObjectHelper.equal?(output.contents.first, expected_objects.first).should be_true
+          ObjectHelper.equal?(output.contents.last, expected_objects.last).should be_true
+          ObjectHelper.equal?(output.contents.first, expected_objects.last).should be_false
           output.should eq(Response::ListObjectsV2.new("blah", "", 205, 1000, false, "", expected_objects))
         end
       end
