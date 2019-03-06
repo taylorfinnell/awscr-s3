@@ -1,6 +1,9 @@
 require "../spec_helper"
 
 module Awscr::S3
+  TEST_TIME_1 = Time.new(2009, 9, 11, 17, 50, 30, location: Time::Location::UTC)
+  TEST_TIME_2 = Time.new(2010, 10, 12, 17, 50, 30, location: Time::Location::UTC)
+
   describe Client do
     it "allows signer version" do
       Client.new("adasd", "adasd", "adad", signer: :v2)
@@ -256,7 +259,7 @@ module Awscr::S3
           <IsTruncated>false</IsTruncated>
           <Contents>
               <Key>key2</Key>
-              <LastModified>2009-10-12T17:50:30.000Z</LastModified>
+              <LastModified>2010-10-12T17:50:30.000Z</LastModified>
               <ETag>"fba9dede5f27731c9771645a39863329"</ETag>
               <Size>1337</Size>
               <StorageClass>STANDARD</StorageClass>
@@ -279,9 +282,9 @@ module Awscr::S3
 
         expected_objects = [
           Object.new("my-image.jpg", 434_234,
-            "\"fba9dede5f27731c9771645a39863328\"", "2009-09-11T17:50:30.000Z"),
+            "\"fba9dede5f27731c9771645a39863328\"", TEST_TIME_1),
           Object.new("key2", 1337,
-            "\"fba9dede5f27731c9771645a39863329\"", "2009-10-12T17:50:30.000Z"),
+            "\"fba9dede5f27731c9771645a39863329\"", TEST_TIME_2),
         ]
 
         objects.should eq([
@@ -310,7 +313,7 @@ module Awscr::S3
           </Contents>
           <Contents>
               <Key>key2</Key>
-              <LastModified>2009-10-12T17:50:30.000Z</LastModified>
+              <LastModified>2010-10-12T17:50:30.000Z</LastModified>
               <ETag>&quot;fba9dede5f27731c9771645a39863329&quot;</ETag>
               <Size>1337</Size>
               <StorageClass>STANDARD</StorageClass>
@@ -323,9 +326,9 @@ module Awscr::S3
 
         expected_objects = [
           Object.new("my-image.jpg", 434_234,
-            "\"fba9dede5f27731c9771645a39863328\"", "2009-09-11T17:50:30.000Z"),
+            "\"fba9dede5f27731c9771645a39863328\"", TEST_TIME_1),
           Object.new("key2", 1337,
-            "\"fba9dede5f27731c9771645a39863329\"", "2009-10-12T17:50:30.000Z"),
+            "\"fba9dede5f27731c9771645a39863329\"", TEST_TIME_2),
         ]
 
         client = Client.new("us-east-1", "key", "secret")

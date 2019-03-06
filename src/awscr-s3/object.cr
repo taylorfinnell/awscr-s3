@@ -13,7 +13,7 @@ module Awscr::S3
     # The time string the `Object` was last modifed
     getter last_modified
 
-    def initialize(@key : String, @size : Int32, @etag : String, @last_modified : String)
+    def initialize(@key : String, @size : Int32, @etag : String, @last_modified : Time)
     end
 
     def_equals @key, @size, @etag, @last_modified

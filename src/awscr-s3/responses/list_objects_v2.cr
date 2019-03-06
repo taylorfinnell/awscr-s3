@@ -3,6 +3,9 @@ require "uri"
 
 module Awscr::S3::Response
   class ListObjectsV2
+    # :nodoc:
+    DATE_FORMAT = "%FT%T"
+
     # Create a `ListObjectsV2` response from an
     # `HTTP::Client::Response` object
     def self.from_response(response)
@@ -20,7 +23,7 @@ module Awscr::S3::Response
         key = object.string("Key")
         size = object.string("Size").to_i
         etag = object.string("ETag")
-        last_modified = object.string("LastModified")
+        last_modified = Time.parse(object.string("LastModified"), DATE_FORMAT, Time::Location::UTC)
 
         objects << Object.new(key, size, etag, last_modified)
       end
