@@ -12,6 +12,6 @@ client = Awscr::S3::Client.new(
 )
 
 client.list_objects(bucket: BUCKET, max_keys: 10).each do |response|
-  keys = response.contents.sort_by { |o| o.last_modified }.map(&.key)
+  keys = response.contents.sort_by(&.last_modified).map(&.key)
   p keys
 end
