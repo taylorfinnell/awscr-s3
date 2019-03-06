@@ -16,6 +16,6 @@ module Awscr::S3
     def initialize(@key : String, @size : Int32, @etag : String, @last_modified : String)
     end
 
-    def_equals @key, @size, @etag
+    def_equals @key, @size, @etag, @last_modified
   end
 end
