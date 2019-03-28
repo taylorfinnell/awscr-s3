@@ -239,8 +239,8 @@ module Awscr::S3
     # resp = client.get_object("bucket1", "obj")
     # p resp.body # => "MY DATA"
     # ```
-    def get_object(bucket, object : String)
-      resp = http.get("/#{bucket}/#{object}")
+    def get_object(bucket, object : String, headers : Hash(String, String) = Hash(String, String).new)
+      resp = http.get("/#{bucket}/#{object}", headers: headers)
 
       Response::GetObjectOutput.from_response(resp)
     end
@@ -253,8 +253,8 @@ module Awscr::S3
     #   IO.copy(resp.body.as(IO), STDOUT) # => "MY DATA"
     # end
     # ```
-    def get_object(bucket, object : String)
-      http.get("/#{bucket}/#{object}") do |resp|
+    def get_object(bucket, object : String, headers : Hash(String, String) = Hash(String, String).new)
+      http.get("/#{bucket}/#{object}", headers: headers) do |resp|
         yield Response::GetObjectOutput.from_response(resp)
       end
     end
