@@ -81,8 +81,8 @@ module Awscr::S3
     # http = Http.new(signer)
     # http.get("/")
     # ```
-    def get(path)
-      resp = @http.get(path)
+    def get(path, headers : Hash(String, String) = Hash(String, String).new)
+      resp = @http.get(path, headers: HTTP::Headers.new.merge!(headers))
       handle_response!(resp)
     end
 
@@ -94,8 +94,8 @@ module Awscr::S3
     #   pp resp
     # end
     # ```
-    def get(path)
-      @http.get(path) do |resp|
+    def get(path, headers : Hash(String, String) = Hash(String, String).new)
+      @http.get(path, headers: HTTP::Headers.new.merge!(headers)) do |resp|
         handle_response!(resp)
         yield resp
       end
