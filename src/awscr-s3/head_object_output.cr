@@ -1,5 +1,3 @@
-require "xml"
-
 module Awscr::S3::Response
   class HeadObjectOutput
     # The body of the request object
