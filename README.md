@@ -64,7 +64,7 @@ resp # => true
 
 ```crystal
 client = Client.new("region", "key", "secret")
-resp = client.create_bucket("test")
+resp = client.put_bucket("test")
 resp # => true
 ```
 
