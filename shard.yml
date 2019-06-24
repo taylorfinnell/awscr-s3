@@ -4,7 +4,7 @@ version: 0.3.4
 authors:
   - Taylor Finnell <tmfinnell@gmail.com>
 
-crystal: 0.27.0
+crystal: 0.28.0
 
 license: MIT
 
@@ -20,6 +20,3 @@ development_dependencies:
   webmock:
     github: manastech/webmock.cr
     branch: master
-  ameba:
-    github: veelenga/ameba
-    version: ~> 0.7.0
