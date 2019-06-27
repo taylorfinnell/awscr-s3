@@ -264,8 +264,8 @@ module Awscr::S3
     # ```
     # client = Client.new("region", "key", "secret")
     # resp = client.head_object("bucket1", "obj")
-    # p resp.size   # => 123
-    # p resp.status # => HTTP::Status::OK
+    # p resp.size          # => 123
+    # p resp.status        # => HTTP::Status::OK
     # p resp.last_modified # => "Wed, 19 Jun 2019 11:55:33 GMT"
     # ```
     def head_object(bucket, object : String, headers : Hash(String, String) = Hash(String, String).new)
