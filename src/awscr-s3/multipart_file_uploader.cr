@@ -58,7 +58,7 @@ module Awscr::S3
     end
 
     private def compute_default_part_size(source_size)
-      [(source_size / 10_000).ceil, 5 * 1024 * 1024].max
+      [(source_size // 10_000).ceil, 5 * 1024 * 1024].max
     end
 
     private def part_size(total_size, part_size, offset)
