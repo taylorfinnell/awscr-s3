@@ -9,7 +9,7 @@ module Awscr
         end
 
         Spec.after_each do
-          Timecop.reset
+          Timecop.return
         end
 
         it "generates the same html each call" do

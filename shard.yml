@@ -11,12 +11,12 @@ license: MIT
 dependencies:
   awscr-signer:
     github: taylorfinnell/awscr-signer
-    version: ~> 0.6.0
+    version: ~> 0.7.0
 
 development_dependencies:
   timecop:
-    github: waterlink/timecop.cr
-    version: ~> 0.1.0
+    github: crystal-community/timecop.cr
+    version: ~> 0.3.0
   webmock:
     github: manastech/webmock.cr
     branch: master

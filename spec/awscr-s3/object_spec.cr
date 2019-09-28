@@ -1,7 +1,7 @@
 require "../spec_helper"
 
 module Awscr::S3
-  OBJECT_TEST_TIME = Time.new(2019, 3, 2, 3, 9, 4, location: Time::Location::UTC)
+  OBJECT_TEST_TIME = Time.utc(2019, 3, 2, 3, 9, 4)
 
   describe Object do
     it "is equal to another object if key size and etag are same" do

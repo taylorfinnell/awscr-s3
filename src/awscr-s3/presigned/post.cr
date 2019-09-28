@@ -67,7 +67,7 @@ module Awscr
         private def add_fields_before_sign
           case @signer
           when :v4
-            time = Time.utc_now
+            time = Time.utc
             @policy.condition("x-amz-credential", credential_scope(time))
             @policy.condition("x-amz-algorithm", Signer::ALGORITHM)
             @policy.condition("x-amz-date", time.to_s("%Y%m%dT%H%M%SZ"))
