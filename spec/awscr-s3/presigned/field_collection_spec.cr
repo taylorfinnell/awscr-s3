@@ -10,8 +10,16 @@ module Awscr
 
       describe FieldCollection do
         it "is enumerable" do
+          field = TestField.new("k", "v")
           fields = FieldCollection.new
-          fields.should be_a(Enumerable(PostField))
+          fields.push(field)
+
+          collected = [] of PostField
+          fields.each do |f|
+            collected << f
+          end
+
+          collected.should eq([field])
         end
 
         it "can have fields added to it" do
