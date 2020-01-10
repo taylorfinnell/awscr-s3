@@ -13,7 +13,7 @@ module Awscr::S3
     end
 
     it "raises on invalid version" do
-      expect_raises(Exception) do
+      expect_raises(S3::Exception) do
         SignerFactory.get("region", "key", "secrety", version: :v1)
       end
     end

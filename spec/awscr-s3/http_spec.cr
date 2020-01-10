@@ -59,7 +59,7 @@ module Awscr::S3
 
         http = Http.new(SIGNER)
 
-        expect_raises Http::ServerError, "NoSuchKey: The resource you requested does not exist" do
+        expect_raises S3::NoSuchKey, "The resource you requested does not exist" do
           http.get("/sup")
         end
       end
@@ -70,32 +70,32 @@ module Awscr::S3
 
         http = Http.new(SIGNER)
 
-        expect_raises Http::ServerError do
+        expect_raises S3::Exception do
           http.get("/sup")
         end
       end
 
       context "with body_io" do
-        pending "handles aws specific errors" do
+        it "handles aws specific errors" do
           WebMock.stub(:get, "http://s3.amazonaws.com/sup?")
             .to_return(status: 404, body: ERROR_BODY)
 
           http = Http.new(SIGNER)
 
-          expect_raises Http::ServerError, "NoSuchKey: The resource you requested does not exist" do
+          expect_raises S3::NoSuchKey, "The resource you requested does not exist" do
             http.get("/sup") do |response|
               pp response
             end
           end
         end
 
-        pending "handles bad responses" do
+        it "handles bad responses" do
           WebMock.stub(:get, "http://s3.amazonaws.com/sup?")
             .to_return(status: 404)
 
           http = Http.new(SIGNER)
 
-          expect_raises Http::ServerError do
+          expect_raises S3::Exception do
             http.get("/sup") do |response|
               pp response
             end
@@ -111,7 +111,7 @@ module Awscr::S3
 
         http = Http.new(SIGNER)
 
-        expect_raises Http::ServerError, "NoSuchKey: The resource you requested does not exist" do
+        expect_raises S3::Exception, "The resource you requested does not exist" do
           http.head("/")
         end
       end
@@ -122,7 +122,7 @@ module Awscr::S3
 
         http = Http.new(SIGNER)
 
-        expect_raises Http::ServerError do
+        expect_raises S3::Exception do
           http.head("/")
         end
       end
@@ -135,7 +135,7 @@ module Awscr::S3
 
         http = Http.new(SIGNER)
 
-        expect_raises Http::ServerError, "NoSuchKey: The resource you requested does not exist" do
+        expect_raises S3::NoSuchKey, "The resource you requested does not exist" do
           http.put("/", "")
         end
       end
@@ -146,7 +146,7 @@ module Awscr::S3
 
         http = Http.new(SIGNER)
 
-        expect_raises Http::ServerError do
+        expect_raises S3::Exception do
           http.put("/", "")
         end
       end
@@ -184,7 +184,7 @@ module Awscr::S3
 
         http = Http.new(SIGNER)
 
-        expect_raises Http::ServerError, "NoSuchKey: The resource you requested does not exist" do
+        expect_raises S3::NoSuchKey, "The resource you requested does not exist" do
           http.post("/")
         end
       end
@@ -195,7 +195,7 @@ module Awscr::S3
 
         http = Http.new(SIGNER)
 
-        expect_raises Http::ServerError do
+        expect_raises S3::Exception do
           http.post("/")
         end
       end
@@ -215,7 +215,7 @@ module Awscr::S3
 
         http = Http.new(SIGNER)
 
-        expect_raises Http::ServerError, "NoSuchKey: The resource you requested does not exist" do
+        expect_raises S3::NoSuchKey, "The resource you requested does not exist" do
           http.delete("/")
         end
       end
@@ -226,7 +226,7 @@ module Awscr::S3
 
         http = Http.new(SIGNER)
 
-        expect_raises Http::ServerError do
+        expect_raises S3::Exception do
           http.delete("/")
         end
       end
