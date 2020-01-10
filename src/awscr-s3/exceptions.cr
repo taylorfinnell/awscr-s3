@@ -104,6 +104,7 @@ module Awscr::S3
   end
 
   {% for error in EXCEPTIONS %}
+    # :nodoc:
     class {{error.id}} < Exception
     end
   {% end %}
