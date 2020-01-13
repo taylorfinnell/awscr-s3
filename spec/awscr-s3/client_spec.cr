@@ -59,11 +59,11 @@ module Awscr::S3
       end
 
       it "raises if too many keys" do
-        keys = ["test"] * 1000
+        keys = ["test"] * 1001
 
         client = Client.new("us-east-1", "key", "secret")
 
-        expect_raises Exception do
+        expect_raises S3::Exception do
           client.batch_delete("bucket", keys)
         end
       end

@@ -4,20 +4,6 @@ require "uri"
 
 module Awscr::S3
   class Http
-    # Exception raised when S3 gives us a non 200 http status code. The error
-    # will have a specific message from S3.
-    class ServerError < Exception
-      # Creates a `ServerError` from an `HTTP::Client::Response`
-      def self.from_response(response)
-        xml = XML.new(response.body || response.body_io)
-
-        code = xml.string("//Error/Code")
-        message = xml.string("//Error/Message")
-
-        new("#{code}: #{message}")
-      end
-    end
-
     def initialize(@signer : Awscr::Signer::Signers::Interface,
                    @region : String = standard_us_region,
                    @custom_endpoint : String? = nil)
@@ -106,9 +92,9 @@ module Awscr::S3
       return response if (200..299).includes?(response.status_code)
 
       if response.body_io? || !response.body?.try(&.empty?)
-        raise ServerError.from_response(response)
+        raise S3::Exception.from_response(response)
       else
-        raise ServerError.new("server error: #{response.status_code}")
+        raise S3::Exception.new("server error: #{response.status_code}")
       end
     end
 

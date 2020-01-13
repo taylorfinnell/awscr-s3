@@ -18,7 +18,7 @@ module Awscr
 
         # Create a Presigned::Url link. Supports GET and PUT.
         def for(method : Symbol)
-          raise "unsupported method #{method}" unless allowed_methods.includes?(method)
+          raise S3::Exception.new("unsupported method #{method}") unless allowed_methods.includes?(method)
 
           request = build_request(method.to_s.upcase)
 

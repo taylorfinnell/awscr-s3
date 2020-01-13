@@ -52,7 +52,7 @@ module Awscr
           )
           url = Url.new(options)
 
-          expect_raises(Exception) do
+          expect_raises(S3::Exception) do
             url.for(:test)
           end
         end

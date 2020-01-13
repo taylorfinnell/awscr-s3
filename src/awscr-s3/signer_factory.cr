@@ -22,7 +22,7 @@ module Awscr
             aws_secret_key: aws_secret_key
           )
         else
-          raise "Unknown signer version: #{version}"
+          raise S3::Exception.new("Unknown signer version: #{version}")
         end
       end
     end
