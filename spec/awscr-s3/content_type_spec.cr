@@ -11,12 +11,10 @@ module Awscr::S3
 
     describe "when the io is a file" do
       it "returns the correct Content-Type" do
-        ContentType::TYPES.keys.each do |ext|
-          tempfile = File.tempfile("foo", ext)
-          file = File.open(tempfile.path)
-          ContentType.get(file).should be(ContentType::TYPES[ext])
-          tempfile.delete
-        end
+        tempfile = File.tempfile("foo", ".txt")
+        file = File.open(tempfile.path)
+        ContentType.get(file).should eq("text/plain")
+        tempfile.delete
       end
     end
 
@@ -25,6 +23,17 @@ module Awscr::S3
         tempfile = File.tempfile("foo", ".spicy")
         file = File.open(tempfile.path)
         ContentType.get(file).should be(ContentType::DEFAULT)
+        tempfile.delete
+      end
+    end
+
+    describe "custom types" do
+      it "works" do
+        MIME.register(".bhutjolokia", "ouch!")
+
+        tempfile = File.tempfile("foo", ".bhutjolokia")
+        file = File.open(tempfile.path)
+        ContentType.get(file).should eq("ouch!")
         tempfile.delete
       end
     end
