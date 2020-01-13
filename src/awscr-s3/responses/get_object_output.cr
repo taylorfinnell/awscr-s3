@@ -10,12 +10,27 @@ module Awscr::S3::Response
     # Create a `GetObjectOutput` response from an
     # `HTTP::Client::Response` object
     def self.from_response(response)
-      new(response.body? || response.body_io, response.headers)
+      new(response.body, response.headers)
     end
 
-    def initialize(@body : IO | String, @headers : HTTP::Headers)
+    def initialize(@body : String, @headers : HTTP::Headers)
+    end
+  end
+
+  class GetObjectStream
+    # Body IO for streaming the body of the object
+    getter body_io
+
+    # The headers returned along with the object response
+    getter headers
+
+    # Create a `GetObjectStream` response from an
+    # `HTTP::Client::Response` object
+    def self.from_response(response)
+      new(response.body_io, response.headers)
     end
 
-    def_equals @body
+    def initialize(@body_io : IO, @headers : HTTP::Headers)
+    end
   end
 end
