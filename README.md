@@ -109,6 +109,11 @@ resp.success? # => true
 ```crystal
 resp = client.get_object("bucket_name", "object_key")
 resp.body # => myobjectbody
+
+# Or stream the object (recommended for large objects)
+client.get_object("bucket_name", "object_key") do |obj|
+  IO.copy(obj.body_io, STDOUT) # => myobjectbody
+end
 ```
 
 ## **List Objects**
