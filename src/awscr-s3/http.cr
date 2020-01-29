@@ -56,8 +56,8 @@ module Awscr::S3
     # http = Http.new(signer)
     # http.head("/")
     # ```
-    def head(path)
-      resp = @http.head(path)
+    def head(path, headers : Hash(String, String) = Hash(String, String).new)
+      resp = @http.head(path, headers: HTTP::Headers.new.merge!(headers))
       handle_response!(resp)
     end
 
