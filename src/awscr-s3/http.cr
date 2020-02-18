@@ -102,7 +102,7 @@ module Awscr::S3
     private def endpoint : URI
       return URI.parse(@custom_endpoint.to_s) if @custom_endpoint
       return default_endpoint if @region == standard_us_region
-      URI.parse("http://#{SERVICE_NAME}-#{@region}.amazonaws.com")
+      URI.parse("https://#{SERVICE_NAME}-#{@region}.amazonaws.com")
     end
 
     # :nodoc:
@@ -112,7 +112,7 @@ module Awscr::S3
 
     # :nodoc:
     private def default_endpoint : URI
-      URI.parse("http://#{SERVICE_NAME}.amazonaws.com")
+      URI.parse("https://#{SERVICE_NAME}.amazonaws.com")
     end
   end
 end
