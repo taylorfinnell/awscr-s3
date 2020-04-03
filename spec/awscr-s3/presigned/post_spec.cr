@@ -192,7 +192,7 @@ module Awscr
             post.build { |p| p.expiration(Time.local); policy = p }
 
             policy.should be_a(Policy)
-            policy.as(Policy).fields["Signature"].should eq("vI0Km7fxOL7B9BunXFKM2/GvS1A=")
+            policy.as(Policy).fields["Signature"].should eq("7zeRwvjzXMtd9rUnq0N5yJoPxqo=")
           end
 
           it "yields the signed v4 policy" do
@@ -205,7 +205,7 @@ module Awscr
             post.build { |p| p.expiration(Time.local); policy = p }
 
             policy.should be_a(Policy)
-            policy.as(Policy).fields["x-amz-signature"].should eq("7dc0bf8fe1dcc2344f8ceaf3148a8898fbac6f074ccbe4edfbfac545be693add")
+            policy.as(Policy).fields["x-amz-signature"].should eq("4466a0e8c924b34bcb91ff3d95c8f0ed9ee9f7b897bab57a8213e6af5c52a064")
           end
         end
       end
