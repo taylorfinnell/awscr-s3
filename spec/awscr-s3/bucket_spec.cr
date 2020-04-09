@@ -16,14 +16,12 @@ module Awscr::S3
 
     it "has a name" do
       bucket = Bucket.new("name", Time.local)
-
       bucket.name.should eq("name")
     end
 
     it "has a creation_time" do
       time = Time.local
       bucket = Bucket.new("name", time)
-
       bucket.creation_time.should eq(time)
     end
   end
