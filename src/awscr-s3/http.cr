@@ -7,7 +7,6 @@ module Awscr::S3
     def initialize(@signer : Awscr::Signer::Signers::Interface,
                    @region : String = standard_us_region,
                    @custom_endpoint : String? = nil)
-
       @endpoint = endpoint
     end
 
