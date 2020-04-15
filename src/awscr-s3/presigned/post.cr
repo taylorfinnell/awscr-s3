@@ -61,6 +61,8 @@ module Awscr
           when :v2
             @policy.condition("AWSAccessKeyId", @aws_access_key)
             @policy.condition("Signature", signature.to_s)
+          else
+            raise "unnexpected signer: #{@signer}"
           end
         end
 
@@ -73,6 +75,8 @@ module Awscr
             @policy.condition("x-amz-date", time.to_s("%Y%m%dT%H%M%SZ"))
           when :v2
             # do nothing
+          else
+            raise "unnexpected signer: #{@signer}"
           end
         end
 

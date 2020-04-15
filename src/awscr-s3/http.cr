@@ -7,12 +7,10 @@ module Awscr::S3
     def initialize(@signer : Awscr::Signer::Signers::Interface,
                    @region : String = standard_us_region,
                    @custom_endpoint : String? = nil)
-      @http = HTTP::Client.new(endpoint)
-
-      @http.before_request do |request|
-        @signer.sign(request)
-      end
+      @endpoint = endpoint
     end
+
+    @endpoint : URI
 
     # Issue a DELETE request to the *path* with optional *headers*
     #
@@ -22,7 +20,7 @@ module Awscr::S3
     # ```
     def delete(path, headers : Hash(String, String) = Hash(String, String).new)
       headers = HTTP::Headers.new.merge!(headers)
-      resp = @http.delete(path, headers: headers)
+      resp = http.delete(path, headers: headers)
       handle_response!(resp)
     end
 
@@ -34,7 +32,7 @@ module Awscr::S3
     # ```
     def post(path, body = nil, headers : Hash(String, String) = Hash(String, String).new)
       headers = HTTP::Headers.new.merge!(headers)
-      resp = @http.post(path, headers: headers, body: body)
+      resp = http.post(path, headers: headers, body: body)
       handle_response!(resp)
     end
 
@@ -46,7 +44,7 @@ module Awscr::S3
     # ```
     def put(path : String, body : IO | String, headers : Hash(String, String) = Hash(String, String).new)
       headers = HTTP::Headers{"Content-Length" => body.size.to_s}.merge!(headers)
-      resp = @http.put(path, headers: headers, body: body)
+      resp = http.put(path, headers: headers, body: body)
       handle_response!(resp)
     end
 
@@ -57,7 +55,7 @@ module Awscr::S3
     # http.head("/")
     # ```
     def head(path, headers : Hash(String, String) = Hash(String, String).new)
-      resp = @http.head(path, headers: HTTP::Headers.new.merge!(headers))
+      resp = http.head(path, headers: HTTP::Headers.new.merge!(headers))
       handle_response!(resp)
     end
 
@@ -68,7 +66,7 @@ module Awscr::S3
     # http.get("/")
     # ```
     def get(path, headers : Hash(String, String) = Hash(String, String).new)
-      resp = @http.get(path, headers: HTTP::Headers.new.merge!(headers))
+      resp = http.get(path, headers: HTTP::Headers.new.merge!(headers))
       handle_response!(resp)
     end
 
@@ -81,7 +79,7 @@ module Awscr::S3
     # end
     # ```
     def get(path, headers : Hash(String, String) = Hash(String, String).new)
-      @http.get(path, headers: HTTP::Headers.new.merge!(headers)) do |resp|
+      http.get(path, headers: HTTP::Headers.new.merge!(headers)) do |resp|
         handle_response!(resp)
         yield resp
       end
@@ -102,7 +100,7 @@ module Awscr::S3
     private def endpoint : URI
       return URI.parse(@custom_endpoint.to_s) if @custom_endpoint
       return default_endpoint if @region == standard_us_region
-      URI.parse("http://#{SERVICE_NAME}-#{@region}.amazonaws.com")
+      URI.parse("https://#{SERVICE_NAME}-#{@region}.amazonaws.com")
     end
 
     # :nodoc:
@@ -112,7 +110,16 @@ module Awscr::S3
 
     # :nodoc:
     private def default_endpoint : URI
-      URI.parse("http://#{SERVICE_NAME}.amazonaws.com")
+      URI.parse("https://#{SERVICE_NAME}.amazonaws.com")
+    end
+
+    # :nodoc:
+    private def http
+      client = HTTP::Client.new(@endpoint)
+      client.before_request do |request|
+        @signer.sign(request)
+      end
+      client
     end
   end
 end
