@@ -13,6 +13,11 @@ module Awscr::S3
     def initialize(@name : String, @creation_time : Time, @owner : String? = nil)
     end
 
+    # Compares the name of the bucket to other
+    def ==(other : String)
+      @name == other
+    end
+
     def_equals @name, @creation_time
   end
 end

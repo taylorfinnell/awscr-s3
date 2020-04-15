@@ -14,6 +14,18 @@ module Awscr::S3
       (Bucket.new("test", Time.unix(Time.local.to_unix + 123)) == bucket).should eq(false)
     end
 
+    it "has the same name as the string provided" do
+      time = Time.local
+      bucket = Bucket.new("test3", time)
+      (bucket == "test3").should eq(true)
+    end
+
+    it "has not the same name as the string provided" do 
+      time = Time.local
+      bucket = Bucket.new("test4", time)
+      (bucket == "abcdef").should eq(false)
+    end
+
     it "has a name" do
       bucket = Bucket.new("name", Time.local)
       bucket.name.should eq("name")
