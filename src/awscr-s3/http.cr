@@ -42,7 +42,7 @@ module Awscr::S3
     # http = Http.new(signer)
     # http.put("/", body: IO::Memory.new("test"))
     # ```
-    def put(path : String, body : IO | String, headers : Hash(String, String) = Hash(String, String).new)
+    def put(path : String, body : IO | String | Bytes, headers : Hash(String, String) = Hash(String, String).new)
       headers = HTTP::Headers{"Content-Length" => body.size.to_s}.merge!(headers)
       resp = http.put(path, headers: headers, body: body)
       handle_response!(resp)
