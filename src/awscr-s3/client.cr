@@ -107,7 +107,7 @@ module Awscr::S3
     # p resp.upload_id # => someid
     # ```
     def upload_part(bucket : String, object : String,
-                    upload_id : String, part_number : Int32, part : IO | String)
+                    upload_id : String, part_number : Int32, part : IO | String | Bytes)
       resp = http.put("/#{bucket}/#{object}?partNumber=#{part_number}&uploadId=#{upload_id}", part)
 
       Response::UploadPartOutput.new(
@@ -226,7 +226,7 @@ module Awscr::S3
     # resp = client.put_object("bucket1", "obj", "MY DATA")
     # p resp.key # => "obj"
     # ```
-    def put_object(bucket, object : String, body : IO | String,
+    def put_object(bucket, object : String, body : IO | String | Bytes,
                    headers : Hash(String, String) = Hash(String, String).new)
       resp = http.put("/#{bucket}/#{object}", body, headers)
 

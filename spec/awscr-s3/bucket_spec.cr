@@ -20,7 +20,7 @@ module Awscr::S3
       (bucket == "test3").should eq(true)
     end
 
-    it "has not the same name as the string provided" do 
+    it "has not the same name as the string provided" do
       time = Time.local
       bucket = Bucket.new("test4", time)
       (bucket == "abcdef").should eq(false)
