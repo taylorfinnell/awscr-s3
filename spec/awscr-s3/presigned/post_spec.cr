@@ -189,7 +189,7 @@ module Awscr
               signer: :v2
             )
             policy = nil
-            post.build { |p| p.expiration(Time.local); policy = p }
+            post.build { |p| p.expiration(Time.utc); policy = p }
 
             policy.should be_a(Policy)
             policy.as(Policy).fields["Signature"].should eq("vI0Km7fxOL7B9BunXFKM2/GvS1A=")
@@ -202,7 +202,7 @@ module Awscr
               aws_secret_key: "test"
             )
             policy = nil
-            post.build { |p| p.expiration(Time.local); policy = p }
+            post.build { |p| p.expiration(Time.utc); policy = p }
 
             policy.should be_a(Policy)
             policy.as(Policy).fields["x-amz-signature"].should eq("7dc0bf8fe1dcc2344f8ceaf3148a8898fbac6f074ccbe4edfbfac545be693add")

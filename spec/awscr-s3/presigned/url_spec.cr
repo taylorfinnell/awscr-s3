@@ -76,7 +76,7 @@ module Awscr
           end
 
           it "generates a correct url for v4" do
-            Timecop.freeze(Time.local(2013, 5, 24)) do
+            Timecop.freeze(Time.utc(2013, 5, 24)) do
               options = Url::Options.new(
                 region: "us-east-1",
                 aws_access_key: "AKIAIOSFODNN7EXAMPLE",
