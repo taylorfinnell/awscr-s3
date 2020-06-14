@@ -17,7 +17,7 @@ module Fixtures
         <Location>https://s3.amazonaws.com/screensnapr-development/test</Location>
         <Bucket>screensnapr-development</Bucket>
         <Key>test</Key>
-        <ETag>\"7611c6414e4b58f22ff9f59a2c1767b7-2\"</ETag>
+        <ETag>"7611c6414e4b58f22ff9f59a2c1767b7-2"</ETag>
       </CompleteMultipartUploadResult>
     RESP_BODY
   end

@@ -116,9 +116,19 @@ module Awscr::S3
     # :nodoc:
     private def http
       client = HTTP::Client.new(@endpoint)
-      client.before_request do |request|
-        @signer.sign(request)
+
+      # When we are using V4 we must tell the signer to skip encoding the path
+      # because we already did that
+      if (signer = @signer).is_a?(Awscr::Signer::Signers::V4)
+        client.before_request do |request|
+          signer.as(Awscr::Signer::Signers::V4).sign(request, encode_path: false)
+        end
+      else
+        client.before_request do |request|
+          signer.sign(request)
+        end
       end
+
       client
     end
   end

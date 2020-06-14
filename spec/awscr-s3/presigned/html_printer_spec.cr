@@ -55,7 +55,7 @@ module Awscr
             <input type="hidden" name="x-amz-algorithm" value="AWS4-HMAC-SHA256" /><br />
             <input type="hidden" name="x-amz-date" value="19700101T000001Z" /><br />
             <input type="hidden" name="policy" value="eyJleHBpcmF0aW9uIjoiMTk3MC0wMS0wMVQwMDowMDowMS4wMDBaIiwiY29uZGl0aW9ucyI6W3siYnVja2V0IjoidGVzdCJ9LHsieC1hbXotY3JlZGVudGlhbCI6InRlc3QvMTk3MDAxMDEvcmVnaW9uL3MzL2F3czRfcmVxdWVzdCJ9LHsieC1hbXotYWxnb3JpdGhtIjoiQVdTNC1ITUFDLVNIQTI1NiJ9LHsieC1hbXotZGF0ZSI6IjE5NzAwMTAxVDAwMDAwMVoifV19" /><br />
-            <input type="hidden" name="x-amz-signature" value="f509df9965f9cf92b77aabc6b81a6f2fd24f36d3a6daaf46e9704ef5c333ee88\" />
+            <input type="hidden" name="x-amz-signature" value="f509df9965f9cf92b77aabc6b81a6f2fd24f36d3a6daaf46e9704ef5c333ee88" />
 
             <input type="file"   name="file" /> <br />
             <input type="submit" name="submit" value="Upload" />
