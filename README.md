@@ -30,7 +30,7 @@ require "awscr-s3"
 ## **Creating a Client**
 
 ```crystal
-client = Awscr::S3::Client.new("us-east1", "key", "secret")
+client = Awscr::S3::Client.new("us-east-1", "key", "secret")
 ```
 
 For S3 compatible services, like DigitalOcean Spaces or Minio, you'll need to set a custom endpoint:
@@ -42,7 +42,7 @@ client = Awscr::S3::Client.new("nyc3", "key", "secret", endpoint: "https://nyc3.
 If you wish you wish to you version 2 request signing you may specify the signer
 
 ```crystal
-client = Awscr::S3::Client.new("us-east1", "key", "secret", signer: :v2)
+client = Awscr::S3::Client.new("us-east-1", "key", "secret", signer: :v2)
 ```
 
 ## **List Buckets**
