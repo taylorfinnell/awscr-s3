@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="generator" content="Crystal Docs 0.34.0">
+<meta name="crystal_docs.project_version" content="HEAD">
+<meta name="crystal_docs.project_name" content="awscr-s3">
+
+
+<link href="../../../css/style.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="../../../js/doc.js"></script>
+
+<svg class="hidden">
+  <symbol id="octicon-link" viewBox="0 0 16 16">
+    <path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path>
+  </symbol>
+</svg>
+
+  <meta id="repository-name" content="awscr-s3">
+  <title>Awscr::S3::Presigned::PostField - awscr-s3 HEAD</title>
+  <script type="text/javascript">
+    CrystalDocs.base_path = "../../../";
+  </script>
+</head>
+<body>
+
+<div class="sidebar">
+  <div class="sidebar-header">
+    <div class="search-box">
+      <input type="search" class="search-input" placeholder="Search..." spellcheck="false" aria-label="Search">
+    </div>
+
+    <div class="project-summary">
+      <h1 class="project-name">
+        <a href="../../../index.html">
+          awscr-s3
+        </a>
+      </h1>
+
+      <span class="project-version">
+        HEAD
+      </span>
+    </div>
+  </div>
+
+  <div class="search-results" class="hidden">
+    <ul class="search-list"></ul>
+  </div>
+
+  <div class="types-list">
+    <ul>
+  
+  <li class="parent open current" data-id="awscr-s3/Awscr" data-name="awscr">
+      <a href="../../../Awscr.html">Awscr</a>
+      
+        <ul>
+  
+  <li class="parent open current" data-id="awscr-s3/Awscr/S3" data-name="awscr::s3">
+      <a href="../../../Awscr/S3.html">S3</a>
+      
+        <ul>
+  
+  <li class=" " data-id="awscr-s3/Awscr/S3/Bucket" data-name="awscr::s3::bucket">
+      <a href="../../../Awscr/S3/Bucket.html">Bucket</a>
+      
+    </li>
+  
+  <li class=" " data-id="awscr-s3/Awscr/S3/Client" data-name="awscr::s3::client">
+      <a href="../../../Awscr/S3/Client.html">Client</a>
+      
+    </li>
+  
+  <li class=" " data-id="awscr-s3/Awscr/S3/ContentType" data-name="awscr::s3::contenttype">
+      <a href="../../../Awscr/S3/ContentType.html">ContentType</a>
+      
+    </li>
+  
+  <li class=" " data-id="awscr-s3/Awscr/S3/Exception" data-name="awscr::s3::exception">
+      <a href="../../../Awscr/S3/Exception.html">Exception</a>
+      
+    </li>
+  
+  <li class="parent " data-id="awscr-s3/Awscr/S3/FileUploader" data-name="awscr::s3::fileuploader">
+      <a href="../../../Awscr/S3/FileUploader.html">FileUploader</a>
+      
+        <ul>
+  
+  <li class=" " data-id="awscr-s3/Awscr/S3/FileUploader/Options" data-name="awscr::s3::fileuploader::options">
+      <a href="../../../Awscr/S3/FileUploader/Options.html">Options</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+  <li class=" " data-id="awscr-s3/Awscr/S3/Http" data-name="awscr::s3::http">
+      <a href="../../../Awscr/S3/Http.html">Http</a>
+      
+    </li>
+  
+  <li class=" " data-id="awscr-s3/Awscr/S3/Object" data-name="awscr::s3::object">
+      <a href="../../../Awscr/S3/Object.html">Object</a>
+      
+    </li>
+  
+  <li class="parent " data-id="awscr-s3/Awscr/S3/Paginator" data-name="awscr::s3::paginator">
+      <a href="../../../Awscr/S3/Paginator.html">Paginator</a>
+      
+        <ul>
+  
+  <li class=" " data-id="awscr-s3/Awscr/S3/Paginator/ListObjectsV2" data-name="awscr::s3::paginator::listobjectsv2">
+      <a href="../../../Awscr/S3/Paginator/ListObjectsV2.html">ListObjectsV2</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+  <li class="parent open current" data-id="awscr-s3/Awscr/S3/Presigned" data-name="awscr::s3::presigned">
+      <a href="../../../Awscr/S3/Presigned.html">Presigned</a>
+      
+        <ul>
+  
+  <li class=" " data-id="awscr-s3/Awscr/S3/Presigned/FieldCollection" data-name="awscr::s3::presigned::fieldcollection">
+      <a href="../../../Awscr/S3/Presigned/FieldCollection.html">FieldCollection</a>
+      
+    </li>
+  
+  <li class=" " data-id="awscr-s3/Awscr/S3/Presigned/Form" data-name="awscr::s3::presigned::form">
+      <a href="../../../Awscr/S3/Presigned/Form.html">Form</a>
+      
+    </li>
+  
+  <li class=" " data-id="awscr-s3/Awscr/S3/Presigned/HtmlPrinter" data-name="awscr::s3::presigned::htmlprinter">
+      <a href="../../../Awscr/S3/Presigned/HtmlPrinter.html">HtmlPrinter</a>
+      
+    </li>
+  
+  <li class=" " data-id="awscr-s3/Awscr/S3/Presigned/Policy" data-name="awscr::s3::presigned::policy">
+      <a href="../../../Awscr/S3/Presigned/Policy.html">Policy</a>
+      
+    </li>
+  
+  <li class=" " data-id="awscr-s3/Awscr/S3/Presigned/Post" data-name="awscr::s3::presigned::post">
+      <a href="../../../Awscr/S3/Presigned/Post.html">Post</a>
+      
+    </li>
+  
+  <li class=" current" data-id="awscr-s3/Awscr/S3/Presigned/PostField" data-name="awscr::s3::presigned::postfield">
+      <a href="../../../Awscr/S3/Presigned/PostField.html">PostField</a>
+      
+    </li>
+  
+  <li class="parent " data-id="awscr-s3/Awscr/S3/Presigned/Url" data-name="awscr::s3::presigned::url">
+      <a href="../../../Awscr/S3/Presigned/Url.html">Url</a>
+      
+        <ul>
+  
+  <li class=" " data-id="awscr-s3/Awscr/S3/Presigned/Url/Options" data-name="awscr::s3::presigned::url::options">
+      <a href="../../../Awscr/S3/Presigned/Url/Options.html">Options</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+  <li class="parent " data-id="awscr-s3/Awscr/S3/Response" data-name="awscr::s3::response">
+      <a href="../../../Awscr/S3/Response.html">Response</a>
+      
+        <ul>
+  
+  <li class="parent " data-id="awscr-s3/Awscr/S3/Response/BatchDeleteOutput" data-name="awscr::s3::response::batchdeleteoutput">
+      <a href="../../../Awscr/S3/Response/BatchDeleteOutput.html">BatchDeleteOutput</a>
+      
+        <ul>
+  
+  <li class=" " data-id="awscr-s3/Awscr/S3/Response/BatchDeleteOutput/DeletedObject" data-name="awscr::s3::response::batchdeleteoutput::deletedobject">
+      <a href="../../../Awscr/S3/Response/BatchDeleteOutput/DeletedObject.html">DeletedObject</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+  <li class=" " data-id="awscr-s3/Awscr/S3/Response/CompleteMultipartUpload" data-name="awscr::s3::response::completemultipartupload">
+      <a href="../../../Awscr/S3/Response/CompleteMultipartUpload.html">CompleteMultipartUpload</a>
+      
+    </li>
+  
+  <li class=" " data-id="awscr-s3/Awscr/S3/Response/GetObjectOutput" data-name="awscr::s3::response::getobjectoutput">
+      <a href="../../../Awscr/S3/Response/GetObjectOutput.html">GetObjectOutput</a>
+      
+    </li>
+  
+  <li class=" " data-id="awscr-s3/Awscr/S3/Response/GetObjectStream" data-name="awscr::s3::response::getobjectstream">
+      <a href="../../../Awscr/S3/Response/GetObjectStream.html">GetObjectStream</a>
+      
+    </li>
+  
+  <li class=" " data-id="awscr-s3/Awscr/S3/Response/HeadObjectOutput" data-name="awscr::s3::response::headobjectoutput">
+      <a href="../../../Awscr/S3/Response/HeadObjectOutput.html">HeadObjectOutput</a>
+      
+    </li>
+  
+  <li class=" " data-id="awscr-s3/Awscr/S3/Response/ListAllMyBuckets" data-name="awscr::s3::response::listallmybuckets">
+      <a href="../../../Awscr/S3/Response/ListAllMyBuckets.html">ListAllMyBuckets</a>
+      
+    </li>
+  
+  <li class=" " data-id="awscr-s3/Awscr/S3/Response/ListObjectsV2" data-name="awscr::s3::response::listobjectsv2">
+      <a href="../../../Awscr/S3/Response/ListObjectsV2.html">ListObjectsV2</a>
+      
+    </li>
+  
+  <li class=" " data-id="awscr-s3/Awscr/S3/Response/PutObjectOutput" data-name="awscr::s3::response::putobjectoutput">
+      <a href="../../../Awscr/S3/Response/PutObjectOutput.html">PutObjectOutput</a>
+      
+    </li>
+  
+  <li class=" " data-id="awscr-s3/Awscr/S3/Response/StartMultipartUpload" data-name="awscr::s3::response::startmultipartupload">
+      <a href="../../../Awscr/S3/Response/StartMultipartUpload.html">StartMultipartUpload</a>
+      
+    </li>
+  
+  <li class=" " data-id="awscr-s3/Awscr/S3/Response/UploadPartOutput" data-name="awscr::s3::response::uploadpartoutput">
+      <a href="../../../Awscr/S3/Response/UploadPartOutput.html">UploadPartOutput</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+  <li class=" " data-id="awscr-s3/Awscr/S3/SignerFactory" data-name="awscr::s3::signerfactory">
+      <a href="../../../Awscr/S3/SignerFactory.html">SignerFactory</a>
+      
+    </li>
+  
+  <li class=" " data-id="awscr-s3/Awscr/S3/XML" data-name="awscr::s3::xml">
+      <a href="../../../Awscr/S3/XML.html">XML</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+</ul>
+
+  </div>
+</div>
+
+
+<div class="main-content">
+<h1 class="type-name">
+
+  <span class="kind">class</span> Awscr::S3::Presigned::PostField
+
+</h1>
+
+
+  <ul class="superclass-hierarchy"><li class="superclass"><a href="../../../Awscr/S3/Presigned/PostField.html">Awscr::S3::Presigned::PostField</a></li><li class="superclass">Reference</li><li class="superclass">Object</li></ul>
+
+
+
+
+  <h2>
+    <a id="overview" class="anchor" href="#overview">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+    Overview
+  </h2>
+
+  <p>A field in a <code><a href="../../../Awscr/S3/Presigned/Post.html">Presigned::Post</a></code></p>
+
+
+
+
+
+  <h2>
+    <a id="included-modules" class="anchor" href="#included-modules">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+    Included Modules
+  </h2>
+  <ul class="other-types-list">
+    
+      <li class="other-type">Comparable(<a href="../../../Awscr/S3/Presigned/PostField.html">Awscr::S3::Presigned::PostField</a>)</li>
+    
+  </ul>
+
+
+
+
+
+
+
+
+
+
+  <h2>
+    <a id="defined-in" class="anchor" href="#defined-in">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+    Defined in:
+  </h2>
+  
+    
+      <a href="https://github.com/taylorfinnell/awscr-s3/blob/d16e88438aff9989cdf05c8684fa8eb5e76799a8/src/awscr-s3/presigned/post_field.cr#L5" target="_blank">
+        awscr-s3/presigned/post_field.cr
+      </a>
+    
+    <br/>
+  
+
+
+
+
+
+  <h2>
+    <a id="constructors" class="anchor" href="#constructors">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+    Constructors
+  </h2>
+  <ul class="list-summary">
+    
+      <li class="entry-summary">
+        <a href="#new(key:String,value:String)-class-method" class="signature"><strong>.new</strong>(key : String, value : String)</a>
+        
+      </li>
+    
+  </ul>
+
+
+
+
+
+  <h2>
+    <a id="instance-method-summary" class="anchor" href="#instance-method-summary">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+    Instance Method Summary
+  </h2>
+  <ul class="list-summary">
+    
+      <li class="entry-summary">
+        <a href="#(field:PostField)-instance-method" class="signature"><strong>#<=></strong>(field : PostField)</a>
+        
+          <div class="summary"><p>The comparison operator.</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#key:String-instance-method" class="signature"><strong>#key</strong> : String</a>
+        
+          <div class="summary"><p>The key of the field</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#serialize-instance-method" class="signature"><strong>#serialize</strong></a>
+        
+          <div class="summary"><p>Serialize the key into the format required for a <code><a href="../../../Awscr/S3/Presigned/Post.html">Presigned::Post</a></code></p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#value:String-instance-method" class="signature"><strong>#value</strong> : String</a>
+        
+          <div class="summary"><p>The value of the field</p></div>
+        
+      </li>
+    
+  </ul>
+
+
+
+
+
+<div class="methods-inherited">
+  
+    
+
+
+    
+
+
+    
+
+
+  
+    
+
+
+    
+
+
+    
+
+
+  
+    
+
+
+    
+
+
+    
+
+
+  
+</div>
+
+
+  <h2>
+    <a id="constructor-detail" class="anchor" href="#constructor-detail">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+    Constructor Detail
+  </h2>
+  
+    <div class="entry-detail" id="new(key:String,value:String)-class-method">
+      <div class="signature">
+        
+        def self.<strong>new</strong>(key : String, value : String)
+
+        <a class="method-permalink" href="#new(key:String,value:String)-class-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/taylorfinnell/awscr-s3/blob/d16e88438aff9989cdf05c8684fa8eb5e76799a8/src/awscr-s3/presigned/post_field.cr#L14" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+
+
+
+
+
+  <h2>
+    <a id="instance-method-detail" class="anchor" href="#instance-method-detail">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+    Instance Method Detail
+  </h2>
+  
+    <div class="entry-detail" id="(field:PostField)-instance-method">
+      <div class="signature">
+        
+        def <strong><=></strong>(field : <a href="../../../Awscr/S3/Presigned/PostField.html">PostField</a>)
+
+        <a class="method-permalink" href="#(field:PostField)-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+            <div class="doc-inherited">
+              Description copied from module Comparable(<a href="../../../Awscr/S3/Presigned/PostField.html">Awscr::S3::Presigned::PostField</a>)
+            </div>
+          
+          <p>The comparison operator. Returns <code>0</code> if the two objects are equal,
+a negative number if this object is considered less than <em>other</em>,
+a positive number if this object is considered greter than <em>other</em>,
+or <code>nil</code> if the two objects are not comparable.</p>
+
+<p>Subclasses define this method to provide class-specific ordering.</p>
+
+<p>The comparison operator is usually used to sort values:</p>
+
+<pre><code><span class="c"># Sort in a descending way:</span>
+[<span class="n">3</span>, <span class="n">1</span>, <span class="n">2</span>].sort { <span class="o">|</span>x, y<span class="o">|</span> y <span class="o">&lt;=&gt;</span> x } <span class="c"># =&gt; [3, 2, 1]</span>
+
+<span class="c"># Sort in an ascending way:</span>
+[<span class="n">3</span>, <span class="n">1</span>, <span class="n">2</span>].sort { <span class="o">|</span>x, y<span class="o">|</span> x <span class="o">&lt;=&gt;</span> y } <span class="c"># =&gt; [1, 2, 3]</span></code></pre>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/taylorfinnell/awscr-s3/blob/d16e88438aff9989cdf05c8684fa8eb5e76799a8/src/awscr-s3/presigned/post_field.cr#L22" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="key:String-instance-method">
+      <div class="signature">
+        
+        def <strong>key</strong> : String
+
+        <a class="method-permalink" href="#key:String-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>The key of the field</p>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/taylorfinnell/awscr-s3/blob/d16e88438aff9989cdf05c8684fa8eb5e76799a8/src/awscr-s3/presigned/post_field.cr#L9" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="serialize-instance-method">
+      <div class="signature">
+        
+        def <strong>serialize</strong>
+
+        <a class="method-permalink" href="#serialize-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Serialize the key into the format required for a <code><a href="../../../Awscr/S3/Presigned/Post.html">Presigned::Post</a></code></p>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/taylorfinnell/awscr-s3/blob/d16e88438aff9989cdf05c8684fa8eb5e76799a8/src/awscr-s3/presigned/post_field.cr#L18" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="value:String-instance-method">
+      <div class="signature">
+        
+        def <strong>value</strong> : String
+
+        <a class="method-permalink" href="#value:String-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>The value of the field</p>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/taylorfinnell/awscr-s3/blob/d16e88438aff9989cdf05c8684fa8eb5e76799a8/src/awscr-s3/presigned/post_field.cr#L12" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+
+
+
+
+</div>
+
+</body>
+</html>

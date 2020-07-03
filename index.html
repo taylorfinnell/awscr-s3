@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="generator" content="Crystal Docs 0.34.0">
+<meta name="crystal_docs.project_version" content="HEAD">
+<meta name="crystal_docs.project_name" content="awscr-s3">
+
+
+<link href="css/style.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="js/doc.js"></script>
+
+<svg class="hidden">
+  <symbol id="octicon-link" viewBox="0 0 16 16">
+    <path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path>
+  </symbol>
+</svg>
+
+  <meta id="repository-name" content="awscr-s3">
+  <title>awscr-s3 HEAD</title>
+  <script type="text/javascript">
+  CrystalDocs.base_path = "";
+  </script>
+</head>
+<body>
+
+<div class="sidebar">
+  <div class="sidebar-header">
+    <div class="search-box">
+      <input type="search" class="search-input" placeholder="Search..." spellcheck="false" aria-label="Search">
+    </div>
+
+    <div class="project-summary">
+      <h1 class="project-name">
+        <a href="index.html">
+          awscr-s3
+        </a>
+      </h1>
+
+      <span class="project-version">
+        HEAD
+      </span>
+    </div>
+  </div>
+
+  <div class="search-results" class="hidden">
+    <ul class="search-list"></ul>
+  </div>
+
+  <div class="types-list">
+    <ul>
+  
+  <li class="parent " data-id="awscr-s3/Awscr" data-name="awscr">
+      <a href="Awscr.html">Awscr</a>
+      
+        <ul>
+  
+  <li class="parent " data-id="awscr-s3/Awscr/S3" data-name="awscr::s3">
+      <a href="Awscr/S3.html">S3</a>
+      
+        <ul>
+  
+  <li class=" " data-id="awscr-s3/Awscr/S3/Bucket" data-name="awscr::s3::bucket">
+      <a href="Awscr/S3/Bucket.html">Bucket</a>
+      
+    </li>
+  
+  <li class=" " data-id="awscr-s3/Awscr/S3/Client" data-name="awscr::s3::client">
+      <a href="Awscr/S3/Client.html">Client</a>
+      
+    </li>
+  
+  <li class=" " data-id="awscr-s3/Awscr/S3/ContentType" data-name="awscr::s3::contenttype">
+      <a href="Awscr/S3/ContentType.html">ContentType</a>
+      
+    </li>
+  
+  <li class=" " data-id="awscr-s3/Awscr/S3/Exception" data-name="awscr::s3::exception">
+      <a href="Awscr/S3/Exception.html">Exception</a>
+      
+    </li>
+  
+  <li class="parent " data-id="awscr-s3/Awscr/S3/FileUploader" data-name="awscr::s3::fileuploader">
+      <a href="Awscr/S3/FileUploader.html">FileUploader</a>
+      
+        <ul>
+  
+  <li class=" " data-id="awscr-s3/Awscr/S3/FileUploader/Options" data-name="awscr::s3::fileuploader::options">
+      <a href="Awscr/S3/FileUploader/Options.html">Options</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+  <li class=" " data-id="awscr-s3/Awscr/S3/Http" data-name="awscr::s3::http">
+      <a href="Awscr/S3/Http.html">Http</a>
+      
+    </li>
+  
+  <li class=" " data-id="awscr-s3/Awscr/S3/Object" data-name="awscr::s3::object">
+      <a href="Awscr/S3/Object.html">Object</a>
+      
+    </li>
+  
+  <li class="parent " data-id="awscr-s3/Awscr/S3/Paginator" data-name="awscr::s3::paginator">
+      <a href="Awscr/S3/Paginator.html">Paginator</a>
+      
+        <ul>
+  
+  <li class=" " data-id="awscr-s3/Awscr/S3/Paginator/ListObjectsV2" data-name="awscr::s3::paginator::listobjectsv2">
+      <a href="Awscr/S3/Paginator/ListObjectsV2.html">ListObjectsV2</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+  <li class="parent " data-id="awscr-s3/Awscr/S3/Presigned" data-name="awscr::s3::presigned">
+      <a href="Awscr/S3/Presigned.html">Presigned</a>
+      
+        <ul>
+  
+  <li class=" " data-id="awscr-s3/Awscr/S3/Presigned/FieldCollection" data-name="awscr::s3::presigned::fieldcollection">
+      <a href="Awscr/S3/Presigned/FieldCollection.html">FieldCollection</a>
+      
+    </li>
+  
+  <li class=" " data-id="awscr-s3/Awscr/S3/Presigned/Form" data-name="awscr::s3::presigned::form">
+      <a href="Awscr/S3/Presigned/Form.html">Form</a>
+      
+    </li>
+  
+  <li class=" " data-id="awscr-s3/Awscr/S3/Presigned/HtmlPrinter" data-name="awscr::s3::presigned::htmlprinter">
+      <a href="Awscr/S3/Presigned/HtmlPrinter.html">HtmlPrinter</a>
+      
+    </li>
+  
+  <li class=" " data-id="awscr-s3/Awscr/S3/Presigned/Policy" data-name="awscr::s3::presigned::policy">
+      <a href="Awscr/S3/Presigned/Policy.html">Policy</a>
+      
+    </li>
+  
+  <li class=" " data-id="awscr-s3/Awscr/S3/Presigned/Post" data-name="awscr::s3::presigned::post">
+      <a href="Awscr/S3/Presigned/Post.html">Post</a>
+      
+    </li>
+  
+  <li class=" " data-id="awscr-s3/Awscr/S3/Presigned/PostField" data-name="awscr::s3::presigned::postfield">
+      <a href="Awscr/S3/Presigned/PostField.html">PostField</a>
+      
+    </li>
+  
+  <li class="parent " data-id="awscr-s3/Awscr/S3/Presigned/Url" data-name="awscr::s3::presigned::url">
+      <a href="Awscr/S3/Presigned/Url.html">Url</a>
+      
+        <ul>
+  
+  <li class=" " data-id="awscr-s3/Awscr/S3/Presigned/Url/Options" data-name="awscr::s3::presigned::url::options">
+      <a href="Awscr/S3/Presigned/Url/Options.html">Options</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+  <li class="parent " data-id="awscr-s3/Awscr/S3/Response" data-name="awscr::s3::response">
+      <a href="Awscr/S3/Response.html">Response</a>
+      
+        <ul>
+  
+  <li class="parent " data-id="awscr-s3/Awscr/S3/Response/BatchDeleteOutput" data-name="awscr::s3::response::batchdeleteoutput">
+      <a href="Awscr/S3/Response/BatchDeleteOutput.html">BatchDeleteOutput</a>
+      
+        <ul>
+  
+  <li class=" " data-id="awscr-s3/Awscr/S3/Response/BatchDeleteOutput/DeletedObject" data-name="awscr::s3::response::batchdeleteoutput::deletedobject">
+      <a href="Awscr/S3/Response/BatchDeleteOutput/DeletedObject.html">DeletedObject</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+  <li class=" " data-id="awscr-s3/Awscr/S3/Response/CompleteMultipartUpload" data-name="awscr::s3::response::completemultipartupload">
+      <a href="Awscr/S3/Response/CompleteMultipartUpload.html">CompleteMultipartUpload</a>
+      
+    </li>
+  
+  <li class=" " data-id="awscr-s3/Awscr/S3/Response/GetObjectOutput" data-name="awscr::s3::response::getobjectoutput">
+      <a href="Awscr/S3/Response/GetObjectOutput.html">GetObjectOutput</a>
+      
+    </li>
+  
+  <li class=" " data-id="awscr-s3/Awscr/S3/Response/GetObjectStream" data-name="awscr::s3::response::getobjectstream">
+      <a href="Awscr/S3/Response/GetObjectStream.html">GetObjectStream</a>
+      
+    </li>
+  
+  <li class=" " data-id="awscr-s3/Awscr/S3/Response/HeadObjectOutput" data-name="awscr::s3::response::headobjectoutput">
+      <a href="Awscr/S3/Response/HeadObjectOutput.html">HeadObjectOutput</a>
+      
+    </li>
+  
+  <li class=" " data-id="awscr-s3/Awscr/S3/Response/ListAllMyBuckets" data-name="awscr::s3::response::listallmybuckets">
+      <a href="Awscr/S3/Response/ListAllMyBuckets.html">ListAllMyBuckets</a>
+      
+    </li>
+  
+  <li class=" " data-id="awscr-s3/Awscr/S3/Response/ListObjectsV2" data-name="awscr::s3::response::listobjectsv2">
+      <a href="Awscr/S3/Response/ListObjectsV2.html">ListObjectsV2</a>
+      
+    </li>
+  
+  <li class=" " data-id="awscr-s3/Awscr/S3/Response/PutObjectOutput" data-name="awscr::s3::response::putobjectoutput">
+      <a href="Awscr/S3/Response/PutObjectOutput.html">PutObjectOutput</a>
+      
+    </li>
+  
+  <li class=" " data-id="awscr-s3/Awscr/S3/Response/StartMultipartUpload" data-name="awscr::s3::response::startmultipartupload">
+      <a href="Awscr/S3/Response/StartMultipartUpload.html">StartMultipartUpload</a>
+      
+    </li>
+  
+  <li class=" " data-id="awscr-s3/Awscr/S3/Response/UploadPartOutput" data-name="awscr::s3::response::uploadpartoutput">
+      <a href="Awscr/S3/Response/UploadPartOutput.html">UploadPartOutput</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+  <li class=" " data-id="awscr-s3/Awscr/S3/SignerFactory" data-name="awscr::s3::signerfactory">
+      <a href="Awscr/S3/SignerFactory.html">SignerFactory</a>
+      
+    </li>
+  
+  <li class=" " data-id="awscr-s3/Awscr/S3/XML" data-name="awscr::s3::xml">
+      <a href="Awscr/S3/XML.html">XML</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+</ul>
+
+  </div>
+</div>
+
+
+<div class="main-content">
+<h1><a id="awscr-s3" class="anchor" href="#awscr-s3">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>awscr-s3</h1>
+
+<p><a href="https://travis-ci.org/taylorfinnell/awscr-s3" target="_blank"><img src="https://travis-ci.org/taylorfinnell/awscr-s3.svg?branch=master" alt="Build Status"/></a></p>
+
+<p>A Crystal shard for S3 and compatible services.</p>
+
+<h2><a id="installation" class="anchor" href="#installation">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>Installation</h2>
+
+<p>Add this to your application's <code>shard.yml</code>:</p>
+
+<pre><code class="language-yaml">dependencies:
+  awscr-s3:
+    github: taylorfinnell/awscr-s3</code></pre>
+
+<h2><a id="examples" class="anchor" href="#examples">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>Examples</h2>
+
+<p><a href="https://github.com/taylorfinnell/awscr-s3/tree/master/examples" target="_blank">Examples</a></p>
+
+<h2><a id="documentation" class="anchor" href="#documentation">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>Documentation</h2>
+
+<p><a href="https://taylorfinnell.github.io/awscr-s3/" target="_blank">Documentation</a></p>
+
+<h2><a id="usage" class="anchor" href="#usage">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>Usage</h2>
+
+<pre><code class="language-crystal"><span class="k">require</span> <span class="s">&quot;awscr-s3&quot;</span></code></pre>
+
+<h2><a id="creating-a-client" class="anchor" href="#creating-a-client">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a><strong>Creating a Client</strong></h2>
+
+<pre><code class="language-crystal">client <span class="o">=</span> <span class="t">Awscr</span><span class="t">::</span><span class="t">S3</span><span class="t">::</span><span class="t">Client</span>.<span class="k">new</span>(<span class="s">&quot;us-east-1&quot;</span>, <span class="s">&quot;key&quot;</span>, <span class="s">&quot;secret&quot;</span>)</code></pre>
+
+<p>For S3 compatible services, like DigitalOcean Spaces or Minio, you'll need to set a custom endpoint:</p>
+
+<pre><code class="language-crystal">client <span class="o">=</span> <span class="t">Awscr</span><span class="t">::</span><span class="t">S3</span><span class="t">::</span><span class="t">Client</span>.<span class="k">new</span>(<span class="s">&quot;nyc3&quot;</span>, <span class="s">&quot;key&quot;</span>, <span class="s">&quot;secret&quot;</span>, endpoint: <span class="s">&quot;https://nyc3.digitaloceanspaces.com&quot;</span>)</code></pre>
+
+<p>If you wish you wish to you version 2 request signing you may specify the signer</p>
+
+<pre><code class="language-crystal">client <span class="o">=</span> <span class="t">Awscr</span><span class="t">::</span><span class="t">S3</span><span class="t">::</span><span class="t">Client</span>.<span class="k">new</span>(<span class="s">&quot;us-east-1&quot;</span>, <span class="s">&quot;key&quot;</span>, <span class="s">&quot;secret&quot;</span>, signer: <span class="n">:v2</span>)</code></pre>
+
+<h2><a id="list-buckets" class="anchor" href="#list-buckets">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a><strong>List Buckets</strong></h2>
+
+<pre><code class="language-crystal">resp <span class="o">=</span> client.list_buckets
+resp.buckets <span class="c"># =&gt; [&quot;bucket1&quot;, &quot;bucket2&quot;]</span></code></pre>
+
+<h2><a id="delete-a-bucket" class="anchor" href="#delete-a-bucket">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a><strong>Delete a bucket</strong></h2>
+
+<pre><code class="language-crystal">client <span class="o">=</span> <span class="t">Client</span>.<span class="k">new</span>(<span class="s">&quot;region&quot;</span>, <span class="s">&quot;key&quot;</span>, <span class="s">&quot;secret&quot;</span>)
+resp <span class="o">=</span> client.delete_bucket(<span class="s">&quot;test&quot;</span>)
+resp <span class="c"># =&gt; true</span></code></pre>
+
+<h2><a id="create-a-bucket" class="anchor" href="#create-a-bucket">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>Create a bucket</h2>
+
+<pre><code class="language-crystal">client <span class="o">=</span> <span class="t">Client</span>.<span class="k">new</span>(<span class="s">&quot;region&quot;</span>, <span class="s">&quot;key&quot;</span>, <span class="s">&quot;secret&quot;</span>)
+resp <span class="o">=</span> client.put_bucket(<span class="s">&quot;test&quot;</span>)
+resp <span class="c"># =&gt; true</span></code></pre>
+
+<h2><a id="put-object" class="anchor" href="#put-object">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a><strong>Put Object</strong></h2>
+
+<pre><code class="language-crystal">resp <span class="o">=</span> client.put_object(<span class="s">&quot;bucket_name&quot;</span>, <span class="s">&quot;object_key&quot;</span>, <span class="s">&quot;myobjectbody&quot;</span>)
+resp.etag <span class="c"># =&gt; ...</span></code></pre>
+
+<p>You can also pass additional headers (e.g. metadata):</p>
+
+<pre><code class="language-crystal">client.put_object(<span class="s">&quot;bucket_name&quot;</span>, <span class="s">&quot;object_key&quot;</span>, <span class="s">&quot;myobjectbody&quot;</span>, {<span class="s">&quot;x-amz-meta-name&quot;</span> => <span class="s">&quot;myobject&quot;</span>})</code></pre>
+
+<h2><a id="delete-object" class="anchor" href="#delete-object">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a><strong>Delete Object</strong></h2>
+
+<pre><code class="language-crystal">resp <span class="o">=</span> client.delete_object(<span class="s">&quot;bucket_name&quot;</span>, <span class="s">&quot;object_key&quot;</span>)
+resp <span class="c"># =&gt; true</span></code></pre>
+
+<h2><a id="check-bucket-existence" class="anchor" href="#check-bucket-existence">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a><strong>Check Bucket Existence</strong></h2>
+
+<pre><code class="language-crystal">resp <span class="o">=</span> client.head_bucket(<span class="s">&quot;bucket_name&quot;</span>)
+resp <span class="c"># =&gt; true</span></code></pre>
+
+<p>Raises an exception if bucket does not exist.</p>
+
+<h2><a id="batch-delete-objects" class="anchor" href="#batch-delete-objects">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a><strong>Batch Delete Objects</strong></h2>
+
+<pre><code class="language-crystal">resp <span class="o">=</span> client.batch_delete(<span class="s">&quot;bucket_name&quot;</span>, [<span class="s">&quot;key1&quot;</span>, <span class="s">&quot;key2&quot;</span>])
+resp.success? <span class="c"># =&gt; true</span></code></pre>
+
+<h2><a id="get-object" class="anchor" href="#get-object">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a><strong>Get Object</strong></h2>
+
+<pre><code class="language-crystal">resp <span class="o">=</span> client.get_object(<span class="s">&quot;bucket_name&quot;</span>, <span class="s">&quot;object_key&quot;</span>)
+resp.body <span class="c"># =&gt; myobjectbody</span>
+
+<span class="c"># Or stream the object (recommended for large objects)</span>
+client.get_object(<span class="s">&quot;bucket_name&quot;</span>, <span class="s">&quot;object_key&quot;</span>) <span class="k">do</span> <span class="o">|</span>obj<span class="o">|</span>
+  <span class="t">IO</span>.copy(obj.body_io, <span class="t">STDOUT</span>) <span class="c"># =&gt; myobjectbody</span>
+<span class="k">end</span></code></pre>
+
+<h2><a id="list-objects" class="anchor" href="#list-objects">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a><strong>List Objects</strong></h2>
+
+<pre><code class="language-crystal">client.list_objects(<span class="s">&quot;bucket_name&quot;</span>).each <span class="k">do</span> <span class="o">|</span>resp<span class="o">|</span>
+  p resp.contents.map(<span class="o">&amp;</span>.key)
+<span class="k">end</span></code></pre>
+
+<h2><a id="upload-a-file" class="anchor" href="#upload-a-file">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a><strong>Upload a file</strong></h2>
+
+<pre><code class="language-crystal">uploader <span class="o">=</span> <span class="t">Awscr</span><span class="t">::</span><span class="t">S3</span><span class="t">::</span><span class="t">FileUploader</span>.<span class="k">new</span>(client)
+
+<span class="t">File</span>.open(<span class="t">File</span>.expand_path(<span class="s">&quot;myfile&quot;</span>), <span class="s">&quot;r&quot;</span>) <span class="k">do</span> <span class="o">|</span>file<span class="o">|</span>
+  puts uploader.upload(<span class="s">&quot;bucket_name&quot;</span>, <span class="s">&quot;someobjectkey&quot;</span>, file)
+<span class="k">end</span></code></pre>
+
+<p>You can also pass additional headers (e.g. metadata):</p>
+
+<pre><code class="language-crystal">uploader <span class="o">=</span> <span class="t">Awscr</span><span class="t">::</span><span class="t">S3</span><span class="t">::</span><span class="t">FileUploader</span>.<span class="k">new</span>(client)
+
+<span class="t">File</span>.open(<span class="t">File</span>.expand_path(<span class="s">&quot;myfile&quot;</span>), <span class="s">&quot;r&quot;</span>) <span class="k">do</span> <span class="o">|</span>file<span class="o">|</span>
+  puts uploader.upload(<span class="s">&quot;bucket_name&quot;</span>, <span class="s">&quot;someobjectkey&quot;</span>, file, {<span class="s">&quot;x-amz-meta-name&quot;</span> => <span class="s">&quot;myobject&quot;</span>})
+<span class="k">end</span></code></pre>
+
+<h2><a id="creating-a-presignedform." class="anchor" href="#creating-a-presignedform.">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a><strong>Creating a <code>Presigned::Form</code>.</strong></h2>
+
+<pre><code class="language-crystal">form <span class="o">=</span> <span class="t">Awscr</span><span class="t">::</span><span class="t">S3</span><span class="t">::</span><span class="t">Presigned</span><span class="t">::</span><span class="t">Form</span>.build(<span class="s">&quot;us-east-1&quot;</span>, <span class="s">&quot;access key&quot;</span>, <span class="s">&quot;secret key&quot;</span>) <span class="k">do</span> <span class="o">|</span>form<span class="o">|</span>
+  form.expiration(<span class="t">Time</span>.unix(<span class="t">Time</span>.now.to_unix <span class="o">+</span> <span class="n">1000</span>))
+  form.condition(<span class="s">&quot;bucket&quot;</span>, <span class="s">&quot;mybucket&quot;</span>)
+  form.condition(<span class="s">&quot;acl&quot;</span>, <span class="s">&quot;public-read&quot;</span>)
+  form.condition(<span class="s">&quot;key&quot;</span>, <span class="t">SecureRandom</span>.uuid)
+  form.condition(<span class="s">&quot;Content-Type&quot;</span>, <span class="s">&quot;text/plain&quot;</span>)
+  form.condition(<span class="s">&quot;success_action_status&quot;</span>, <span class="s">&quot;201&quot;</span>)
+<span class="k">end</span></code></pre>
+
+<p>You may use version 2 request signing via</p>
+
+<pre><code class="language-crystal">form <span class="o">=</span> <span class="t">Awscr</span><span class="t">::</span><span class="t">S3</span><span class="t">::</span><span class="t">Presigned</span><span class="t">::</span><span class="t">Form</span>.build(<span class="s">&quot;us-east-1&quot;</span>, <span class="s">&quot;access key&quot;</span>, <span class="s">&quot;secret key&quot;</span>, signer: <span class="n">:v2</span>) <span class="k">do</span> <span class="o">|</span>form<span class="o">|</span>
+  ...
+<span class="k">end</span></code></pre>
+
+<p><strong>Converting the form to raw HTML (for browser uploads, etc).</strong></p>
+
+<pre><code class="language-crystal">puts form.to_html</code></pre>
+
+<p><strong>Submitting the form.</strong></p>
+
+<pre><code class="language-crystal">data <span class="o">=</span> <span class="t">IO</span><span class="t">::</span><span class="t">Memory</span>.<span class="k">new</span>(<span class="s">&quot;Hello, S3!&quot;</span>)
+form.submit(data)</code></pre>
+
+<h2><a id="creating-a-presignedurl." class="anchor" href="#creating-a-presignedurl.">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a><strong>Creating a <code>Presigned::Url</code>.</strong></h2>
+
+<pre><code class="language-crystal">options <span class="o">=</span> <span class="t">Awscr</span><span class="t">::</span><span class="t">S3</span><span class="t">::</span><span class="t">Presigned</span><span class="t">::</span><span class="t">Url</span><span class="t">::</span><span class="t">Options</span>.<span class="k">new</span>(
+   aws_access_key: <span class="s">&quot;key&quot;</span>,
+   aws_secret_key: <span class="s">&quot;secret&quot;</span>,
+   region: <span class="s">&quot;us-east-1&quot;</span>,
+   object: <span class="s">&quot;test.txt&quot;</span>,
+   bucket: <span class="s">&quot;mybucket&quot;</span>,
+   additional_options: {
+  <span class="s">&quot;Content-Type&quot;</span> => <span class="s">&quot;image/png&quot;</span>
+})
+
+url <span class="o">=</span> <span class="t">Awscr</span><span class="t">::</span><span class="t">S3</span><span class="t">::</span><span class="t">Presigned</span><span class="t">::</span><span class="t">Url</span>.<span class="k">new</span>(options)
+p url.<span class="k">for</span>(<span class="n">:put</span>)</code></pre>
+
+<p>You may use version 2 request signing via</p>
+
+<pre><code class="language-crystal">options <span class="o">=</span> <span class="t">Awscr</span><span class="t">::</span><span class="t">S3</span><span class="t">::</span><span class="t">Presigned</span><span class="t">::</span><span class="t">Url</span><span class="t">::</span><span class="t">Options</span>.<span class="k">new</span>(
+   aws_access_key: <span class="s">&quot;key&quot;</span>,
+   aws_secret_key: <span class="s">&quot;secret&quot;</span>,
+   region: <span class="s">&quot;us-east-1&quot;</span>,
+   object: <span class="s">&quot;test.txt&quot;</span>,
+   bucket: <span class="s">&quot;mybucket&quot;</span>,
+   signer: <span class="n">:v2</span>
+)</code></pre>
+</div>
+</body>
+</html>

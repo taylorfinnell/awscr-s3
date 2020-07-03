@@ -1,0 +1,939 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="generator" content="Crystal Docs 0.34.0">
+<meta name="crystal_docs.project_version" content="HEAD">
+<meta name="crystal_docs.project_name" content="awscr-s3">
+
+
+<link href="../../css/style.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="../../js/doc.js"></script>
+
+<svg class="hidden">
+  <symbol id="octicon-link" viewBox="0 0 16 16">
+    <path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path>
+  </symbol>
+</svg>
+
+  <meta id="repository-name" content="awscr-s3">
+  <title>Awscr::S3::Client - awscr-s3 HEAD</title>
+  <script type="text/javascript">
+    CrystalDocs.base_path = "../../";
+  </script>
+</head>
+<body>
+
+<div class="sidebar">
+  <div class="sidebar-header">
+    <div class="search-box">
+      <input type="search" class="search-input" placeholder="Search..." spellcheck="false" aria-label="Search">
+    </div>
+
+    <div class="project-summary">
+      <h1 class="project-name">
+        <a href="../../index.html">
+          awscr-s3
+        </a>
+      </h1>
+
+      <span class="project-version">
+        HEAD
+      </span>
+    </div>
+  </div>
+
+  <div class="search-results" class="hidden">
+    <ul class="search-list"></ul>
+  </div>
+
+  <div class="types-list">
+    <ul>
+  
+  <li class="parent open current" data-id="awscr-s3/Awscr" data-name="awscr">
+      <a href="../../Awscr.html">Awscr</a>
+      
+        <ul>
+  
+  <li class="parent open current" data-id="awscr-s3/Awscr/S3" data-name="awscr::s3">
+      <a href="../../Awscr/S3.html">S3</a>
+      
+        <ul>
+  
+  <li class=" " data-id="awscr-s3/Awscr/S3/Bucket" data-name="awscr::s3::bucket">
+      <a href="../../Awscr/S3/Bucket.html">Bucket</a>
+      
+    </li>
+  
+  <li class=" current" data-id="awscr-s3/Awscr/S3/Client" data-name="awscr::s3::client">
+      <a href="../../Awscr/S3/Client.html">Client</a>
+      
+    </li>
+  
+  <li class=" " data-id="awscr-s3/Awscr/S3/ContentType" data-name="awscr::s3::contenttype">
+      <a href="../../Awscr/S3/ContentType.html">ContentType</a>
+      
+    </li>
+  
+  <li class=" " data-id="awscr-s3/Awscr/S3/Exception" data-name="awscr::s3::exception">
+      <a href="../../Awscr/S3/Exception.html">Exception</a>
+      
+    </li>
+  
+  <li class="parent " data-id="awscr-s3/Awscr/S3/FileUploader" data-name="awscr::s3::fileuploader">
+      <a href="../../Awscr/S3/FileUploader.html">FileUploader</a>
+      
+        <ul>
+  
+  <li class=" " data-id="awscr-s3/Awscr/S3/FileUploader/Options" data-name="awscr::s3::fileuploader::options">
+      <a href="../../Awscr/S3/FileUploader/Options.html">Options</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+  <li class=" " data-id="awscr-s3/Awscr/S3/Http" data-name="awscr::s3::http">
+      <a href="../../Awscr/S3/Http.html">Http</a>
+      
+    </li>
+  
+  <li class=" " data-id="awscr-s3/Awscr/S3/Object" data-name="awscr::s3::object">
+      <a href="../../Awscr/S3/Object.html">Object</a>
+      
+    </li>
+  
+  <li class="parent " data-id="awscr-s3/Awscr/S3/Paginator" data-name="awscr::s3::paginator">
+      <a href="../../Awscr/S3/Paginator.html">Paginator</a>
+      
+        <ul>
+  
+  <li class=" " data-id="awscr-s3/Awscr/S3/Paginator/ListObjectsV2" data-name="awscr::s3::paginator::listobjectsv2">
+      <a href="../../Awscr/S3/Paginator/ListObjectsV2.html">ListObjectsV2</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+  <li class="parent " data-id="awscr-s3/Awscr/S3/Presigned" data-name="awscr::s3::presigned">
+      <a href="../../Awscr/S3/Presigned.html">Presigned</a>
+      
+        <ul>
+  
+  <li class=" " data-id="awscr-s3/Awscr/S3/Presigned/FieldCollection" data-name="awscr::s3::presigned::fieldcollection">
+      <a href="../../Awscr/S3/Presigned/FieldCollection.html">FieldCollection</a>
+      
+    </li>
+  
+  <li class=" " data-id="awscr-s3/Awscr/S3/Presigned/Form" data-name="awscr::s3::presigned::form">
+      <a href="../../Awscr/S3/Presigned/Form.html">Form</a>
+      
+    </li>
+  
+  <li class=" " data-id="awscr-s3/Awscr/S3/Presigned/HtmlPrinter" data-name="awscr::s3::presigned::htmlprinter">
+      <a href="../../Awscr/S3/Presigned/HtmlPrinter.html">HtmlPrinter</a>
+      
+    </li>
+  
+  <li class=" " data-id="awscr-s3/Awscr/S3/Presigned/Policy" data-name="awscr::s3::presigned::policy">
+      <a href="../../Awscr/S3/Presigned/Policy.html">Policy</a>
+      
+    </li>
+  
+  <li class=" " data-id="awscr-s3/Awscr/S3/Presigned/Post" data-name="awscr::s3::presigned::post">
+      <a href="../../Awscr/S3/Presigned/Post.html">Post</a>
+      
+    </li>
+  
+  <li class=" " data-id="awscr-s3/Awscr/S3/Presigned/PostField" data-name="awscr::s3::presigned::postfield">
+      <a href="../../Awscr/S3/Presigned/PostField.html">PostField</a>
+      
+    </li>
+  
+  <li class="parent " data-id="awscr-s3/Awscr/S3/Presigned/Url" data-name="awscr::s3::presigned::url">
+      <a href="../../Awscr/S3/Presigned/Url.html">Url</a>
+      
+        <ul>
+  
+  <li class=" " data-id="awscr-s3/Awscr/S3/Presigned/Url/Options" data-name="awscr::s3::presigned::url::options">
+      <a href="../../Awscr/S3/Presigned/Url/Options.html">Options</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+  <li class="parent " data-id="awscr-s3/Awscr/S3/Response" data-name="awscr::s3::response">
+      <a href="../../Awscr/S3/Response.html">Response</a>
+      
+        <ul>
+  
+  <li class="parent " data-id="awscr-s3/Awscr/S3/Response/BatchDeleteOutput" data-name="awscr::s3::response::batchdeleteoutput">
+      <a href="../../Awscr/S3/Response/BatchDeleteOutput.html">BatchDeleteOutput</a>
+      
+        <ul>
+  
+  <li class=" " data-id="awscr-s3/Awscr/S3/Response/BatchDeleteOutput/DeletedObject" data-name="awscr::s3::response::batchdeleteoutput::deletedobject">
+      <a href="../../Awscr/S3/Response/BatchDeleteOutput/DeletedObject.html">DeletedObject</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+  <li class=" " data-id="awscr-s3/Awscr/S3/Response/CompleteMultipartUpload" data-name="awscr::s3::response::completemultipartupload">
+      <a href="../../Awscr/S3/Response/CompleteMultipartUpload.html">CompleteMultipartUpload</a>
+      
+    </li>
+  
+  <li class=" " data-id="awscr-s3/Awscr/S3/Response/GetObjectOutput" data-name="awscr::s3::response::getobjectoutput">
+      <a href="../../Awscr/S3/Response/GetObjectOutput.html">GetObjectOutput</a>
+      
+    </li>
+  
+  <li class=" " data-id="awscr-s3/Awscr/S3/Response/GetObjectStream" data-name="awscr::s3::response::getobjectstream">
+      <a href="../../Awscr/S3/Response/GetObjectStream.html">GetObjectStream</a>
+      
+    </li>
+  
+  <li class=" " data-id="awscr-s3/Awscr/S3/Response/HeadObjectOutput" data-name="awscr::s3::response::headobjectoutput">
+      <a href="../../Awscr/S3/Response/HeadObjectOutput.html">HeadObjectOutput</a>
+      
+    </li>
+  
+  <li class=" " data-id="awscr-s3/Awscr/S3/Response/ListAllMyBuckets" data-name="awscr::s3::response::listallmybuckets">
+      <a href="../../Awscr/S3/Response/ListAllMyBuckets.html">ListAllMyBuckets</a>
+      
+    </li>
+  
+  <li class=" " data-id="awscr-s3/Awscr/S3/Response/ListObjectsV2" data-name="awscr::s3::response::listobjectsv2">
+      <a href="../../Awscr/S3/Response/ListObjectsV2.html">ListObjectsV2</a>
+      
+    </li>
+  
+  <li class=" " data-id="awscr-s3/Awscr/S3/Response/PutObjectOutput" data-name="awscr::s3::response::putobjectoutput">
+      <a href="../../Awscr/S3/Response/PutObjectOutput.html">PutObjectOutput</a>
+      
+    </li>
+  
+  <li class=" " data-id="awscr-s3/Awscr/S3/Response/StartMultipartUpload" data-name="awscr::s3::response::startmultipartupload">
+      <a href="../../Awscr/S3/Response/StartMultipartUpload.html">StartMultipartUpload</a>
+      
+    </li>
+  
+  <li class=" " data-id="awscr-s3/Awscr/S3/Response/UploadPartOutput" data-name="awscr::s3::response::uploadpartoutput">
+      <a href="../../Awscr/S3/Response/UploadPartOutput.html">UploadPartOutput</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+  <li class=" " data-id="awscr-s3/Awscr/S3/SignerFactory" data-name="awscr::s3::signerfactory">
+      <a href="../../Awscr/S3/SignerFactory.html">SignerFactory</a>
+      
+    </li>
+  
+  <li class=" " data-id="awscr-s3/Awscr/S3/XML" data-name="awscr::s3::xml">
+      <a href="../../Awscr/S3/XML.html">XML</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+</ul>
+
+  </div>
+</div>
+
+
+<div class="main-content">
+<h1 class="type-name">
+
+  <span class="kind">class</span> Awscr::S3::Client
+
+</h1>
+
+
+  <ul class="superclass-hierarchy"><li class="superclass"><a href="../../Awscr/S3/Client.html">Awscr::S3::Client</a></li><li class="superclass">Reference</li><li class="superclass">Object</li></ul>
+
+
+
+
+  <h2>
+    <a id="overview" class="anchor" href="#overview">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+    Overview
+  </h2>
+
+  <p>An S3 client for interacting with S3.</p>
+
+<p>Creating an S3 Client</p>
+
+<pre><code>client <span class="o">=</span> <span class="t">Client</span>.<span class="k">new</span>(<span class="s">&quot;region&quot;</span>, <span class="s">&quot;key&quot;</span>, <span class="s">&quot;secret&quot;</span>)</code></pre>
+
+<p>Client with custom endpoint</p>
+
+<pre><code>client <span class="o">=</span> <span class="t">Client</span>.<span class="k">new</span>(<span class="s">&quot;region&quot;</span>, <span class="s">&quot;key&quot;</span>, <span class="s">&quot;secret&quot;</span>, endpoint: <span class="s">&quot;http://test.com&quot;</span>)</code></pre>
+
+<p>Client with custom signer algorithm</p>
+
+<pre><code>client <span class="o">=</span> <span class="t">Client</span>.<span class="k">new</span>(<span class="s">&quot;region&quot;</span>, <span class="s">&quot;key&quot;</span>, <span class="s">&quot;secret&quot;</span>, signer: <span class="n">:v2</span>)</code></pre>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  <h2>
+    <a id="defined-in" class="anchor" href="#defined-in">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+    Defined in:
+  </h2>
+  
+    
+      <a href="https://github.com/taylorfinnell/awscr-s3/blob/d16e88438aff9989cdf05c8684fa8eb5e76799a8/src/awscr-s3/client.cr#L26" target="_blank">
+        awscr-s3/client.cr
+      </a>
+    
+    <br/>
+  
+
+
+
+
+
+  <h2>
+    <a id="constructors" class="anchor" href="#constructors">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+    Constructors
+  </h2>
+  <ul class="list-summary">
+    
+      <li class="entry-summary">
+        <a href="#new(region:String,aws_access_key:String,aws_secret_key:String,endpoint:String?=nil,signer:Symbol=:v4)-class-method" class="signature"><strong>.new</strong>(region : String, aws_access_key : String, aws_secret_key : String, endpoint : String? = <span class="n">nil</span>, signer : Symbol = <span class="n">:v4</span>)</a>
+        
+      </li>
+    
+  </ul>
+
+
+
+
+
+  <h2>
+    <a id="instance-method-summary" class="anchor" href="#instance-method-summary">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+    Instance Method Summary
+  </h2>
+  <ul class="list-summary">
+    
+      <li class="entry-summary">
+        <a href="#abort_multipart_upload(bucket:String,object:String,upload_id:String)-instance-method" class="signature"><strong>#abort_multipart_upload</strong>(bucket : String, object : String, upload_id : String)</a>
+        
+          <div class="summary"><p>Aborts a multi part upload.</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#batch_delete(bucket,keys:Array(String))-instance-method" class="signature"><strong>#batch_delete</strong>(bucket, keys : Array(String))</a>
+        
+          <div class="summary"><p>Batch deletes a list of object keys in a single request.</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#complete_multipart_upload(bucket:String,object:String,upload_id:String,parts:Array(Response::UploadPartOutput))-instance-method" class="signature"><strong>#complete_multipart_upload</strong>(bucket : String, object : String, upload_id : String, parts : Array(Response::UploadPartOutput))</a>
+        
+          <div class="summary"><p>Complete a multipart upload</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#delete_bucket(bucket)-instance-method" class="signature"><strong>#delete_bucket</strong>(bucket)</a>
+        
+          <div class="summary"><p>Delete a bucket, note: it must be empty</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#delete_object(bucket,object,headers:Hash(String,String)=Hash(String,String).new)-instance-method" class="signature"><strong>#delete_object</strong>(bucket, object, headers : Hash(String, String) = <span class="t">Hash</span>(<span class="t">String</span>, <span class="t">String</span>).<span class="k">new</span>)</a>
+        
+          <div class="summary"><p>Delete an object from a bucket, returns <code>true</code> if successful, <code>false</code> otherwise.</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#get_object(bucket,object:String,headers:Hash(String,String)=Hash(String,String).new)-instance-method" class="signature"><strong>#get_object</strong>(bucket, object : String, headers : Hash(String, String) = <span class="t">Hash</span>(<span class="t">String</span>, <span class="t">String</span>).<span class="k">new</span>)</a>
+        
+          <div class="summary"><p>Get the contents of an object in a bucket</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#get_object(bucket,object:String,headers:Hash(String,String)=Hash(String,String).new,&)-instance-method" class="signature"><strong>#get_object</strong>(bucket, object : String, headers : Hash(String, String) = <span class="t">Hash</span>(<span class="t">String</span>, <span class="t">String</span>).<span class="k">new</span>, &)</a>
+        
+          <div class="summary"><p>Get the contents of an object in a bucket as an IO object</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#head_bucket(bucket)-instance-method" class="signature"><strong>#head_bucket</strong>(bucket)</a>
+        
+          <div class="summary"><p>Get information about a bucket, useful for determining if a bucket exists.</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#head_object(bucket,object:String,headers:Hash(String,String)=Hash(String,String).new)-instance-method" class="signature"><strong>#head_object</strong>(bucket, object : String, headers : Hash(String, String) = <span class="t">Hash</span>(<span class="t">String</span>, <span class="t">String</span>).<span class="k">new</span>)</a>
+        
+          <div class="summary"><p>Get the metadata of an object in a bucket</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#list_buckets-instance-method" class="signature"><strong>#list_buckets</strong></a>
+        
+          <div class="summary"><p>List s3 buckets</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#list_objects(bucket,max_keys=nil,prefix=nil)-instance-method" class="signature"><strong>#list_objects</strong>(bucket, max_keys = <span class="n">nil</span>, prefix = <span class="n">nil</span>)</a>
+        
+          <div class="summary"><p>List all the items in a bucket</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#put_bucket(bucket,region:String?=nil,headers:Hash(String,String)=Hash(String,String).new)-instance-method" class="signature"><strong>#put_bucket</strong>(bucket, region : String? = <span class="n">nil</span>, headers : Hash(String, String) = <span class="t">Hash</span>(<span class="t">String</span>, <span class="t">String</span>).<span class="k">new</span>)</a>
+        
+          <div class="summary"><p>Create a bucket, optionally place it in a region.</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#put_object(bucket,object:String,body:IO%7CString%7CBytes,headers:Hash(String,String)=Hash(String,String).new)-instance-method" class="signature"><strong>#put_object</strong>(bucket, object : String, body : IO | String | Bytes, headers : Hash(String, String) = <span class="t">Hash</span>(<span class="t">String</span>, <span class="t">String</span>).<span class="k">new</span>)</a>
+        
+          <div class="summary"><p>Add an object to a bucket.</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#start_multipart_upload(bucket:String,object:String,headers:Hash(String,String)=Hash(String,String).new)-instance-method" class="signature"><strong>#start_multipart_upload</strong>(bucket : String, object : String, headers : Hash(String, String) = <span class="t">Hash</span>(<span class="t">String</span>, <span class="t">String</span>).<span class="k">new</span>)</a>
+        
+          <div class="summary"><p>Start a multipart upload</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#upload_part(bucket:String,object:String,upload_id:String,part_number:Int32,part:IO%7CString)-instance-method" class="signature"><strong>#upload_part</strong>(bucket : String, object : String, upload_id : String, part_number : Int32, part : IO | String)</a>
+        
+          <div class="summary"><p>Upload a part, for use in multipart uploading</p></div>
+        
+      </li>
+    
+  </ul>
+
+
+
+
+
+<div class="methods-inherited">
+  
+    
+
+
+    
+
+
+    
+
+
+  
+    
+
+
+    
+
+
+    
+
+
+  
+</div>
+
+
+  <h2>
+    <a id="constructor-detail" class="anchor" href="#constructor-detail">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+    Constructor Detail
+  </h2>
+  
+    <div class="entry-detail" id="new(region:String,aws_access_key:String,aws_secret_key:String,endpoint:String?=nil,signer:Symbol=:v4)-class-method">
+      <div class="signature">
+        
+        def self.<strong>new</strong>(region : String, aws_access_key : String, aws_secret_key : String, endpoint : String? = <span class="n">nil</span>, signer : Symbol = <span class="n">:v4</span>)
+
+        <a class="method-permalink" href="#new(region:String,aws_access_key:String,aws_secret_key:String,endpoint:String?=nil,signer:Symbol=:v4)-class-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/taylorfinnell/awscr-s3/blob/d16e88438aff9989cdf05c8684fa8eb5e76799a8/src/awscr-s3/client.cr#L29" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+
+
+
+
+
+  <h2>
+    <a id="instance-method-detail" class="anchor" href="#instance-method-detail">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+    Instance Method Detail
+  </h2>
+  
+    <div class="entry-detail" id="abort_multipart_upload(bucket:String,object:String,upload_id:String)-instance-method">
+      <div class="signature">
+        
+        def <strong>abort_multipart_upload</strong>(bucket : String, object : String, upload_id : String)
+
+        <a class="method-permalink" href="#abort_multipart_upload(bucket:String,object:String,upload_id:String)-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Aborts a multi part upload. Returns true if the abort was a success, false
+otherwise.</p>
+
+<pre><code>client <span class="o">=</span> <span class="t">Client</span>.<span class="k">new</span>(<span class="s">&quot;region&quot;</span>, <span class="s">&quot;key&quot;</span>, <span class="s">&quot;secret&quot;</span>)
+resp <span class="o">=</span> client.abort_multipart_upload(<span class="s">&quot;bucket1&quot;</span>, <span class="s">&quot;obj&quot;</span>, <span class="s">&quot;123&quot;</span>)
+p resp <span class="c"># =&gt; true</span></code></pre>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/taylorfinnell/awscr-s3/blob/d16e88438aff9989cdf05c8684fa8eb5e76799a8/src/awscr-s3/client.cr#L156" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="batch_delete(bucket,keys:Array(String))-instance-method">
+      <div class="signature">
+        
+        def <strong>batch_delete</strong>(bucket, keys : Array(String))
+
+        <a class="method-permalink" href="#batch_delete(bucket,keys:Array(String))-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Batch deletes a list of object keys in a single request.</p>
+
+<pre><code>client <span class="o">=</span> <span class="t">Client</span>.<span class="k">new</span>(<span class="s">&quot;region&quot;</span>, <span class="s">&quot;key&quot;</span>, <span class="s">&quot;secret&quot;</span>)
+resp <span class="o">=</span> client.batch_delete(<span class="s">&quot;bucket1&quot;</span>, [<span class="s">&quot;obj&quot;</span>, <span class="s">&quot;obj2&quot;</span>])
+p resp.success? <span class="c"># =&gt; true</span></code></pre>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/taylorfinnell/awscr-s3/blob/d16e88438aff9989cdf05c8684fa8eb5e76799a8/src/awscr-s3/client.cr#L197" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="complete_multipart_upload(bucket:String,object:String,upload_id:String,parts:Array(Response::UploadPartOutput))-instance-method">
+      <div class="signature">
+        
+        def <strong>complete_multipart_upload</strong>(bucket : String, object : String, upload_id : String, parts : Array(<a href="../../Awscr/S3/Response/UploadPartOutput.html">Response::UploadPartOutput</a>))
+
+        <a class="method-permalink" href="#complete_multipart_upload(bucket:String,object:String,upload_id:String,parts:Array(Response::UploadPartOutput))-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Complete a multipart upload</p>
+
+<pre><code>client <span class="o">=</span> <span class="t">Client</span>.<span class="k">new</span>(<span class="s">&quot;region&quot;</span>, <span class="s">&quot;key&quot;</span>, <span class="s">&quot;secret&quot;</span>)
+resp <span class="o">=</span> client.complete_multipart_upload(<span class="s">&quot;bucket1&quot;</span>, <span class="s">&quot;obj&quot;</span>, <span class="s">&quot;123&quot;</span>, parts)
+p resp.key <span class="c"># =&gt; obj</span></code></pre>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/taylorfinnell/awscr-s3/blob/d16e88438aff9989cdf05c8684fa8eb5e76799a8/src/awscr-s3/client.cr#L127" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="delete_bucket(bucket)-instance-method">
+      <div class="signature">
+        
+        def <strong>delete_bucket</strong>(bucket)
+
+        <a class="method-permalink" href="#delete_bucket(bucket)-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Delete a bucket, note: it must be empty</p>
+
+<pre><code>client <span class="o">=</span> <span class="t">Client</span>.<span class="k">new</span>(<span class="s">&quot;region&quot;</span>, <span class="s">&quot;key&quot;</span>, <span class="s">&quot;secret&quot;</span>)
+resp <span class="o">=</span> client.delete_bucket(<span class="s">&quot;test&quot;</span>)
+p resp <span class="c"># =&gt; true</span></code></pre>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/taylorfinnell/awscr-s3/blob/d16e88438aff9989cdf05c8684fa8eb5e76799a8/src/awscr-s3/client.cr#L82" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="delete_object(bucket,object,headers:Hash(String,String)=Hash(String,String).new)-instance-method">
+      <div class="signature">
+        
+        def <strong>delete_object</strong>(bucket, object, headers : Hash(String, String) = <span class="t">Hash</span>(<span class="t">String</span>, <span class="t">String</span>).<span class="k">new</span>)
+
+        <a class="method-permalink" href="#delete_object(bucket,object,headers:Hash(String,String)=Hash(String,String).new)-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Delete an object from a bucket, returns <code>true</code> if successful, <code>false</code>
+otherwise.</p>
+
+<pre><code>client <span class="o">=</span> <span class="t">Client</span>.<span class="k">new</span>(<span class="s">&quot;region&quot;</span>, <span class="s">&quot;key&quot;</span>, <span class="s">&quot;secret&quot;</span>)
+resp <span class="o">=</span> client.delete_object(<span class="s">&quot;bucket1&quot;</span>, <span class="s">&quot;obj&quot;</span>)
+p resp <span class="c"># =&gt; true</span></code></pre>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/taylorfinnell/awscr-s3/blob/d16e88438aff9989cdf05c8684fa8eb5e76799a8/src/awscr-s3/client.cr#L184" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="get_object(bucket,object:String,headers:Hash(String,String)=Hash(String,String).new)-instance-method">
+      <div class="signature">
+        
+        def <strong>get_object</strong>(bucket, object : String, headers : Hash(String, String) = <span class="t">Hash</span>(<span class="t">String</span>, <span class="t">String</span>).<span class="k">new</span>)
+
+        <a class="method-permalink" href="#get_object(bucket,object:String,headers:Hash(String,String)=Hash(String,String).new)-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Get the contents of an object in a bucket</p>
+
+<pre><code>client <span class="o">=</span> <span class="t">Client</span>.<span class="k">new</span>(<span class="s">&quot;region&quot;</span>, <span class="s">&quot;key&quot;</span>, <span class="s">&quot;secret&quot;</span>)
+resp <span class="o">=</span> client.get_object(<span class="s">&quot;bucket1&quot;</span>, <span class="s">&quot;obj&quot;</span>)
+p resp.body <span class="c"># =&gt; &quot;MY DATA&quot;</span></code></pre>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/taylorfinnell/awscr-s3/blob/d16e88438aff9989cdf05c8684fa8eb5e76799a8/src/awscr-s3/client.cr#L243" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="get_object(bucket,object:String,headers:Hash(String,String)=Hash(String,String).new,&)-instance-method">
+      <div class="signature">
+        
+        def <strong>get_object</strong>(bucket, object : String, headers : Hash(String, String) = <span class="t">Hash</span>(<span class="t">String</span>, <span class="t">String</span>).<span class="k">new</span>, &)
+
+        <a class="method-permalink" href="#get_object(bucket,object:String,headers:Hash(String,String)=Hash(String,String).new,&)-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Get the contents of an object in a bucket as an IO object</p>
+
+<pre><code>client <span class="o">=</span> <span class="t">Client</span>.<span class="k">new</span>(<span class="s">&quot;region&quot;</span>, <span class="s">&quot;key&quot;</span>, <span class="s">&quot;secret&quot;</span>)
+client.get_object(<span class="s">&quot;bucket1&quot;</span>, <span class="s">&quot;obj&quot;</span>) <span class="k">do</span> <span class="o">|</span>resp<span class="o">|</span>
+  <span class="t">IO</span>.copy(resp.body_io, <span class="t">STDOUT</span>) <span class="c"># =&gt; &quot;MY DATA&quot;</span>
+<span class="k">end</span></code></pre>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/taylorfinnell/awscr-s3/blob/d16e88438aff9989cdf05c8684fa8eb5e76799a8/src/awscr-s3/client.cr#L257" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="head_bucket(bucket)-instance-method">
+      <div class="signature">
+        
+        def <strong>head_bucket</strong>(bucket)
+
+        <a class="method-permalink" href="#head_bucket(bucket)-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Get information about a bucket, useful for determining if a bucket exists.
+Raises a <code>Http::ServerError</code> if the bucket does not exist.</p>
+
+<pre><code>client <span class="o">=</span> <span class="t">Client</span>.<span class="k">new</span>(<span class="s">&quot;region&quot;</span>, <span class="s">&quot;key&quot;</span>, <span class="s">&quot;secret&quot;</span>)
+resp <span class="o">=</span> client.head_bucket(<span class="s">&quot;bucket1&quot;</span>)
+p resp <span class="c"># =&gt; true</span></code></pre>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/taylorfinnell/awscr-s3/blob/d16e88438aff9989cdf05c8684fa8eb5e76799a8/src/awscr-s3/client.cr#L170" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="head_object(bucket,object:String,headers:Hash(String,String)=Hash(String,String).new)-instance-method">
+      <div class="signature">
+        
+        def <strong>head_object</strong>(bucket, object : String, headers : Hash(String, String) = <span class="t">Hash</span>(<span class="t">String</span>, <span class="t">String</span>).<span class="k">new</span>)
+
+        <a class="method-permalink" href="#head_object(bucket,object:String,headers:Hash(String,String)=Hash(String,String).new)-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Get the metadata of an object in a bucket</p>
+
+<pre><code>client <span class="o">=</span> <span class="t">Client</span>.<span class="k">new</span>(<span class="s">&quot;region&quot;</span>, <span class="s">&quot;key&quot;</span>, <span class="s">&quot;secret&quot;</span>)
+resp <span class="o">=</span> client.head_object(<span class="s">&quot;bucket1&quot;</span>, <span class="s">&quot;obj&quot;</span>)
+p resp.size          <span class="c"># =&gt; 123</span>
+p resp.status        <span class="c"># =&gt; HTTP::Status::OK</span>
+p resp.last_modified <span class="c"># =&gt; &quot;Wed, 19 Jun 2019 11:55:33 GMT&quot;</span></code></pre>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/taylorfinnell/awscr-s3/blob/d16e88438aff9989cdf05c8684fa8eb5e76799a8/src/awscr-s3/client.cr#L272" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="list_buckets-instance-method">
+      <div class="signature">
+        
+        def <strong>list_buckets</strong>
+
+        <a class="method-permalink" href="#list_buckets-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>List s3 buckets</p>
+
+<pre><code>client <span class="o">=</span> <span class="t">Client</span>.<span class="k">new</span>(<span class="s">&quot;region&quot;</span>, <span class="s">&quot;key&quot;</span>, <span class="s">&quot;secret&quot;</span>)
+resp <span class="o">=</span> client.list_buckets
+p resp.buckets.map(<span class="o">&amp;</span>.name) <span class="c"># =&gt; [&quot;bucket1&quot;, &quot;bucket2&quot;]</span></code></pre>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/taylorfinnell/awscr-s3/blob/d16e88438aff9989cdf05c8684fa8eb5e76799a8/src/awscr-s3/client.cr#L46" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="list_objects(bucket,max_keys=nil,prefix=nil)-instance-method">
+      <div class="signature">
+        
+        def <strong>list_objects</strong>(bucket, max_keys = <span class="n">nil</span>, prefix = <span class="n">nil</span>)
+
+        <a class="method-permalink" href="#list_objects(bucket,max_keys=nil,prefix=nil)-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>List all the items in a bucket</p>
+
+<pre><code>client <span class="o">=</span> <span class="t">Client</span>.<span class="k">new</span>(<span class="s">&quot;region&quot;</span>, <span class="s">&quot;key&quot;</span>, <span class="s">&quot;secret&quot;</span>)
+resp <span class="o">=</span> client.list_objects(<span class="s">&quot;bucket1&quot;</span>, prefix: <span class="s">&quot;test&quot;</span>)
+p resp.map(<span class="o">&amp;</span>.key) <span class="c"># =&gt; [&quot;obj&quot;]</span></code></pre>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/taylorfinnell/awscr-s3/blob/d16e88438aff9989cdf05c8684fa8eb5e76799a8/src/awscr-s3/client.cr#L284" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="put_bucket(bucket,region:String?=nil,headers:Hash(String,String)=Hash(String,String).new)-instance-method">
+      <div class="signature">
+        
+        def <strong>put_bucket</strong>(bucket, region : String? = <span class="n">nil</span>, headers : Hash(String, String) = <span class="t">Hash</span>(<span class="t">String</span>, <span class="t">String</span>).<span class="k">new</span>)
+
+        <a class="method-permalink" href="#put_bucket(bucket,region:String?=nil,headers:Hash(String,String)=Hash(String,String).new)-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Create a bucket, optionally place it in a region.</p>
+
+<pre><code>client <span class="o">=</span> <span class="t">Client</span>.<span class="k">new</span>(<span class="s">&quot;region&quot;</span>, <span class="s">&quot;key&quot;</span>, <span class="s">&quot;secret&quot;</span>)
+resp <span class="o">=</span> client.create_bucket(<span class="s">&quot;test&quot;</span>)
+p resp <span class="c"># =&gt; true</span></code></pre>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/taylorfinnell/awscr-s3/blob/d16e88438aff9989cdf05c8684fa8eb5e76799a8/src/awscr-s3/client.cr#L59" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="put_object(bucket,object:String,body:IO|String|Bytes,headers:Hash(String,String)=Hash(String,String).new)-instance-method">
+      <div class="signature">
+        
+        def <strong>put_object</strong>(bucket, object : String, body : IO | String | Bytes, headers : Hash(String, String) = <span class="t">Hash</span>(<span class="t">String</span>, <span class="t">String</span>).<span class="k">new</span>)
+
+        <a class="method-permalink" href="#put_object(bucket,object:String,body:IO%7CString%7CBytes,headers:Hash(String,String)=Hash(String,String).new)-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Add an object to a bucket.</p>
+
+<pre><code>client <span class="o">=</span> <span class="t">Client</span>.<span class="k">new</span>(<span class="s">&quot;region&quot;</span>, <span class="s">&quot;key&quot;</span>, <span class="s">&quot;secret&quot;</span>)
+resp <span class="o">=</span> client.put_object(<span class="s">&quot;bucket1&quot;</span>, <span class="s">&quot;obj&quot;</span>, <span class="s">&quot;MY DATA&quot;</span>)
+p resp.key <span class="c"># =&gt; &quot;obj&quot;</span></code></pre>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/taylorfinnell/awscr-s3/blob/d16e88438aff9989cdf05c8684fa8eb5e76799a8/src/awscr-s3/client.cr#L229" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="start_multipart_upload(bucket:String,object:String,headers:Hash(String,String)=Hash(String,String).new)-instance-method">
+      <div class="signature">
+        
+        def <strong>start_multipart_upload</strong>(bucket : String, object : String, headers : Hash(String, String) = <span class="t">Hash</span>(<span class="t">String</span>, <span class="t">String</span>).<span class="k">new</span>)
+
+        <a class="method-permalink" href="#start_multipart_upload(bucket:String,object:String,headers:Hash(String,String)=Hash(String,String).new)-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Start a multipart upload</p>
+
+<pre><code>client <span class="o">=</span> <span class="t">Client</span>.<span class="k">new</span>(<span class="s">&quot;region&quot;</span>, <span class="s">&quot;key&quot;</span>, <span class="s">&quot;secret&quot;</span>)
+resp <span class="o">=</span> client.start_multipart_upload(<span class="s">&quot;bucket1&quot;</span>, <span class="s">&quot;obj&quot;</span>)
+p resp.upload_id <span class="c"># =&gt; someid</span></code></pre>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/taylorfinnell/awscr-s3/blob/d16e88438aff9989cdf05c8684fa8eb5e76799a8/src/awscr-s3/client.cr#L95" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="upload_part(bucket:String,object:String,upload_id:String,part_number:Int32,part:IO|String)-instance-method">
+      <div class="signature">
+        
+        def <strong>upload_part</strong>(bucket : String, object : String, upload_id : String, part_number : Int32, part : IO | String)
+
+        <a class="method-permalink" href="#upload_part(bucket:String,object:String,upload_id:String,part_number:Int32,part:IO%7CString)-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Upload a part, for use in multipart uploading</p>
+
+<pre><code>client <span class="o">=</span> <span class="t">Client</span>.<span class="k">new</span>(<span class="s">&quot;region&quot;</span>, <span class="s">&quot;key&quot;</span>, <span class="s">&quot;secret&quot;</span>)
+resp <span class="o">=</span> client.upload_part(<span class="s">&quot;bucket1&quot;</span>, <span class="s">&quot;obj&quot;</span>, <span class="s">&quot;someid&quot;</span>, <span class="n">123</span>, <span class="s">&quot;MY DATA&quot;</span>)
+p resp.upload_id <span class="c"># =&gt; someid</span></code></pre>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/taylorfinnell/awscr-s3/blob/d16e88438aff9989cdf05c8684fa8eb5e76799a8/src/awscr-s3/client.cr#L109" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+
+
+
+
+</div>
+
+</body>
+</html>
