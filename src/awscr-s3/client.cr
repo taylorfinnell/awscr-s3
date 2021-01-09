@@ -94,7 +94,7 @@ module Awscr::S3
     # ```
     def start_multipart_upload(bucket : String, object : String,
                                headers : Hash(String, String) = Hash(String, String).new)
-      resp = http.post("/#{bucket}/#{URI.encode_www_form(object)}?uploads", headers: headers)
+      resp = http.post("/#{bucket}/#{URI.encode(object)}?uploads", headers: headers)
 
       Response::StartMultipartUpload.from_response(resp)
     end
@@ -108,7 +108,7 @@ module Awscr::S3
     # ```
     def upload_part(bucket : String, object : String,
                     upload_id : String, part_number : Int32, part : IO | String)
-      resp = http.put("/#{bucket}/#{URI.encode_www_form(object)}?partNumber=#{part_number}&uploadId=#{upload_id}", part)
+      resp = http.put("/#{bucket}/#{URI.encode(object)}?partNumber=#{part_number}&uploadId=#{upload_id}", part)
 
       Response::UploadPartOutput.new(
         resp.headers["ETag"],
@@ -141,7 +141,7 @@ module Awscr::S3
         end
       end
 
-      resp = http.post("/#{bucket}/#{URI.encode_www_form(object)}?uploadId=#{upload_id}", body: body)
+      resp = http.post("/#{bucket}/#{URI.encode(object)}?uploadId=#{upload_id}", body: body)
       Response::CompleteMultipartUpload.from_response(resp)
     end
 
@@ -154,7 +154,7 @@ module Awscr::S3
     # p resp # => true
     # ```
     def abort_multipart_upload(bucket : String, object : String, upload_id : String)
-      resp = http.delete("/#{bucket}/#{URI.encode_www_form(object)}?uploadId=#{upload_id}")
+      resp = http.delete("/#{bucket}/#{URI.encode(object)}?uploadId=#{upload_id}")
 
       resp.status_code == 204
     end
@@ -182,7 +182,7 @@ module Awscr::S3
     # p resp # => true
     # ```
     def delete_object(bucket, object, headers : Hash(String, String) = Hash(String, String).new)
-      resp = http.delete("/#{bucket}/#{URI.encode_www_form(object)}", headers)
+      resp = http.delete("/#{bucket}/#{URI.encode(object)}", headers)
 
       resp.status_code == 204
     end
@@ -228,7 +228,7 @@ module Awscr::S3
     # ```
     def put_object(bucket, object : String, body : IO | String | Bytes,
                    headers : Hash(String, String) = Hash(String, String).new)
-      resp = http.put("/#{bucket}/#{URI.encode_www_form(object)}", body, headers)
+      resp = http.put("/#{bucket}/#{URI.encode(object)}", body, headers)
 
       Response::PutObjectOutput.from_response(resp)
     end
@@ -241,7 +241,7 @@ module Awscr::S3
     # p resp.body # => "MY DATA"
     # ```
     def get_object(bucket, object : String, headers : Hash(String, String) = Hash(String, String).new)
-      resp = http.get("/#{bucket}/#{URI.encode_www_form(object)}", headers: headers)
+      resp = http.get("/#{bucket}/#{URI.encode(object)}", headers: headers)
 
       Response::GetObjectOutput.from_response(resp)
     end
@@ -255,7 +255,7 @@ module Awscr::S3
     # end
     # ```
     def get_object(bucket, object : String, headers : Hash(String, String) = Hash(String, String).new)
-      http.get("/#{bucket}/#{URI.encode_www_form(object)}", headers: headers) do |resp|
+      http.get("/#{bucket}/#{URI.encode(object)}", headers: headers) do |resp|
         yield Response::GetObjectStream.from_response(resp)
       end
     end
@@ -270,7 +270,7 @@ module Awscr::S3
     # p resp.last_modified # => "Wed, 19 Jun 2019 11:55:33 GMT"
     # ```
     def head_object(bucket, object : String, headers : Hash(String, String) = Hash(String, String).new)
-      resp = http.head("/#{bucket}/#{URI.encode_www_form(object)}", headers: headers)
+      resp = http.head("/#{bucket}/#{URI.encode(object)}", headers: headers)
       Response::HeadObjectOutput.from_response(resp)
     end
 

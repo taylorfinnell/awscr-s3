@@ -226,6 +226,19 @@ module Awscr::S3
         client = Client.new("us-east-1", "key", "secret")
         client.put_object("mybucket", "object.txt", io, {"x-amz-meta-name" => "object"})
       end
+
+      it "handles objects with slashes" do
+        io = IO::Memory.new("Hello")
+
+        WebMock.stub(:put, "https://s3.amazonaws.com/mybucket/notes/object.txt")
+          .with(body: "Hello")
+          .to_return(body: "", headers: {"ETag" => "etag"})
+
+        client = Client.new("us-east-1", "key", "secret")
+        resp = client.put_object("mybucket", "notes/object.txt", io)
+
+        resp.should eq(Response::PutObjectOutput.new("etag"))
+      end
     end
 
     describe "list_objects" do
