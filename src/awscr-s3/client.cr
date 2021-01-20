@@ -94,7 +94,7 @@ module Awscr::S3
     # ```
     def start_multipart_upload(bucket : String, object : String,
                                headers : Hash(String, String) = Hash(String, String).new)
-      resp = http.post("/#{bucket}/#{URI.encode(object)}?uploads", headers: headers)
+      resp = http.post("/#{bucket}/#{encode(object)}?uploads", headers: headers)
 
       Response::StartMultipartUpload.from_response(resp)
     end
@@ -108,7 +108,7 @@ module Awscr::S3
     # ```
     def upload_part(bucket : String, object : String,
                     upload_id : String, part_number : Int32, part : IO | String)
-      resp = http.put("/#{bucket}/#{URI.encode(object)}?partNumber=#{part_number}&uploadId=#{upload_id}", part)
+      resp = http.put("/#{bucket}/#{encode(object)}?partNumber=#{part_number}&uploadId=#{upload_id}", part)
 
       Response::UploadPartOutput.new(
         resp.headers["ETag"],
@@ -141,7 +141,7 @@ module Awscr::S3
         end
       end
 
-      resp = http.post("/#{bucket}/#{URI.encode(object)}?uploadId=#{upload_id}", body: body)
+      resp = http.post("/#{bucket}/#{encode(object)}?uploadId=#{upload_id}", body: body)
       Response::CompleteMultipartUpload.from_response(resp)
     end
 
@@ -154,7 +154,7 @@ module Awscr::S3
     # p resp # => true
     # ```
     def abort_multipart_upload(bucket : String, object : String, upload_id : String)
-      resp = http.delete("/#{bucket}/#{URI.encode(object)}?uploadId=#{upload_id}")
+      resp = http.delete("/#{bucket}/#{encode(object)}?uploadId=#{upload_id}")
 
       resp.status_code == 204
     end
@@ -182,7 +182,7 @@ module Awscr::S3
     # p resp # => true
     # ```
     def delete_object(bucket, object, headers : Hash(String, String) = Hash(String, String).new)
-      resp = http.delete("/#{bucket}/#{URI.encode(object)}", headers)
+      resp = http.delete("/#{bucket}/#{encode(object)}", headers)
 
       resp.status_code == 204
     end
@@ -228,7 +228,7 @@ module Awscr::S3
     # ```
     def put_object(bucket, object : String, body : IO | String | Bytes,
                    headers : Hash(String, String) = Hash(String, String).new)
-      resp = http.put("/#{bucket}/#{URI.encode(object)}", body, headers)
+      resp = http.put("/#{bucket}/#{encode(object)}", body, headers)
 
       Response::PutObjectOutput.from_response(resp)
     end
@@ -241,7 +241,7 @@ module Awscr::S3
     # p resp.body # => "MY DATA"
     # ```
     def get_object(bucket, object : String, headers : Hash(String, String) = Hash(String, String).new)
-      resp = http.get("/#{bucket}/#{URI.encode(object)}", headers: headers)
+      resp = http.get("/#{bucket}/#{encode(object)}", headers: headers)
 
       Response::GetObjectOutput.from_response(resp)
     end
@@ -255,7 +255,7 @@ module Awscr::S3
     # end
     # ```
     def get_object(bucket, object : String, headers : Hash(String, String) = Hash(String, String).new)
-      http.get("/#{bucket}/#{URI.encode(object)}", headers: headers) do |resp|
+      http.get("/#{bucket}/#{encode(object)}", headers: headers) do |resp|
         yield Response::GetObjectStream.from_response(resp)
       end
     end
@@ -270,7 +270,7 @@ module Awscr::S3
     # p resp.last_modified # => "Wed, 19 Jun 2019 11:55:33 GMT"
     # ```
     def head_object(bucket, object : String, headers : Hash(String, String) = Hash(String, String).new)
-      resp = http.head("/#{bucket}/#{URI.encode(object)}", headers: headers)
+      resp = http.head("/#{bucket}/#{encode(object)}", headers: headers)
       Response::HeadObjectOutput.from_response(resp)
     end
 
@@ -295,6 +295,22 @@ module Awscr::S3
     # :nodoc:
     private def http
       @http
+    end
+
+    private def encode(object)
+      String.build do |io|
+        URI.encode(object, io, space_to_plus: true) do |byte|
+          # check for characters we want to encode
+          # otherwise fall back to default implementation
+          # https://github.com/crystal-lang/crystal/blob/5999ae29beacf4cfd54e232ca83c1a46b79f26a5/src/uri/encoding.cr#L70-L72
+          !should_encode?(byte) && (URI.reserved?(byte) || URI.unreserved?(byte))
+        end
+      end
+    end
+
+    private def should_encode?(byte)
+      char = byte.unsafe_chr
+      char == '='
     end
   end
 end

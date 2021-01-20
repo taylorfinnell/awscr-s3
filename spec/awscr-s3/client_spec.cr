@@ -226,19 +226,6 @@ module Awscr::S3
         client = Client.new("us-east-1", "key", "secret")
         client.put_object("mybucket", "object.txt", io, {"x-amz-meta-name" => "object"})
       end
-
-      it "handles objects with slashes" do
-        io = IO::Memory.new("Hello")
-
-        WebMock.stub(:put, "https://s3.amazonaws.com/mybucket/notes/object.txt")
-          .with(body: "Hello")
-          .to_return(body: "", headers: {"ETag" => "etag"})
-
-        client = Client.new("us-east-1", "key", "secret")
-        resp = client.put_object("mybucket", "notes/object.txt", io)
-
-        resp.should eq(Response::PutObjectOutput.new("etag"))
-      end
     end
 
     describe "list_objects" do
@@ -428,6 +415,47 @@ module Awscr::S3
 
         client = Client.new("", "key", "secret", "http://127.0.0.1:9000")
         resp = client.put_object("mybucket", "object.txt", io)
+
+        resp.should eq(Response::PutObjectOutput.new("etag"))
+      end
+    end
+
+    describe "encoding" do
+      it "handles slashes" do
+        io = IO::Memory.new("Hello")
+
+        WebMock.stub(:put, "https://s3.amazonaws.com/mybucket/notes/object.txt")
+          .with(body: "Hello")
+          .to_return(body: "", headers: {"ETag" => "etag"})
+
+        client = Client.new("us-east-1", "key", "secret")
+        resp = client.put_object("mybucket", "notes/object.txt", io)
+
+        resp.should eq(Response::PutObjectOutput.new("etag"))
+      end
+
+      it "handles equals sign" do
+        io = IO::Memory.new("Hello")
+
+        WebMock.stub(:put, "https://s3.amazonaws.com/mybucket/test%3D")
+          .with(body: "Hello")
+          .to_return(body: "", headers: {"ETag" => "etag"})
+
+        client = Client.new("us-east-1", "key", "secret")
+        resp = client.put_object("mybucket", "test=", io)
+
+        resp.should eq(Response::PutObjectOutput.new("etag"))
+      end
+
+      it "handles spaces" do
+        io = IO::Memory.new("Hello")
+
+        WebMock.stub(:put, "https://s3.amazonaws.com/mybucket/test+object")
+          .with(body: "Hello")
+          .to_return(body: "", headers: {"ETag" => "etag"})
+
+        client = Client.new("us-east-1", "key", "secret")
+        resp = client.put_object("mybucket", "test object", io)
 
         resp.should eq(Response::PutObjectOutput.new("etag"))
       end
