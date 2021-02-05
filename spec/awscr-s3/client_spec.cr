@@ -419,46 +419,5 @@ module Awscr::S3
         resp.should eq(Response::PutObjectOutput.new("etag"))
       end
     end
-
-    describe "encoding" do
-      it "handles slashes" do
-        io = IO::Memory.new("Hello")
-
-        WebMock.stub(:put, "https://s3.amazonaws.com/mybucket/notes/object.txt")
-          .with(body: "Hello")
-          .to_return(body: "", headers: {"ETag" => "etag"})
-
-        client = Client.new("us-east-1", "key", "secret")
-        resp = client.put_object("mybucket", "notes/object.txt", io)
-
-        resp.should eq(Response::PutObjectOutput.new("etag"))
-      end
-
-      it "handles equals sign" do
-        io = IO::Memory.new("Hello")
-
-        WebMock.stub(:put, "https://s3.amazonaws.com/mybucket/test%3D")
-          .with(body: "Hello")
-          .to_return(body: "", headers: {"ETag" => "etag"})
-
-        client = Client.new("us-east-1", "key", "secret")
-        resp = client.put_object("mybucket", "test=", io)
-
-        resp.should eq(Response::PutObjectOutput.new("etag"))
-      end
-
-      it "handles spaces" do
-        io = IO::Memory.new("Hello")
-
-        WebMock.stub(:put, "https://s3.amazonaws.com/mybucket/test+object")
-          .with(body: "Hello")
-          .to_return(body: "", headers: {"ETag" => "etag"})
-
-        client = Client.new("us-east-1", "key", "secret")
-        resp = client.put_object("mybucket", "test object", io)
-
-        resp.should eq(Response::PutObjectOutput.new("etag"))
-      end
-    end
   end
 end
