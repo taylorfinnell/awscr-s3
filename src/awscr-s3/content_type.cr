@@ -10,7 +10,7 @@ module Awscr::S3
     # extension it uses the default content type
     def self.get(io : IO) : String
       if io.responds_to?(:path)
-        MIME.from_filename(io.path, DEFAULT)
+        io.path.try { |path| MIME.from_filename(path, DEFAULT) } || DEFAULT
       else
         DEFAULT
       end

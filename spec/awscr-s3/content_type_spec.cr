@@ -27,6 +27,13 @@ module Awscr::S3
       end
     end
 
+    describe "when the io has nil as path" do
+      it "returns the default Content-Type" do
+        io = UNIXSocket.new(fd: 1)
+        ContentType.get(io).should be(ContentType::DEFAULT)
+      end
+    end
+
     describe "custom types" do
       it "works" do
         MIME.register(".bhutjolokia", "ouch!")
