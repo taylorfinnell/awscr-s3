@@ -1,6 +1,6 @@
 module Awscr::S3::Response
   class HeadObjectOutput
-    DATE_FORMAT = "%a, %d %b %Y %l:%M:%S"
+    DATE_FORMAT = "%a, %d %b %Y %H:%M:%S %Z"
 
     # The body of the request object
     getter status : HTTP::Status
@@ -27,9 +27,7 @@ module Awscr::S3::Response
     end
 
     private def self.parse_date(date : String)
-      last_modified_words = date.split(" ")
-      timezone = Time::Location.local = Time::Location.load(last_modified_words.pop)
-      Time.parse(last_modified_words.join(" "), DATE_FORMAT, timezone)
+      Time.parse!(date.gsub(/\s{2,}/, ' '), DATE_FORMAT)
     end
   end
 end
