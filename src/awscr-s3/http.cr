@@ -11,6 +11,7 @@ module Awscr::S3
     end
 
     @endpoint : URI
+    @client : HTTP::Client?
 
     # Issue a DELETE request to the *path* with optional *headers*
     #
@@ -20,8 +21,7 @@ module Awscr::S3
     # ```
     def delete(path, headers : Hash(String, String) = Hash(String, String).new)
       headers = HTTP::Headers.new.merge!(headers)
-      resp = http.delete(path, headers: headers)
-      handle_response!(resp)
+      exec("DELETE", path, headers: headers)
     end
 
     # Issue a POST request to the *path* with optional *headers*, and *body*
@@ -32,8 +32,7 @@ module Awscr::S3
     # ```
     def post(path, body = nil, headers : Hash(String, String) = Hash(String, String).new)
       headers = HTTP::Headers.new.merge!(headers)
-      resp = http.post(path, headers: headers, body: body)
-      handle_response!(resp)
+      exec("POST", path, headers: headers, body: body)
     end
 
     # Issue a PUT request to the *path* with optional *headers* and *body*
@@ -44,8 +43,7 @@ module Awscr::S3
     # ```
     def put(path : String, body : IO | String | Bytes, headers : Hash(String, String) = Hash(String, String).new)
       headers = HTTP::Headers{"Content-Length" => body.size.to_s}.merge!(headers)
-      resp = http.put(path, headers: headers, body: body)
-      handle_response!(resp)
+      exec("PUT", path, headers: headers, body: body)
     end
 
     # Issue a HEAD request to the *path*
@@ -55,8 +53,7 @@ module Awscr::S3
     # http.head("/")
     # ```
     def head(path, headers : Hash(String, String) = Hash(String, String).new)
-      resp = http.head(path, headers: HTTP::Headers.new.merge!(headers))
-      handle_response!(resp)
+      exec("HEAD", path, headers: HTTP::Headers.new.merge!(headers))
     end
 
     # Issue a GET request to the *path*
@@ -66,8 +63,7 @@ module Awscr::S3
     # http.get("/")
     # ```
     def get(path, headers : Hash(String, String) = Hash(String, String).new)
-      resp = http.get(path, headers: HTTP::Headers.new.merge!(headers))
-      handle_response!(resp)
+      exec("GET", path, headers: HTTP::Headers.new.merge!(headers))
     end
 
     # Issue a GET request to the *path*
@@ -79,9 +75,34 @@ module Awscr::S3
     # end
     # ```
     def get(path, headers : Hash(String, String) = Hash(String, String).new)
-      http.get(path, headers: HTTP::Headers.new.merge!(headers)) do |resp|
-        handle_response!(resp)
+      exec("GET", path, headers: HTTP::Headers.new.merge!(headers)) do |resp|
         yield resp
+      end
+    end
+
+    private def exec(method, path, headers, body = nil)
+      retries = 0
+
+      loop do
+        resp = http.exec(method, path, headers, body)
+        return handle_response!(resp)
+      rescue ex : IO::Error
+        raise ex if retries > 2
+        @client = nil
+        retries += 1
+      end
+    end
+
+    private def exec(method, path, headers, body = nil, &)
+      retries = 0
+
+      loop do
+        return http.exec(method, path, headers, body) do |resp|
+          yield handle_response!(resp)
+        end
+      rescue ex : IO::Error
+        raise ex if retries > 2
+        @client = nil
       end
     end
 
@@ -115,21 +136,23 @@ module Awscr::S3
 
     # :nodoc:
     private def http
-      client = HTTP::Client.new(@endpoint)
+      @client ||= create_client(@endpoint, @signer)
+    end
 
-      # When we are using V4 we must tell the signer to skip encoding the path
-      # because we already did that
-      if (signer = @signer).is_a?(Awscr::Signer::Signers::V4)
-        client.before_request do |request|
-          signer.as(Awscr::Signer::Signers::V4).sign(request, encode_path: false)
-        end
-      else
-        client.before_request do |request|
-          signer.sign(request)
+    private def create_client(endpoint, signer)
+      HTTP::Client.new(endpoint).tap do |client|
+        # When we are using V4 we must tell the signer to skip encoding the path
+        # because we already did that
+        if signer.is_a?(Awscr::Signer::Signers::V4)
+          client.before_request do |request|
+            signer.as(Awscr::Signer::Signers::V4).sign(request, encode_path: false)
+          end
+        else
+          client.before_request do |request|
+            signer.sign(request)
+          end
         end
       end
-
-      client
     end
   end
 end
