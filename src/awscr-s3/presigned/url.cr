@@ -30,7 +30,11 @@ module Awscr
 
           String.build do |str|
             str << "https://"
-            str << request.host
+            {% if compare_versions(Crystal::VERSION, "0.36.0") < 0 %}
+              str << request.host
+            {% else %}
+              str << request.hostname
+            {% end %}
             str << request.resource
           end
         end
