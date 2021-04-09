@@ -268,6 +268,8 @@ module Awscr::S3
     # p resp.size          # => 123
     # p resp.status        # => HTTP::Status::OK
     # p resp.last_modified # => "Wed, 19 Jun 2019 11:55:33 GMT"
+    # p resp.etag          # => ""
+    # p resp.meta          # => {"my_tag" => "my_value"}
     # ```
     def head_object(bucket, object : String, headers : Hash(String, String) = Hash(String, String).new)
       resp = http.head("/#{bucket}/#{Util.encode(object)}", headers: headers)
