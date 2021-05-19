@@ -1,0 +1,62 @@
+name: CI
+
+on: push
+
+jobs:
+  review:
+    name: Run static analysis of source code
+    runs-on: ubuntu-latest
+
+    container:
+      image: crystallang/crystal:latest
+
+    steps:
+      - name: "[Git] Checkout code"
+        uses: actions/checkout@v2
+
+      - name: "[Setup] Install dependencies"
+        env:
+          CRYSTAL_ENV: test
+        run: >-
+          CRYSTAL_WORKERS=$(nproc)
+          shards install
+
+      - name: "[Analysis] Run static analysis"
+        env:
+          CRYSTAL_ENV: test
+        run: >-
+          CRYSTAL_WORKERS=$(nproc)
+          ./bin/ameba -c .ameba.yml
+
+  test:
+    name: Run tests using crystallang/crystal:latest
+    runs-on: ubuntu-latest
+    needs: review
+
+    container:
+      image: crystallang/crystal:latest
+
+    steps:
+      - name: "[Git] Checkout code"
+        uses: actions/checkout@v2
+
+      - name: "[Setup] Install dependencies"
+        env:
+          CRYSTAL_ENV: test
+        run: >-
+          CRYSTAL_WORKERS=$(nproc)
+          shards install
+
+      - name: "[Test] Run specs"
+        env:
+          CRYSTAL_ENV: test
+        run: >-
+          CRYSTAL_WORKERS=$(nproc)
+          crystal spec -v --error-trace --no-color
+
+      - name: "[Test] Compile files with release flag"
+        env:
+          CRYSTAL_ENV: test
+        run: >-
+          CRYSTAL_WORKERS=$(nproc)
+          crystal build --release --stats --progress src/awscr-s3.cr
