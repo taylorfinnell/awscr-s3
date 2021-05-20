@@ -4,11 +4,25 @@ on: push
 
 jobs:
   review:
-    name: Run static analysis of source code
     runs-on: ubuntu-latest
 
+    strategy:
+      fail-fast: false
+      matrix:
+        crystal_version:
+          - 0.36.1
+          - latest
+        experimental: [false]
+        include:
+          - crystal_version: nightly
+            experimental: true
+
+    name: "Run analysis [crystal ${{matrix.crystal_version}}]"
+
+    continue-on-error: ${{ matrix.experimental }}
+
     container:
-      image: crystallang/crystal:latest
+      image: crystallang/crystal:${{matrix.crystal_version}}
 
     steps:
       - name: "[Git] Checkout code"
@@ -29,12 +43,25 @@ jobs:
           ./bin/ameba -c .ameba.yml
 
   test:
-    name: Run tests using crystallang/crystal:latest
     runs-on: ubuntu-latest
-    needs: review
+
+    strategy:
+      fail-fast: false
+      matrix:
+        crystal_version:
+          - 0.36.1
+          - latest
+        experimental: [false]
+        include:
+          - crystal_version: nightly
+            experimental: true
+
+    name: "Run tests [crystal ${{matrix.crystal_version}}]"
+
+    continue-on-error: ${{ matrix.experimental }}
 
     container:
-      image: crystallang/crystal:latest
+      image: crystallang/crystal:${{matrix.crystal_version}}
 
     steps:
       - name: "[Git] Checkout code"

@@ -1,7 +1,7 @@
 name: awscr-s3
-version: 0.8.2
+version: 0.8.3
 
-crystal: ">= 0.32.0, < 2.0.0"
+crystal: ">= 0.36.1, < 2.0.0"
 
 description: |
   A Crystal shard for S3 and compatible services.
