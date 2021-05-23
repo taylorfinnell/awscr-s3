@@ -1,0 +1,89 @@
+name: CI
+
+on: push
+
+jobs:
+  review:
+    runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: false
+      matrix:
+        crystal_version:
+          - 0.36.1
+          - latest
+        experimental: [false]
+        include:
+          - crystal_version: nightly
+            experimental: true
+
+    name: "Run analysis [crystal ${{matrix.crystal_version}}]"
+
+    continue-on-error: ${{ matrix.experimental }}
+
+    container:
+      image: crystallang/crystal:${{matrix.crystal_version}}
+
+    steps:
+      - name: "[Git] Checkout code"
+        uses: actions/checkout@v2
+
+      - name: "[Setup] Install dependencies"
+        env:
+          CRYSTAL_ENV: test
+        run: >-
+          CRYSTAL_WORKERS=$(nproc)
+          shards install
+
+      - name: "[Analysis] Run static analysis"
+        env:
+          CRYSTAL_ENV: test
+        run: >-
+          CRYSTAL_WORKERS=$(nproc)
+          ./bin/ameba -c .ameba.yml
+
+  test:
+    runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: false
+      matrix:
+        crystal_version:
+          - 0.36.1
+          - latest
+        experimental: [false]
+        include:
+          - crystal_version: nightly
+            experimental: true
+
+    name: "Run tests [crystal ${{matrix.crystal_version}}]"
+
+    continue-on-error: ${{ matrix.experimental }}
+
+    container:
+      image: crystallang/crystal:${{matrix.crystal_version}}
+
+    steps:
+      - name: "[Git] Checkout code"
+        uses: actions/checkout@v2
+
+      - name: "[Setup] Install dependencies"
+        env:
+          CRYSTAL_ENV: test
+        run: >-
+          CRYSTAL_WORKERS=$(nproc)
+          shards install
+
+      - name: "[Test] Run specs"
+        env:
+          CRYSTAL_ENV: test
+        run: >-
+          CRYSTAL_WORKERS=$(nproc)
+          crystal spec -v --error-trace --no-color
+
+      - name: "[Test] Compile files with release flag"
+        env:
+          CRYSTAL_ENV: test
+        run: >-
+          CRYSTAL_WORKERS=$(nproc)
+          crystal build --release --stats --progress src/awscr-s3.cr

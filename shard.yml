@@ -1,10 +1,13 @@
 name: awscr-s3
-version: 0.8.2
+version: 0.8.3
+
+crystal: ">= 0.36.1, < 2.0.0"
+
+description: |
+  A Crystal shard for S3 and compatible services.
 
 authors:
   - Taylor Finnell <tmfinnell@gmail.com>
-
-crystal: ">= 0.32.0"
 
 license: MIT
 
@@ -20,3 +23,6 @@ development_dependencies:
   webmock:
     github: manastech/webmock.cr
     branch: master
+  ameba:
+    github: crystal-ameba/ameba
+    version: ~> 0.13.0
