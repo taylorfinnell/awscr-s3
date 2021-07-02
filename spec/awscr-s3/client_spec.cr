@@ -228,6 +228,28 @@ module Awscr::S3
       end
     end
 
+    describe "copy_object" do
+      it "can copy an object from source to destination" do
+        resp = <<-RESP
+        <?xml version="1.0" encoding="UTF-8"?>
+        <CopyObjectResult>
+            <LastModified>2009-10-28T22:32:00</LastModified>
+            <ETag>&quot;etag&quot;</ETag>
+        <CopyObjectResult>
+        RESP
+
+        WebMock.stub(:put, "https://s3.amazonaws.com/mybucket/destination?")
+          .with(body: "", headers: {"x-amz-copy-source" => "/mybucket/source"})
+          .to_return(body: resp)
+
+        client = Client.new("us-east-1", "key", "secret")
+        resp = client.copy_object("mybucket", "source", "destination")
+
+        resp.should be_a Response::CopyObjectOutput
+        resp.etag.should eq "etag"
+      end
+    end
+
     describe "list_objects" do
       it "handles pagination" do
         resp = <<-RESP
