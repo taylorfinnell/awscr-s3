@@ -1,5 +1,5 @@
 # awscr-s3
-[![Build Status](https://travis-ci.org/taylorfinnell/awscr-s3.svg?branch=master)](https://travis-ci.org/taylorfinnell/awscr-s3)
+[![CI](https://github.com/taylorfinnell/awscr-s3/actions/workflows/ci.yml/badge.svg)](https://github.com/taylorfinnell/awscr-s3/actions/workflows/ci.yml)
 
 A Crystal shard for S3 and compatible services.
 
