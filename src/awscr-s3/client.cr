@@ -219,6 +219,19 @@ module Awscr::S3
       Response::BatchDeleteOutput.from_response(resp)
     end
 
+    # Copy an object from `source` to `destination` in a bucket.
+    #
+    # ```
+    # client = Client.new("region", "key", "secret")
+    # client.copy_object("bucket1", "source_object", "destination_object")
+    # ```
+    def copy_object(bucket, source : String, destination : String,
+                    headers : Hash(String, String) = {} of String => String)
+      headers["x-amz-copy-source"] = "/#{bucket}/#{Util.encode(source)}"
+      resp = http.put("/#{bucket}/#{Util.encode(destination)}", "", headers)
+      Response::CopyObjectOutput.from_response(resp)
+    end
+
     # Add an object to a bucket.
     #
     # ```

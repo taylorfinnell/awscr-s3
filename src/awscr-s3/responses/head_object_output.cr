@@ -20,7 +20,7 @@ module Awscr::S3::Response
     def initialize(@status, @status_message, @headers)
     end
 
-    {% for f in ["Cache-Control", "Content-Disposition", "Content-Encoding", "Content-Language", "Content-Type",] %}
+    {% for f in ["Cache-Control", "Content-Disposition", "Content-Encoding", "Content-Language", "Content-Type"] %}
       def {{ f.id.stringify.underscore.gsub(/-/, "_").id }} : String?
         headers["{{ f.id }}"]?
       end
@@ -35,7 +35,7 @@ module Awscr::S3::Response
     end
 
     def etag : String?
-      headers["ETag"].try{|v| v.strip('"')}
+      headers["ETag"].try { |v| v.strip('"') }
     end
 
     def meta : Hash(String, String)
