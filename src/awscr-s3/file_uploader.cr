@@ -11,8 +11,9 @@ module Awscr::S3
     struct Options
       # If true the uploader will automatically add a content type header
       getter with_content_types
+      getter simultaneous_parts
 
-      def initialize(@with_content_types : Bool)
+      def initialize(@with_content_types : Bool, @simultaneous_parts : Int32 = 5)
       end
     end
 

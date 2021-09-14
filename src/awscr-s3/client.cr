@@ -33,7 +33,6 @@ module Awscr::S3
         aws_access_key: @aws_access_key,
         aws_secret_key: @aws_secret_key
       )
-      @http = Http.new(@signer, @region, @endpoint)
     end
 
     # List s3 buckets
@@ -108,8 +107,9 @@ module Awscr::S3
     # ```
     def upload_part(bucket : String, object : String,
                     upload_id : String, part_number : Int32, part : IO | String)
+      puts "uploading #{part_number}"
       resp = http.put("/#{bucket}/#{Util.encode(object)}?partNumber=#{part_number}&uploadId=#{upload_id}", part)
-
+      puts "completed #{part_number}"
       Response::UploadPartOutput.new(
         resp.headers["ETag"],
         part_number,
@@ -309,7 +309,7 @@ module Awscr::S3
 
     # :nodoc:
     private def http
-      @http
+      Http.new(@signer, @region, @endpoint)
     end
   end
 end
