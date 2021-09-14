@@ -13,7 +13,7 @@ module Awscr::S3
       it "returns the correct Content-Type" do
         tempfile = File.tempfile("foo", ".txt")
         file = File.open(tempfile.path)
-        ContentType.get(file).should eq("text/plain")
+        ContentType.get(file)[0..9].should eq("text/plain")
         tempfile.delete
       end
     end

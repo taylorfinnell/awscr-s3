@@ -148,9 +148,7 @@ module Awscr::S3
             signer.as(Awscr::Signer::Signers::V4).sign(request, encode_path: false)
           end
         else
-          client.before_request do |request|
-            signer.sign(request)
-          end
+          client.before_request { |request| signer.sign(request) }
         end
       end
     end

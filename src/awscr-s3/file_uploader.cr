@@ -11,8 +11,9 @@ module Awscr::S3
     struct Options
       # If true the uploader will automatically add a content type header
       getter with_content_types
+      getter simultaneous_parts
 
-      def initialize(@with_content_types : Bool)
+      def initialize(@with_content_types : Bool, @simultaneous_parts : Int32 = 5)
       end
     end
 
@@ -32,7 +33,7 @@ module Awscr::S3
       if io.size < UPLOAD_THRESHOLD
         @client.put_object(bucket, object, io, headers)
       else
-        uploader = MultipartFileUploader.new(@client)
+        uploader = MultipartFileUploader.new(@client, @options.simultaneous_parts)
         uploader.upload(bucket, object, io, headers)
       end
       true

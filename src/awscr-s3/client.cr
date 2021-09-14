@@ -33,7 +33,6 @@ module Awscr::S3
         aws_access_key: @aws_access_key,
         aws_secret_key: @aws_secret_key
       )
-      @http = Http.new(@signer, @region, @endpoint)
     end
 
     # List s3 buckets
@@ -309,7 +308,7 @@ module Awscr::S3
 
     # :nodoc:
     private def http
-      @http
+      Http.new(@signer, @region, @endpoint)
     end
   end
 end

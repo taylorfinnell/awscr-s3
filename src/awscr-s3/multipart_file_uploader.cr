@@ -18,10 +18,11 @@ module Awscr::S3
     @object : String?
     @headers : Hash(String, String)?
 
-    def initialize(@client : Client)
+    def initialize(@client : Client, simultaneous : Int32 = 5)
       @pending = [] of Part
       @parts = [] of Response::UploadPartOutput
-      @channel = Channel(Nil).new
+      @uploading = Channel(Nil).new(simultaneous)
+      @completed = Channel(Nil).new
     end
 
     # Uploads an *object* to a *bucket*, in multiple parts
@@ -70,17 +71,21 @@ module Awscr::S3
     end
 
     private def upload_pending(io)
-      @pending.each do |part|
-        bytes = Bytes.new(part.size)
-
-        io.skip(part.offset)
-        io.read(bytes)
-        io.rewind
-
-        spawn upload_part(bytes, part)
+      spawn do
+        @pending.each do |part|
+          @uploading.send(nil)
+          read_part(part, io)
+        end
       end
+      @pending.size.times { @completed.receive }
+    end
 
-      @pending.size.times { @channel.receive }
+    private def read_part(part, io)
+      bytes = Bytes.new(part.size)
+      io.skip(part.offset)
+      io.read(bytes)
+      io.rewind
+      spawn upload_part(bytes, part)
     end
 
     private def upload_part(bytes, part)
@@ -92,7 +97,8 @@ module Awscr::S3
         IO::Memory.new(bytes)
       )
     ensure
-      @channel.send(nil)
+      @uploading.receive
+      @completed.send(nil)
     end
 
     private def complete_upload
