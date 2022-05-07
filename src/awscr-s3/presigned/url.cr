@@ -35,6 +35,20 @@ module Awscr
             {% else %}
               str << request.hostname
             {% end %}
+
+            if @options.include_port
+              if header = request.headers["Host"]?
+                if header.includes?(":")
+                  host, _, port = header.rpartition(":")
+                  puts host, port
+                  unless port == ""
+                    str << ":"
+                    str << port
+                  end
+                end
+              end
+            end
+
             str << request.resource
           end
         end

@@ -28,6 +28,9 @@ module Awscr
           # Optionally set the host name to use. The default is s3.amazonaws.com
           getter host_name
 
+          # Optionally include the port in the presigned url
+          getter include_port
+
           @expires : Int32
           @additional_options : Hash(String, String)
           @bucket : String
@@ -36,10 +39,11 @@ module Awscr
           @aws_access_key : String
           @aws_secret_key : String
           @host_name : String?
+          @include_port : Bool
 
           def initialize(@aws_access_key, @aws_secret_key, @region,
                          @object, @bucket, @expires = 86_400, @host_name = nil,
-                         @additional_options = {} of String => String, @signer = :v4)
+                         @additional_options = {} of String => String, @signer = :v4, @include_port = false)
           end
 
           def signer_version
