@@ -5,14 +5,15 @@ module Awscr
     class SignerFactory
       # Fetch and configure a signer based on a version algorithm
       def self.get(region : String, aws_access_key : String,
-                   aws_secret_key : String, version : Symbol)
+                   aws_secret_key : String, version : Symbol, aws_security_token : String? = nil)
         case version
         when :v4
           Awscr::Signer::Signers::V4.new(
             service: "s3",
             region: region,
             aws_access_key: aws_access_key,
-            aws_secret_key: aws_secret_key
+            aws_secret_key: aws_secret_key,
+            aws_security_token: aws_security_token
           )
         when :v2
           Awscr::Signer::Signers::V2.new(
