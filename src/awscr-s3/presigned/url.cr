@@ -9,11 +9,13 @@ module Awscr
         @aws_access_key : String
         @aws_secret_key : String
         @region : String
+        @scheme : String
 
         def initialize(@options : Options)
           @aws_access_key = @options.aws_access_key
           @aws_secret_key = @options.aws_secret_key
           @region = @options.region
+          @scheme = @options.scheme
         end
 
         # Create a Presigned::Url link. Supports GET and PUT.
@@ -29,7 +31,7 @@ module Awscr
           presign_request(request)
 
           String.build do |str|
-            str << "https://"
+            str << "#{@scheme}://"
             {% if compare_versions(Crystal::VERSION, "0.36.0") < 0 %}
               str << request.host
             {% else %}
@@ -83,6 +85,9 @@ module Awscr
         # :nodoc:
         private def host
           if host_name = @options.host_name
+            if host_name.includes?("http")
+              raise RuntimeError.new("host_name must not contain http(s)")
+            end
             host_name
           else
             return default_host if @region == standard_us_region

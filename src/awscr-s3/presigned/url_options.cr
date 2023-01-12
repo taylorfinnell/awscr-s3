@@ -31,6 +31,9 @@ module Awscr
           # Optionally include the port in the presigned url
           getter include_port
 
+          # The scheme attached to the given host. ie: <scheme>://<host_name>. Default: https
+          getter scheme
+
           @expires : Int32
           @additional_options : Hash(String, String)
           @bucket : String
@@ -43,7 +46,7 @@ module Awscr
 
           def initialize(@aws_access_key, @aws_secret_key, @region,
                          @object, @bucket, @expires = 86_400, @host_name = nil,
-                         @additional_options = {} of String => String, @signer = :v4, @include_port = false)
+                         @additional_options = {} of String => String, @signer = :v4, @include_port = false, @scheme = "https")
           end
 
           def signer_version
