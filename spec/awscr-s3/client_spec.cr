@@ -422,7 +422,7 @@ module Awscr::S3
           .with(body: "Hello")
           .to_return(body: "", headers: {"ETag" => "etag"})
 
-        client = Client.new("", "key", "secret", "https://nyc3.digitaloceanspaces.com")
+        client = Client.new("", "key", "secret", endpoint: "https://nyc3.digitaloceanspaces.com")
         resp = client.put_object("mybucket", "object.txt", io)
 
         resp.should eq(Response::PutObjectOutput.new("etag"))
@@ -435,7 +435,7 @@ module Awscr::S3
           .with(body: "Hello")
           .to_return(body: "", headers: {"ETag" => "etag"})
 
-        client = Client.new("", "key", "secret", "http://127.0.0.1:9000")
+        client = Client.new("", "key", "secret", endpoint: "http://127.0.0.1:9000")
         resp = client.put_object("mybucket", "object.txt", io)
 
         resp.should eq(Response::PutObjectOutput.new("etag"))

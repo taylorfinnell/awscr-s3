@@ -8,10 +8,22 @@ require "base64"
 module Awscr::S3
   # An S3 client for interacting with S3.
   #
-  # Creating an S3 Client
+  # Creating an S3 Client:
+  #
+  # 1) Implicitly, through the environment (AWS_REGION, AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY)
+  #
+  # ```
+  # client = Client.new
+  # ```
+  #
+  # 2) Explicitely, by the passing the values:
   #
   # ```
   # client = Client.new("region", "key", "secret")
+  # ```
+  #
+  # ```
+  # client = Client.new("region", "key", "secret", aws_security_token: "temp-token")
   # ```
   #
   # Client with custom endpoint
@@ -26,12 +38,18 @@ module Awscr::S3
   class Client
     @signer : Awscr::Signer::Signers::Interface
 
-    def initialize(@region : String, @aws_access_key : String, @aws_secret_key : String, @endpoint : String? = nil, signer : Symbol = :v4)
+    def initialize
+      initialize(ENV["AWS_REGION"], ENV["AWS_ACCESS_KEY_ID"], ENV["AWS_SECRET_ACCESS_KEY"],
+        aws_security_token: ENV["AWS_SECURITY_TOKEN"]?)
+    end
+
+    def initialize(@region : String, @aws_access_key : String, @aws_secret_key : String, *, @aws_security_token : String? = nil, @endpoint : String? = nil, signer : Symbol = :v4)
       @signer = SignerFactory.get(
         version: signer,
         region: @region,
         aws_access_key: @aws_access_key,
-        aws_secret_key: @aws_secret_key
+        aws_secret_key: @aws_secret_key,
+        aws_security_token: @aws_security_token
       )
     end
 
