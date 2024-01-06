@@ -5,7 +5,7 @@ module Awscr::S3
     getter size
     getter number
 
-    def initialize(@offset : Int32, @size : Int32, @number : Int32)
+    def initialize(@offset : Int64, @size : Int32, @number : Int32)
     end
   end
 
@@ -38,7 +38,7 @@ module Awscr::S3
     end
 
     private def build_pending_parts(io)
-      offset = 0
+      offset = 0_i64
       size = io.size
       default_part_size = compute_default_part_size(io.size)
       number = 1
