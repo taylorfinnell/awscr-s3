@@ -23,15 +23,22 @@ module Awscr::S3
   # ```
   # client = Client.new("region", "key", "secret", signer: :v2)
   # ```
+  #
+  # Creating an S3 Client with a session key, to use temporary credentials
+  #
+  # ```
+  # client = Client.new("region", "key", "secret", "session_key")
+  # ```
   class Client
     @signer : Awscr::Signer::Signers::Interface
 
-    def initialize(@region : String, @aws_access_key : String, @aws_secret_key : String, @endpoint : String? = nil, signer : Symbol = :v4)
+    def initialize(@region : String, @aws_access_key : String, @aws_secret_key : String, @aws_session_key : String? = nil, @endpoint : String? = nil, signer : Symbol = :v4)
       @signer = SignerFactory.get(
         version: signer,
         region: @region,
         aws_access_key: @aws_access_key,
-        aws_secret_key: @aws_secret_key
+        aws_secret_key: @aws_secret_key,
+        aws_session_key: @aws_session_key
       )
     end
 
