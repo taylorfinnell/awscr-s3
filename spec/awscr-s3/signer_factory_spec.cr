@@ -12,6 +12,11 @@ module Awscr::S3
       signer.should be_a(Awscr::Signer::Signers::V4)
     end
 
+    it "can return v4 signer for temporary account" do
+      signer = SignerFactory.get("region", "key", "secrety", aws_session_key: "session_key", version: :v4)
+      signer.should be_a(Awscr::Signer::Signers::V4)
+    end
+
     it "raises on invalid version" do
       expect_raises(S3::Exception) do
         SignerFactory.get("region", "key", "secrety", version: :v1)
