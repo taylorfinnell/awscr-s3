@@ -7,9 +7,17 @@ module Awscr
       # for object uploading.
       class Post
         def initialize(@region : String, @aws_access_key : String,
-                       @aws_secret_key : String, @signer : Symbol = :v4)
+                       @aws_secret_key : String, @aws_session_key : String? = nil,
+                       @signer : Symbol = :v4)
           @policy = Policy.new
         end
+
+        @[Deprecated("Use `#initialize(region : String, aws_access_key : String, aws_secret_key : String, aws_session_key : String? = nil, signer : Symbol = :v4)` instead")]
+        def initialize(region : String, aws_access_key : String,
+                       aws_secret_key : String, signer : Symbol = :v4)
+          initialize(region, aws_access_key, aws_secret_key, nil, signer)
+        end
+
 
         # Build a post object by adding fields
         def build(&block)
@@ -85,7 +93,8 @@ module Awscr
             version: @signer,
             region: @region,
             aws_access_key: @aws_access_key,
-            aws_secret_key: @aws_secret_key
+            aws_secret_key: @aws_secret_key,
+            aws_session_key: @aws_session_key,
           )
         end
       end
