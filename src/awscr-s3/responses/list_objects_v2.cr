@@ -21,7 +21,7 @@ module Awscr::S3::Response
       objects = [] of Object
       xml.array("ListBucketResult/Contents") do |object|
         key = object.string("Key")
-        size = object.string("Size").to_i
+        size = object.string("Size").to_i64
         etag = object.string("ETag")
         last_modified = Time.parse(object.string("LastModified"), DATE_FORMAT, Time::Location::UTC)
 
