@@ -1,4 +1,5 @@
 # awscr-s3
+
 [![CI](https://github.com/taylorfinnell/awscr-s3/actions/workflows/ci.yml/badge.svg)](https://github.com/taylorfinnell/awscr-s3/actions/workflows/ci.yml)
 
 A Crystal shard for S3 and compatible services.
@@ -192,19 +193,59 @@ options = Awscr::S3::Presigned::Url::Options.new(
 })
 
 url = Awscr::S3::Presigned::Url.new(options)
-p url.for(:put)
+puts url.for(:put)
 ```
 
 You may use version 2 request signing via
 
+```crystal
+options = Awscr::S3::Presigned::Url::Options.new(
+  aws_access_key: "key",
+  aws_secret_key: "secret",
+  region: "us-east-1",
+  object: "test.txt",
+  bucket: "mybucket",
+  signer: :v2
+)
+```
+
+### Support 3rd party services
+
+For S3-compatible services like DigitalOcean Spaces, Minio, or Backblaze B2, you'll need to set a custom endpoint.
+
+**Minio (local)**
+
+To use Minio locally, ensure your Minio server is running and configure the endpoint as follows:
 
 ```crystal
 options = Awscr::S3::Presigned::Url::Options.new(
-   aws_access_key: "key",
-   aws_secret_key: "secret",
-   region: "us-east-1",
-   object: "test.txt",
-   bucket: "mybucket",
-   signer: :v2
+  endpoint: "http://127.0.0.1:9000",
+  region: "unused",
+  aws_access_key: "admin",
+  aws_secret_key: "password",
+  bucket: "foo",
+  force_path_style: true,
+  object: "/test.txt"
 )
+
+url = Awscr::S3::Presigned::Url.new(options)
+puts url.for(:get) # => "http://127.0.0.1:9000/foo/test.txt?X-Amz-Expires=86400&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=admin%2F20250313%2Funused%2Fs3%2Faws4_request&X-Amz-Date=20250313T235624Z&X-Amz-SignedHeaders=host&X-Amz-Signature=ce2b33af1dbfd0e132f31d3f9d716eb5d66f4d19fbdcb691e816f7033e345bce"
+```
+
+**DigitalOcean Spaces**
+
+For DigitalOcean Spaces, the bucket is included in the subdomain:
+
+```crystal
+options = Awscr::S3::Presigned::Url::Options.new(
+  endpoint: "https://ams3.digitaloceanspaces.com",
+  region: "unused",
+  aws_access_key: "ACCESSKEYEXAMPLE",
+  aws_secret_key: "SECRETKEYEXAMPLE",
+  bucket: "foo",
+  object: "/test.txt"
+)
+
+url = Awscr::S3::Presigned::Url.new(options)
+puts url.for(:get) # => "https://foo.ams3.digitaloceanspaces.com/test.txt?X-Amz-Expires=86400&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=ACCESSKEYEXAMPLE%2F20250313%2Funused%2Fs3%2Faws4_request&X-Amz-Date=20250313T235511Z&X-Amz-SignedHeaders=host&X-Amz-Signature=e7b17f3c335ed615bf68845f81c2091814f856b61d05cb5aae3ad664de0f1b6e"
 ```
