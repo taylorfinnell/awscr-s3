@@ -6,7 +6,7 @@ module Awscr
       # Fetch and configure a signer based on a version algorithm
       def self.get(region : String, aws_access_key : String,
                    aws_secret_key : String, version : Symbol,
-                   aws_session_key : String?)
+                   aws_session_key : String? = nil)
         case version
         when :v4
           Awscr::Signer::Signers::V4.new(
