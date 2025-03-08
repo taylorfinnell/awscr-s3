@@ -30,7 +30,7 @@ module Awscr
               aws_access_key: "test",
               aws_secret_key: "test"
             )
-            post.build { |b| b.expiration(Time.local) }
+            post.build(&.expiration(Time.local))
 
             post.valid?.should be_false
           end
@@ -41,7 +41,7 @@ module Awscr
               aws_access_key: "test",
               aws_secret_key: "test"
             )
-            post.build { |b| b.condition("bucket", "t") }
+            post.build(&.condition("bucket", "t"))
 
             post.valid?.should be_false
           end
@@ -148,7 +148,7 @@ module Awscr
               aws_access_key: "test",
               aws_secret_key: "test"
             )
-            post.build { |b| b.expiration(Time.local) }
+            post.build(&.expiration(Time.local))
 
             expect_raises(Exception) do
               post.url
@@ -174,7 +174,7 @@ module Awscr
               aws_access_key: "test",
               aws_secret_key: "test"
             )
-            post.build { |b| b.expiration(Time.local) }
+            post.build(&.expiration(Time.local))
 
             post.fields.should be_a(FieldCollection)
           end

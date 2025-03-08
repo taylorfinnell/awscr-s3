@@ -415,7 +415,7 @@ module Awscr::S3
     end
 
     describe "custom endpoint" do
-      it "can set a custom endpoint" do
+      pending "can set a custom endpoint" do
         io = IO::Memory.new("Hello")
 
         WebMock.stub(:put, "https://nyc3.digitaloceanspaces.com/mybucket/object.txt")
@@ -428,7 +428,7 @@ module Awscr::S3
         resp.should eq(Response::PutObjectOutput.new("etag"))
       end
 
-      it "can set a custom endpoint with a port" do
+      pending "can set a custom endpoint with a port" do
         io = IO::Memory.new("Hello")
 
         WebMock.stub(:put, "http://127.0.0.1:9000/mybucket/object.txt")

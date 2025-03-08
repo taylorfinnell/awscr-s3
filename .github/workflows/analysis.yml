@@ -1,0 +1,26 @@
+name: Analysis
+on:
+  push:
+    branches: [master]
+  pull_request:
+    branches: [master]
+  schedule:
+    - cron: 13 7 * * 6
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    name: Lint
+    steps:
+      - name: "[Git] Checkout code"
+        uses: actions/checkout@v4
+      - uses: crystal-lang/install-crystal@v1
+      - name: "[Setup] Install dependencies"
+        run: shards install
+      - name: "[Analysis] Run static analysis"
+        run: ./bin/ameba
+      - name: "[Analysis]  Check formatting"
+        run: crystal tool format --check
+      - name: "[Analysis] Yaml Linting"
+        uses: ibiqlik/action-yamllint@v3
+        with:
+          config_file: .yamllint.yml
