@@ -26,7 +26,7 @@ module Awscr
         end
 
         # Iterate over the collection's fields.
-        def each(&block)
+        def each(&)
           @fields.each do |field|
             yield field
           end

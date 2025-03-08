@@ -35,7 +35,7 @@ module Awscr::S3::Response
     end
 
     def etag : String?
-      headers["ETag"].try { |v| v.strip('"') }
+      headers["ETag"].try(&.strip('"'))
     end
 
     def meta : Hash(String, String)

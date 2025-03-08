@@ -74,7 +74,7 @@ module Awscr::S3
     #   pp resp
     # end
     # ```
-    def get(path, headers : Hash(String, String) = Hash(String, String).new)
+    def get(path, headers : Hash(String, String) = Hash(String, String).new, &)
       exec("GET", path, headers: HTTP::Headers.new.merge!(headers)) do |resp|
         yield resp
       end
