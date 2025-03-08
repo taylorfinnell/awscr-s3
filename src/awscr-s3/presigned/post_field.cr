@@ -19,8 +19,8 @@ module Awscr
           {@key => @value}
         end
 
-        def <=>(field : PostField)
-          if @key == field.key && @value == field.value
+        def <=>(other : PostField)
+          if @key == other.key && @value == other.value
             0
           else
             -1

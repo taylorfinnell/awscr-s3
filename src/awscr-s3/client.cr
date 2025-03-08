@@ -273,7 +273,7 @@ module Awscr::S3
     #   IO.copy(resp.body_io, STDOUT) # => "MY DATA"
     # end
     # ```
-    def get_object(bucket, object : String, headers : Hash(String, String) = Hash(String, String).new)
+    def get_object(bucket, object : String, headers : Hash(String, String) = Hash(String, String).new, &)
       http.get("/#{bucket}/#{Util.encode(object)}", headers: headers) do |resp|
         yield Response::GetObjectStream.from_response(resp)
       end

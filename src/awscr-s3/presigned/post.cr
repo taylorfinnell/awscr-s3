@@ -18,9 +18,8 @@ module Awscr
           initialize(region, aws_access_key, aws_secret_key, nil, signer)
         end
 
-
         # Build a post object by adding fields
-        def build(&block)
+        def build(&)
           yield @policy
 
           add_fields_before_sign
