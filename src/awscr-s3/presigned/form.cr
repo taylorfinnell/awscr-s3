@@ -24,7 +24,7 @@ module Awscr
         #   form.condition("success_action_status", "201")
         # end
         # ```
-        def self.build(region : String, aws_access_key : String, aws_secret_key : String, aws_session_key : String? = nil, signer : Symbol = :v4, &block)
+        def self.build(region : String, aws_access_key : String, aws_secret_key : String, aws_session_key : String? = nil, signer : Symbol = :v4, &)
           post = Post.new(region, aws_access_key, aws_secret_key, aws_session_key, signer)
           post.build do |p|
             yield p
@@ -32,8 +32,8 @@ module Awscr
           new(post, HTTP::Client.new(URI.parse(post.url)))
         end
 
-        @[Deprecated("Use `#build(region : String, aws_access_key : String, aws_secret_key : String, aws_session_key : String? = nil, signer : Symbol = :v4, &block)` instead")]
-        def self.build(region : String, aws_access_key : String, aws_secret_key : String, signer = :v4, &block)
+        @[Deprecated("Use `#build(region : String, aws_access_key : String, aws_secret_key : String, aws_session_key : String? = nil, signer : Symbol = :v4, &)` instead")]
+        def self.build(region : String, aws_access_key : String, aws_secret_key : String, signer = :v4, &)
           post = Post.new(region, aws_access_key, aws_secret_key, nil, signer)
           post.build do |p|
             yield p

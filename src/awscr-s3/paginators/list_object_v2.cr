@@ -7,7 +7,7 @@ module Awscr::S3::Paginator
     @bucket : String
 
     def initialize(@http : S3::Http, @params : Hash(String, String))
-      @params = @params.reject { |_, v| v.nil? || v.empty? }
+      @params.reject! { |_, value| value.nil? || value.empty? }
       @bucket = @params.delete("bucket").as(String)
       @last_output = nil
     end
@@ -30,7 +30,7 @@ module Awscr::S3::Paginator
 
     # :nodoc:
     private def query_string
-      @params.map { |k, v| "#{k}=#{URI.encode(string: v.to_s, space_to_plus: true)}" }.join("&")
+      @params.map { |k, v| "#{k}=#{URI.encode_path(v.to_s)}" }.join("&")
     end
   end
 end

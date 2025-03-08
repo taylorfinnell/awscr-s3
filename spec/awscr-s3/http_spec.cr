@@ -83,9 +83,7 @@ module Awscr::S3
           http = Http.new(SIGNER)
 
           expect_raises S3::NoSuchKey, "The resource you requested does not exist" do
-            http.get("/sup") do |response|
-              pp response
-            end
+            http.get("/sup")
           end
         end
 
@@ -96,9 +94,7 @@ module Awscr::S3
           http = Http.new(SIGNER)
 
           expect_raises S3::Exception do
-            http.get("/sup") do |response|
-              pp response
-            end
+            http.get("/sup")
           end
         end
       end

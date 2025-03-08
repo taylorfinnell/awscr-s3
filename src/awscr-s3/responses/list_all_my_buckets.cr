@@ -35,7 +35,7 @@ module Awscr::S3::Response
     end
 
     # Iterate over each bucket in the response
-    def each(&block)
+    def each(&)
       @buckets.each { |b| yield b }
     end
 

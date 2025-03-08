@@ -1,0 +1,38 @@
+name: Test
+on:
+  push:
+    branches: [master]
+  pull_request:
+    branches: [master]
+  schedule:
+    - cron: 13 7 * * 6
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        crystal_version:
+          - 1.12.2
+          - 1.13.3
+          - 1.14.1
+          - 1.15.1
+          - latest
+        experimental: [false]
+        include:
+          - crystal_version: nightly
+            experimental: true
+    name: Crystal ${{ matrix.crystal_version }}
+    continue-on-error: ${{ matrix.experimental }}
+    steps:
+      - name: "[Git] Checkout code"
+        uses: actions/checkout@v4
+      - uses: crystal-lang/install-crystal@v1
+        with:
+          crystal: ${{ matrix.crystal_version }}
+      - name: "[Setup] Install dependencies"
+        run: shards install
+      - name: "[Test] Run specs"
+        run: crystal spec -v --error-trace --no-color
+      - name: "[Test] Compile files with release flag"
+        run: crystal build --release --stats --progress src/awscr-s3.cr
