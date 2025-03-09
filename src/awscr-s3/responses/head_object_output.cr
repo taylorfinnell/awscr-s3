@@ -40,7 +40,7 @@ module Awscr::S3::Response
 
     def meta : Hash(String, String)
       meta = {} of String => String
-      response.headers.each do |k, v|
+      headers.each do |k, v|
         next unless k.starts_with?("x-amz-meta-")
         meta[k.lchop("x-amz-meta-")] = v.first
       end
