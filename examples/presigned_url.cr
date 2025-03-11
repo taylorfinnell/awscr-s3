@@ -1,10 +1,12 @@
 require "../src/awscr-s3"
 require "uuid"
 
-BUCKET = ENV["AWS_BUCKET"]
-KEY    = ENV["AWS_KEY"]
-SECRET = ENV["AWS_SECRET"]
-REGION = ENV["AWS_REGION"]
+SERVICE = "s3"
+BUCKET  = ENV.fetch("AWS_BUCKET", "examplebucket")
+KEY     = ENV.fetch("AWS_KEY", "AKIAIOSFODNN7EXAMPLE")
+SECRET  = ENV.fetch("AWS_SECRET", "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY")
+REGION  = ENV.fetch("AWS_REGION", "us-east-1")
+HOST    = "#{BUCKET}.#{SERVICE}.amazonaws.com"
 
 object = "/#{UUID.random}"
 
