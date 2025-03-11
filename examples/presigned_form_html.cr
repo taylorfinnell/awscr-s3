@@ -3,15 +3,18 @@
 require "../src/awscr-s3"
 require "uuid"
 
-BUCKET = ENV["AWS_BUCKET"]
-HOST   = "#{BUCKET}.s3.amazonaws.com"
-KEY    = ENV["AWS_KEY"]
-SECRET = ENV["AWS_SECRET"]
-REGION = ENV["AWS_REGION"]
+SERVICE = "s3"
+BUCKET  = ENV.fetch("AWS_BUCKET", "examplebucket")
+KEY     = ENV.fetch("AWS_KEY", "AKIAIOSFODNN7EXAMPLE")
+SECRET  = ENV.fetch("AWS_SECRET", "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY")
+REGION  = ENV.fetch("AWS_REGION", "us-east-1")
+HOST    = "#{BUCKET}.#{SERVICE}.amazonaws.com"
 
-form = Awscr::S3::Presigned::Form.build(region: REGION, aws_access_key: KEY,
+form = Awscr::S3::Presigned::Form.build(
+  region: REGION,
+  aws_access_key: KEY,
   aws_secret_key: SECRET) do |f|
-  f.expiration(Time.unix(Time.now.to_unix + 1000))
+  f.expiration(Time.utc + 1.second)
   f.condition("bucket", BUCKET)
   f.condition("acl", "public-read")
   f.condition("key", UUID.random.to_s)

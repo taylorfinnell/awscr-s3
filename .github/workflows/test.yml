@@ -40,3 +40,12 @@ jobs:
 
       - name: "[Test] Compile files with release flag"
         run: crystal build --release --stats --progress src/awscr-s3.cr
+
+      - name: "[Test] Smoke tests"
+        env:
+          LOG_LEVEL: TRACE
+        run: |
+          for example in examples/*.cr; do
+            echo " > Processing $example..."
+            crystal run --debug $example
+          done

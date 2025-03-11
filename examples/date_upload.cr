@@ -3,14 +3,13 @@
 require "../src/awscr-s3"
 require "uuid"
 
-BUCKET = ENV["AWS_BUCKET"]
-HOST   = "#{BUCKET}.s3.amazonaws.com"
-KEY    = ENV["AWS_KEY"]
-SECRET = ENV["AWS_SECRET"]
-REGION = ENV["AWS_REGION"]
+BUCKET = ENV.fetch("AWS_BUCKET", "examplebucket")
+KEY    = ENV.fetch("AWS_KEY", "AKIAIOSFODNN7EXAMPLE")
+SECRET = ENV.fetch("AWS_SECRET", "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY")
+REGION = ENV.fetch("AWS_REGION", "us-east-1")
 
 form = Awscr::S3::Presigned::Form.build(REGION, KEY, SECRET) do |f|
-  f.expiration(Time.unix(Time.now.to_unix + 1000))
+  f.expiration(Time.utc + 1.second)
   f.condition("bucket", BUCKET)
   f.condition("acl", "public-read")
   f.condition("key", "#{UUID.random}.png"[0...8])
@@ -19,7 +18,7 @@ form = Awscr::S3::Presigned::Form.build(REGION, KEY, SECRET) do |f|
 end
 
 path = "/tmp/#{UUID.random}"
-`screencapture -i #{path}`
+`date >> #{path}`
 
 file = File.open(path)
 resp = form.submit(file)
