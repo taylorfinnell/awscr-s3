@@ -1,6 +1,8 @@
 require "../src/awscr-s3"
 require "uuid"
 
+Log.setup_from_env
+
 BUCKET = ENV.fetch("AWS_BUCKET", "examplebucket")
 KEY    = ENV.fetch("AWS_KEY", "AKIAIOSFODNN7EXAMPLE")
 SECRET = ENV.fetch("AWS_SECRET", "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY")

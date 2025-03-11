@@ -42,7 +42,6 @@ module Awscr
               if header = request.headers["Host"]?
                 if header.includes?(":")
                   host, _, port = header.rpartition(":")
-                  puts host, port
                   unless port == ""
                     str << ":"
                     str << port
@@ -57,6 +56,17 @@ module Awscr
 
         # :nodoc:
         private def presign_request(request)
+          # https://opentelemetry.io/docs/specs/semconv/
+          Log.trace &.emit("Presign request", {
+            "code.filepath":       __FILE__,
+            "code.function.name":  "presign_request",
+            "code.line.number":    __LINE__,
+            "code.location":       "#{__FILE__}:#{__LINE__}",
+            "http.request.method": request.method,
+            "server.address":      request.headers["Host"],
+            "url.path":            request.path,
+            "url.query":           request.query,
+          })
           @options.signer.presign(request)
         end
 

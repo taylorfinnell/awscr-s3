@@ -1,7 +1,7 @@
-# Upload a screenshot to S3 by submiting a presigned form
-
 require "../src/awscr-s3"
 require "uuid"
+
+Log.setup_from_env
 
 BUCKET = ENV.fetch("AWS_BUCKET", "examplebucket")
 KEY    = ENV.fetch("AWS_KEY", "AKIAIOSFODNN7EXAMPLE")

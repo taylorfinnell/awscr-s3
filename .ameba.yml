@@ -1,8 +1,9 @@
-# Run `ameba --only Lint/SpecFilename` for details
+Lint/LiteralInInterpolation:
+  Enabled: false
+
 Lint/SpecFilename:
   Enabled: false
 
-# Run `ameba --only Naming/BlockParameterName` for details
 Naming/BlockParameterName:
   Enabled: false
 
