@@ -24,7 +24,8 @@ options = Awscr::S3::Presigned::Url::Options.new(
   })
 
 url = Awscr::S3::Presigned::Url.new(options)
+puts "url: #{url.for(:get)}"
 
 HTTP::Client.put(url.for(:put), HTTP::Headers.new, body: "Howdy!")
 resp = HTTP::Client.get(url.for(:get))
-p "Object #{object}: #{resp.body}"
+puts "Object #{object}: #{resp.body}"

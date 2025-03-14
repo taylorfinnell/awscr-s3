@@ -25,7 +25,7 @@ module Awscr
           )
           url = Url.new(options)
 
-          url.for(:get).should match(/https:\/\/s3-#{options.region}.amazonaws.com/)
+          url.for(:get).should match(/https:\/\/examplebucket\.s3-#{options.region}.amazonaws.com\/test.txt/)
         end
 
         it "allows host override" do
@@ -35,11 +35,11 @@ module Awscr
             aws_secret_key: "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY",
             bucket: "examplebucket",
             object: "/test.txt",
-            host_name: "examplebucket.s3.amazonaws.com"
+            host_name: "example.com"
           )
           url = Url.new(options)
 
-          url.for(:get).should match(/https:\/\/examplebucket.s3.amazonaws.com/)
+          url.for(:get).should match(/https:\/\/examplebucket.example.com\/test.txt/)
         end
 
         it "raises on unsupported method" do
@@ -72,7 +72,7 @@ module Awscr
             url = Url.new(options)
 
             url.for(:get)
-              .should eq("https://s3.amazonaws.com/examplebucket/test.txt?Expires=86401&AWSAccessKeyId=AKIAIOSFODNN7EXAMPLE&Signature=KP7uBvqYauy%2Fzj1Rb9LgL7e87VY%3D")
+              .should eq("https://examplebucket.s3.amazonaws.com/test.txt?Expires=86401&AWSAccessKeyId=AKIAIOSFODNN7EXAMPLE&Signature=KP7uBvqYauy%2Fzj1Rb9LgL7e87VY%3D")
           end
 
           it "generates a correct url for v4" do
@@ -87,7 +87,43 @@ module Awscr
               url = Url.new(options)
 
               url.for(:get)
-                .should eq("https://s3.amazonaws.com/examplebucket/test.txt?X-Amz-Expires=86400&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAIOSFODNN7EXAMPLE%2F20130524%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20130524T000000Z&X-Amz-SignedHeaders=host&X-Amz-Signature=733255ef022bec3f2a8701cd61d4b371f3f28c9f193a1f02279211d48d5193d7")
+                .should eq("https://examplebucket.s3.amazonaws.com/test.txt?X-Amz-Expires=86400&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAIOSFODNN7EXAMPLE%2F20130524%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20130524T000000Z&X-Amz-SignedHeaders=host&X-Amz-Signature=aeeed9bbccd4d02ee5c0109b86d86835f995330da4c265957d157751f604d404")
+            end
+          end
+
+          it "override default endpoint" do
+            Timecop.freeze(Time.utc(2013, 5, 24)) do
+              options = Url::Options.new(
+                endpoint: "http://127.0.0.1:9000",
+                region: "unused",
+                aws_access_key: "AKIAIOSFODNN7EXAMPLE",
+                aws_secret_key: "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY",
+                bucket: "examplebucket",
+                object: "/test.txt"
+              )
+              url = Url.new(options)
+
+              url.for(:get)
+                .should eq("http://examplebucket.127.0.0.1:9000/test.txt?X-Amz-Expires=86400&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAIOSFODNN7EXAMPLE%2F20130524%2Funused%2Fs3%2Faws4_request&X-Amz-Date=20130524T000000Z&X-Amz-SignedHeaders=host&X-Amz-Signature=4cd2d055e88b21dc0fa9027338aa1e2a1a90a88b61124edd7b9fae6299efcea4")
+            end
+          end
+
+          it "with force_path_style" do
+            Timecop.freeze(Time.utc(2013, 5, 24)) do
+              options = Url::Options.new(
+                host_name: "127.0.0.1:9000",
+                scheme: "http",
+                region: "unused",
+                aws_access_key: "AKIAIOSFODNN7EXAMPLE",
+                aws_secret_key: "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY",
+                bucket: "examplebucket",
+                force_path_style: true,
+                object: "/test.txt"
+              )
+              url = Url.new(options)
+
+              url.for(:get)
+                .should eq("http://127.0.0.1:9000/examplebucket/test.txt?X-Amz-Expires=86400&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAIOSFODNN7EXAMPLE%2F20130524%2Funused%2Fs3%2Faws4_request&X-Amz-Date=20130524T000000Z&X-Amz-SignedHeaders=host&X-Amz-Signature=c4a84832797f4186a789b297af55d2c014cd687933995d72247ed339496d878f")
             end
           end
         end
