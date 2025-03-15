@@ -22,6 +22,22 @@ jobs:
         include:
           - crystal_version: nightly
             experimental: true
+    services:
+      minio:
+        # https://stackoverflow.com/questions/60849745/how-can-i-run-a-command-in-github-action-service-containers
+        image: bitnami/minio:latest
+        env:
+          MINIO_ROOT_USER: admin
+          MINIO_ROOT_PASSWORD: password
+        ports:
+          - 9000:9000
+        # https://github.com/orgs/community/discussions/26688
+        options: >-
+          --health-cmd "curl -s http://localhost:9000/minio/health/live"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=5
+          --name minio-server
     name: Crystal ${{ matrix.crystal_version }}
     continue-on-error: ${{ matrix.experimental }}
     steps:

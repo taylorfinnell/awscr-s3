@@ -249,3 +249,41 @@ options = Awscr::S3::Presigned::Url::Options.new(
 url = Awscr::S3::Presigned::Url.new(options)
 puts url.for(:get) # => "https://foo.ams3.digitaloceanspaces.com/test.txt?X-Amz-Expires=86400&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=ACCESSKEYEXAMPLE%2F20250313%2Funused%2Fs3%2Faws4_request&X-Amz-Date=20250313T235511Z&X-Amz-SignedHeaders=host&X-Amz-Signature=e7b17f3c335ed615bf68845f81c2091814f856b61d05cb5aae3ad664de0f1b6e"
 ```
+
+## Developing `awscr-s3`
+
+To develop and run tests, use the following commands:
+
+### Run All Tests
+
+To run all types of tests (unit and integration) by default, use:
+
+```shell
+$ crystal spec
+```
+
+### Unit Tests
+
+To run **only** the unit tests and exclude integration tests,
+use the `--tag` filter to exclude the integration tests:
+
+```shell
+$ crystal spec --tag '~integration'
+```
+
+### Integration Tests
+
+Integration tests test `awscr-s3` against local S3 implementations, such as MinIO.
+Before running the integration tests, ensure that the necessary dependencies (like the MinIO server) are running.
+
+1. Start the MinIO server and any required services using Docker Compose:
+
+   ```shell
+   $ docker compose -f spec/integration/compose.yml up -d
+   ```
+
+2. Once the dependencies are up, run the integration tests:
+
+   ```shell
+   $ crystal spec --tag 'integration'
+   ```
