@@ -4,12 +4,8 @@ module Awscr
   module S3
     module Presigned
       describe Post do
-        Spec.before_each do
+        before_each do
           Timecop.freeze(Time.unix(1))
-        end
-
-        Spec.after_each do
-          Timecop.return
         end
 
         describe "valid?" do
