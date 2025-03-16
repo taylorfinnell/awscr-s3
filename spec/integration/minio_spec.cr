@@ -48,6 +48,9 @@ describe "minio flow", tags: "integration" do
     actual = client.put_object(bucket_name, key, body)
     actual.etag.should_not eq(nil)
 
+    response = client.head_object(bucket_name, key)
+    response.meta.should be_empty
+
     response = client.get_object(bucket_name, key)
     response.body.should eq(body)
   end

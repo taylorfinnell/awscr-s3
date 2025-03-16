@@ -39,12 +39,12 @@ module Awscr::S3::Response
     end
 
     def meta : Hash(String, String)
-      meta = {} of String => String
+      result = Hash(String, String).new
       headers.each do |k, v|
         next unless k.starts_with?("x-amz-meta-")
-        meta[k.lchop("x-amz-meta-")] = v.first
+        result[k.lchop("x-amz-meta-")] = v.first
       end
-      meta
+      result
     end
 
     private def parse_date(date : String)
