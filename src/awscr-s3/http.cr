@@ -103,6 +103,7 @@ module Awscr::S3
       rescue ex : IO::Error
         raise ex if retries > 2
         @client = nil
+        retries += 1
       end
     end
 
