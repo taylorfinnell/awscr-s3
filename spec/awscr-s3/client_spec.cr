@@ -9,6 +9,44 @@ module Awscr::S3
       Client.new("adasd", "adasd", "adad", signer: :v2)
     end
 
+    describe "region" do
+      it "sets the region to the provided value" do
+        client = Client.new("us-east-1", "some_access_key", "some_secret_key")
+
+        client.region.should eq "us-east-1"
+
+        client = Client.new("custom-region", "some_access_key", "some_secret_key")
+
+        client.region.should eq "custom-region"
+      end
+    end
+
+    describe "endpoint" do
+      it "sets the correct endpoint" do
+        client = Client.new("us-east-1", "some_access_key", "some_secret_key")
+
+        client.endpoint.should eq "https://s3.amazonaws.com/"
+      end
+
+      it "sets the correct endpoint with a defined region" do
+        client = Client.new("eu-west-1", "some_access_key", "some_secret_key")
+
+        client.endpoint.should eq "https://s3-eu-west-1.amazonaws.com/"
+      end
+
+      it "can set a custom endpoint" do
+        client = Client.new("eu-west-1", "some_access_key", "some_secret_key", endpoint: "https://nyc3.digitaloceanspaces.com")
+
+        client.endpoint.should eq "https://nyc3.digitaloceanspaces.com/"
+      end
+
+      it "can set a custom endpoint with a port" do
+        client = Client.new("eu-west-1", "some_access_key", "some_secret_key", endpoint: "http://127.0.0.1:9000")
+
+        client.endpoint.should eq "http://127.0.0.1:9000/"
+      end
+    end
+
     describe "batch_delete" do
       it "can can fail to delete items" do
         xml = <<-XML

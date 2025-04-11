@@ -4,13 +4,12 @@ require "uri"
 
 module Awscr::S3
   class Http
-    def initialize(@signer : Awscr::Signer::Signers::Interface,
-                   @region : String = standard_us_region,
-                   @custom_endpoint : String? = nil)
-      @endpoint = endpoint
+    def initialize(
+      @signer : Awscr::Signer::Signers::Interface,
+      @endpoint : URI
+    )
     end
 
-    @endpoint : URI
     @client : HTTP::Client?
 
     # Issue a DELETE request to the *path* with optional *headers*
@@ -116,23 +115,6 @@ module Awscr::S3
       else
         raise S3::Exception.new("server error: #{response.status_code}")
       end
-    end
-
-    # :nodoc:
-    private def endpoint : URI
-      return URI.parse(@custom_endpoint.to_s) if @custom_endpoint
-      return default_endpoint if @region == standard_us_region
-      URI.parse("https://#{SERVICE_NAME}-#{@region}.amazonaws.com")
-    end
-
-    # :nodoc:
-    private def standard_us_region
-      "us-east-1"
-    end
-
-    # :nodoc:
-    private def default_endpoint : URI
-      URI.parse("https://#{SERVICE_NAME}.amazonaws.com")
     end
 
     # :nodoc:

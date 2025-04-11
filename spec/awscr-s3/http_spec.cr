@@ -19,7 +19,9 @@ module Awscr::S3
         WebMock.stub(:get, "https://s3.amazonaws.com/")
           .to_return(status: 200)
 
-        http = Http.new(SIGNER)
+        client = Client.new("us-east-1", "some_access_key", "some_secret_key")
+
+        http = Http.new(SIGNER, client.endpoint)
 
         http.get("/").status_code.should eq 200
       end
@@ -28,7 +30,9 @@ module Awscr::S3
         WebMock.stub(:get, "https://s3-eu-west-1.amazonaws.com/")
           .to_return(status: 200)
 
-        http = Http.new(SIGNER, "eu-west-1")
+        client = Client.new("eu-west-1", "some_access_key", "some_secret_key")
+
+        http = Http.new(SIGNER, client.endpoint)
 
         http.get("/").status_code.should eq 200
       end
@@ -37,7 +41,9 @@ module Awscr::S3
         WebMock.stub(:get, "https://nyc3.digitaloceanspaces.com")
           .to_return(status: 200)
 
-        http = Http.new(SIGNER, custom_endpoint: "https://nyc3.digitaloceanspaces.com")
+        client = Client.new("us-east-1", "some_access_key", "some_secret_key", endpoint: "https://nyc3.digitaloceanspaces.com")
+
+        http = Http.new(SIGNER, client.endpoint)
 
         http.get("/").status_code.should eq 200
       end
@@ -46,7 +52,9 @@ module Awscr::S3
         WebMock.stub(:get, "http://127.0.0.1:9000")
           .to_return(status: 200)
 
-        http = Http.new(SIGNER, custom_endpoint: "http://127.0.0.1:9000")
+        client = Client.new("us-east-1", "some_access_key", "some_secret_key", endpoint: "http://127.0.0.1:9000")
+
+        http = Http.new(SIGNER, client.endpoint)
 
         http.get("/").status_code.should eq 200
       end
@@ -57,7 +65,9 @@ module Awscr::S3
         WebMock.stub(:get, "https://s3.amazonaws.com/sup?")
           .to_return(status: 404, body: ERROR_BODY)
 
-        http = Http.new(SIGNER)
+        client = Client.new("us-east-1", "some_access_key", "some_secret_key")
+
+        http = Http.new(SIGNER, client.endpoint)
 
         expect_raises S3::NoSuchKey, "The resource you requested does not exist" do
           http.get("/sup")
@@ -68,7 +78,9 @@ module Awscr::S3
         WebMock.stub(:get, "https://s3.amazonaws.com/sup?")
           .to_return(status: 404)
 
-        http = Http.new(SIGNER)
+        client = Client.new("us-east-1", "some_access_key", "some_secret_key")
+
+        http = Http.new(SIGNER, client.endpoint)
 
         expect_raises S3::Exception do
           http.get("/sup")
@@ -80,7 +92,9 @@ module Awscr::S3
           WebMock.stub(:get, "https://s3.amazonaws.com/sup?")
             .to_return(status: 404, body: ERROR_BODY)
 
-          http = Http.new(SIGNER)
+          client = Client.new("us-east-1", "some_access_key", "some_secret_key")
+
+          http = Http.new(SIGNER, client.endpoint)
 
           expect_raises S3::NoSuchKey, "The resource you requested does not exist" do
             http.get("/sup")
@@ -91,7 +105,9 @@ module Awscr::S3
           WebMock.stub(:get, "https://s3.amazonaws.com/sup?")
             .to_return(status: 404)
 
-          http = Http.new(SIGNER)
+          client = Client.new("us-east-1", "some_access_key", "some_secret_key")
+
+          http = Http.new(SIGNER, client.endpoint)
 
           expect_raises S3::Exception do
             http.get("/sup")
@@ -105,7 +121,9 @@ module Awscr::S3
         WebMock.stub(:head, "https://s3.amazonaws.com/?")
           .to_return(status: 404, body: ERROR_BODY)
 
-        http = Http.new(SIGNER)
+        client = Client.new("us-east-1", "some_access_key", "some_secret_key")
+
+        http = Http.new(SIGNER, client.endpoint)
 
         expect_raises S3::Exception, "The resource you requested does not exist" do
           http.head("/")
@@ -116,7 +134,9 @@ module Awscr::S3
         WebMock.stub(:head, "https://s3.amazonaws.com/?")
           .to_return(status: 404)
 
-        http = Http.new(SIGNER)
+        client = Client.new("us-east-1", "some_access_key", "some_secret_key")
+
+        http = Http.new(SIGNER, client.endpoint)
 
         expect_raises S3::Exception do
           http.head("/")
@@ -129,7 +149,9 @@ module Awscr::S3
         WebMock.stub(:put, "https://s3.amazonaws.com/?")
           .to_return(status: 404, body: ERROR_BODY)
 
-        http = Http.new(SIGNER)
+        client = Client.new("us-east-1", "some_access_key", "some_secret_key")
+
+        http = Http.new(SIGNER, client.endpoint)
 
         expect_raises S3::NoSuchKey, "The resource you requested does not exist" do
           http.put("/", "")
@@ -140,7 +162,9 @@ module Awscr::S3
         WebMock.stub(:put, "https://s3.amazonaws.com/?")
           .to_return(status: 404)
 
-        http = Http.new(SIGNER)
+        client = Client.new("us-east-1", "some_access_key", "some_secret_key")
+
+        http = Http.new(SIGNER, client.endpoint)
 
         expect_raises S3::Exception do
           http.put("/", "")
@@ -152,7 +176,9 @@ module Awscr::S3
           .with(body: "abcd", headers: {"Content-Length" => "4"})
           .to_return(status: 200)
 
-        http = Http.new(SIGNER)
+        client = Client.new("us-east-1", "some_access_key", "some_secret_key")
+
+        http = Http.new(SIGNER, client.endpoint)
         http.put("/document", "abcd")
       end
 
@@ -161,7 +187,9 @@ module Awscr::S3
           .with(body: "abcd", headers: {"Content-Length" => "4", "x-amz-meta-name" => "document"})
           .to_return(status: 200)
 
-        http = Http.new(SIGNER)
+        client = Client.new("us-east-1", "some_access_key", "some_secret_key")
+
+        http = Http.new(SIGNER, client.endpoint)
         http.put("/document", "abcd", {"x-amz-meta-name" => "document"})
       end
     end
@@ -171,14 +199,18 @@ module Awscr::S3
         WebMock.stub(:post, "https://s3.amazonaws.com/?")
           .with(headers: {"x-amz-meta-name" => "document"})
 
-        Http.new(SIGNER).post("/", headers: {"x-amz-meta-name" => "document"})
+        client = Client.new("us-east-1", "some_access_key", "some_secret_key")
+
+        Http.new(SIGNER, client.endpoint).post("/", headers: {"x-amz-meta-name" => "document"})
       end
 
       it "handles aws specific errors" do
         WebMock.stub(:post, "https://s3.amazonaws.com/?")
           .to_return(status: 404, body: ERROR_BODY)
 
-        http = Http.new(SIGNER)
+        client = Client.new("us-east-1", "some_access_key", "some_secret_key")
+
+        http = Http.new(SIGNER, client.endpoint)
 
         expect_raises S3::NoSuchKey, "The resource you requested does not exist" do
           http.post("/")
@@ -189,7 +221,9 @@ module Awscr::S3
         WebMock.stub(:post, "https://s3.amazonaws.com/?")
           .to_return(status: 404)
 
-        http = Http.new(SIGNER)
+        client = Client.new("us-east-1", "some_access_key", "some_secret_key")
+
+        http = Http.new(SIGNER, client.endpoint)
 
         expect_raises S3::Exception do
           http.post("/")
@@ -202,14 +236,18 @@ module Awscr::S3
         WebMock.stub(:delete, "https://s3.amazonaws.com/?")
           .with(headers: {"x-amz-mfa" => "123456"})
 
-        Http.new(SIGNER).delete("/", headers: {"x-amz-mfa" => "123456"})
+        client = Client.new("us-east-1", "some_access_key", "some_secret_key")
+
+        Http.new(SIGNER, client.endpoint).delete("/", headers: {"x-amz-mfa" => "123456"})
       end
 
       it "handles aws specific errors" do
         WebMock.stub(:delete, "https://s3.amazonaws.com/?")
           .to_return(status: 404, body: ERROR_BODY)
 
-        http = Http.new(SIGNER)
+        client = Client.new("us-east-1", "some_access_key", "some_secret_key")
+
+        http = Http.new(SIGNER, client.endpoint)
 
         expect_raises S3::NoSuchKey, "The resource you requested does not exist" do
           http.delete("/")
@@ -220,7 +258,9 @@ module Awscr::S3
         WebMock.stub(:delete, "https://s3.amazonaws.com/?")
           .to_return(status: 404)
 
-        http = Http.new(SIGNER)
+        client = Client.new("us-east-1", "some_access_key", "some_secret_key")
+
+        http = Http.new(SIGNER, client.endpoint)
 
         expect_raises S3::Exception do
           http.delete("/")
