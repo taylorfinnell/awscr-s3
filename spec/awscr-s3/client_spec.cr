@@ -25,25 +25,25 @@ module Awscr::S3
       it "sets the correct endpoint" do
         client = Client.new("us-east-1", "some_access_key", "some_secret_key")
 
-        client.endpoint.should eq "https://s3.amazonaws.com/"
+        client.endpoint.to_s.should eq "https://s3.amazonaws.com"
       end
 
       it "sets the correct endpoint with a defined region" do
         client = Client.new("eu-west-1", "some_access_key", "some_secret_key")
 
-        client.endpoint.should eq "https://s3-eu-west-1.amazonaws.com/"
+        client.endpoint.to_s.should eq "https://s3-eu-west-1.amazonaws.com"
       end
 
       it "can set a custom endpoint" do
         client = Client.new("eu-west-1", "some_access_key", "some_secret_key", endpoint: "https://nyc3.digitaloceanspaces.com")
 
-        client.endpoint.should eq "https://nyc3.digitaloceanspaces.com/"
+        client.endpoint.to_s.should eq "https://nyc3.digitaloceanspaces.com"
       end
 
       it "can set a custom endpoint with a port" do
         client = Client.new("eu-west-1", "some_access_key", "some_secret_key", endpoint: "http://127.0.0.1:9000")
 
-        client.endpoint.should eq "http://127.0.0.1:9000/"
+        client.endpoint.to_s.should eq "http://127.0.0.1:9000"
       end
     end
 
