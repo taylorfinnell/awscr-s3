@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [0.9.0] - 2025-04-12
+
 ### Added
 
 - Add option to include port in presigned url. (#106, thanks @taylorfinnell)
@@ -21,7 +23,7 @@
 
 ### Changed
 
-- Migrating more code to use the new session key API. (#115, @philipp-classen)
+- Migrating more code to use the new session key API. (#115, thanks @philipp-classen)
 - Bump awscr-signer to v0.9.0. (#120, thanks @miry)
 
 ## [0.8.3] - 2021-09-16
@@ -35,5 +37,6 @@
 
 - Adds `Awscr::S3::Client#copy_object(bucket, source, destination, headers)`. (#100, thanks @caspiano)
 
-[Unreleased]: https://github.com/taylorfinnell/awscr-s3/compare/v0.8.3...HEAD
+[Unreleased]: https://github.com/taylorfinnell/awscr-s3/compare/v0.9.0...HEAD
+[0.9.0]: https://github.com/taylorfinnell/awscr-s3/compare/v0.8.3...v0.9.0
 [0.8.3]: https://github.com/taylorfinnell/awscr-s3/compare/v0.8.2...v0.8.3
