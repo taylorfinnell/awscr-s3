@@ -6,7 +6,7 @@ module Awscr::S3
   class Http
     def initialize(
       @signer : Awscr::Signer::Signers::Interface,
-      @endpoint : URI
+      @endpoint : URI,
     )
     end
 
