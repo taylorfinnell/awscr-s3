@@ -6,16 +6,14 @@ module Awscr
       # Represents the URL and fields required to send a HTTP form POST to S3
       # for object uploading.
       class Post
-        def initialize(@region : String, @aws_access_key : String,
-                       @aws_secret_key : String, @aws_session_key : String? = nil,
-                       @signer : Symbol = :v4)
+        def initialize(
+          @region : String,
+          @aws_access_key : String,
+          @aws_secret_key : String,
+          @aws_session_key : String? = nil,
+          @signer : Symbol = :v4,
+        )
           @policy = Policy.new
-        end
-
-        @[Deprecated("Use `#initialize(region : String, aws_access_key : String, aws_secret_key : String, aws_session_key : String? = nil, signer : Symbol = :v4)` instead")]
-        def initialize(region : String, aws_access_key : String,
-                       aws_secret_key : String, signer : Symbol = :v4)
-          initialize(region, aws_access_key, aws_secret_key, nil, signer)
         end
 
         # Build a post object by adding fields
