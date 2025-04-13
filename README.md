@@ -1,6 +1,7 @@
 # awscr-s3
 
-[![CI](https://github.com/taylorfinnell/awscr-s3/actions/workflows/ci.yml/badge.svg)](https://github.com/taylorfinnell/awscr-s3/actions/workflows/ci.yml)
+[![GitHub Release](https://img.shields.io/github/v/release/taylorfinnell/awscr-s3?style=flat)](https://github.com/taylorfinnell/awscr-s3/releases)
+[![CI](https://github.com/taylorfinnell/awscr-s3/actions/workflows/test.yml/badge.svg)](https://github.com/taylorfinnell/awscr-s3/actions/workflows/test.yml)
 
 A Crystal shard for S3 and compatible services.
 
