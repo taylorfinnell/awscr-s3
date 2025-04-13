@@ -4,6 +4,7 @@
 
 ### Chores
 
+- Add release and fix CI badges to README. (#135, thanks @treagod)
 - Support Crystal 1.16. (#136, thanks @miry)
 
 ## [0.9.0] - 2025-04-12
