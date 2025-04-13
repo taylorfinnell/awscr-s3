@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Chores
+
+- Support Crystal 1.16. (#136, thanks @miry)
+
 ## [0.9.0] - 2025-04-12
 
 ### Added
