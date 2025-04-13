@@ -24,6 +24,10 @@ module Awscr::S3
         http = Http.new(SIGNER, client.endpoint)
 
         http.get("/").status_code.should eq 200
+
+        http = Http.new(SIGNER)
+
+        http.get("https://s3.amazonaws.com/").status_code.should eq 200
       end
 
       it "sets the correct endpoint with a defined region" do
@@ -35,6 +39,9 @@ module Awscr::S3
         http = Http.new(SIGNER, client.endpoint)
 
         http.get("/").status_code.should eq 200
+
+        http = Http.new(SIGNER, "eu-west-1")
+        http.get("https://s3-eu-west-1.amazonaws.com/").status_code.should eq 200
       end
 
       it "can set a custom endpoint" do
@@ -46,6 +53,9 @@ module Awscr::S3
         http = Http.new(SIGNER, client.endpoint)
 
         http.get("/").status_code.should eq 200
+
+        http = Http.new(SIGNER, custom_endpoint: "https://nyc3.digitaloceanspaces.com")
+        http.get("https://nyc3.digitaloceanspaces.com").status_code.should eq 200
       end
 
       it "can set a custom endpoint with a port" do
@@ -55,6 +65,10 @@ module Awscr::S3
         client = Client.new("us-east-1", "some_access_key", "some_secret_key", endpoint: "http://127.0.0.1:9000")
 
         http = Http.new(SIGNER, client.endpoint)
+
+        http.get("/").status_code.should eq 200
+
+        http = Http.new(SIGNER, custom_endpoint: "http://127.0.0.1:9000")
 
         http.get("/").status_code.should eq 200
       end
@@ -72,6 +86,12 @@ module Awscr::S3
         expect_raises S3::NoSuchKey, "The resource you requested does not exist" do
           http.get("/sup")
         end
+
+        http = Http.new(SIGNER)
+
+        expect_raises S3::NoSuchKey, "The resource you requested does not exist" do
+          http.get("/sup")
+        end
       end
 
       it "handles bad responses" do
@@ -81,6 +101,12 @@ module Awscr::S3
         client = Client.new("us-east-1", "some_access_key", "some_secret_key")
 
         http = Http.new(SIGNER, client.endpoint)
+
+        expect_raises S3::Exception do
+          http.get("/sup")
+        end
+
+        http = Http.new(SIGNER)
 
         expect_raises S3::Exception do
           http.get("/sup")
@@ -99,6 +125,12 @@ module Awscr::S3
           expect_raises S3::NoSuchKey, "The resource you requested does not exist" do
             http.get("/sup")
           end
+
+          http = Http.new(SIGNER)
+
+          expect_raises S3::NoSuchKey, "The resource you requested does not exist" do
+            http.get("/sup")
+          end
         end
 
         it "handles bad responses" do
@@ -108,6 +140,12 @@ module Awscr::S3
           client = Client.new("us-east-1", "some_access_key", "some_secret_key")
 
           http = Http.new(SIGNER, client.endpoint)
+
+          expect_raises S3::Exception do
+            http.get("/sup")
+          end
+
+          http = Http.new(SIGNER)
 
           expect_raises S3::Exception do
             http.get("/sup")
@@ -128,6 +166,12 @@ module Awscr::S3
         expect_raises S3::Exception, "The resource you requested does not exist" do
           http.head("/")
         end
+
+        http = Http.new(SIGNER)
+
+        expect_raises S3::Exception, "The resource you requested does not exist" do
+          http.head("/")
+        end
       end
 
       it "handles bad responses" do
@@ -137,6 +181,12 @@ module Awscr::S3
         client = Client.new("us-east-1", "some_access_key", "some_secret_key")
 
         http = Http.new(SIGNER, client.endpoint)
+
+        expect_raises S3::Exception do
+          http.head("/")
+        end
+
+        http = Http.new(SIGNER)
 
         expect_raises S3::Exception do
           http.head("/")
@@ -156,6 +206,12 @@ module Awscr::S3
         expect_raises S3::NoSuchKey, "The resource you requested does not exist" do
           http.put("/", "")
         end
+
+        http = Http.new(SIGNER)
+
+        expect_raises S3::NoSuchKey, "The resource you requested does not exist" do
+          http.put("/", "")
+        end
       end
 
       it "handles bad responses" do
@@ -165,6 +221,12 @@ module Awscr::S3
         client = Client.new("us-east-1", "some_access_key", "some_secret_key")
 
         http = Http.new(SIGNER, client.endpoint)
+
+        expect_raises S3::Exception do
+          http.put("/", "")
+        end
+
+        http = Http.new(SIGNER)
 
         expect_raises S3::Exception do
           http.put("/", "")
@@ -180,6 +242,9 @@ module Awscr::S3
 
         http = Http.new(SIGNER, client.endpoint)
         http.put("/document", "abcd")
+
+        http = Http.new(SIGNER)
+        http.put("/document", "abcd")
       end
 
       it "passes additional headers, when provided" do
@@ -190,6 +255,9 @@ module Awscr::S3
         client = Client.new("us-east-1", "some_access_key", "some_secret_key")
 
         http = Http.new(SIGNER, client.endpoint)
+        http.put("/document", "abcd", {"x-amz-meta-name" => "document"})
+
+        http = Http.new(SIGNER)
         http.put("/document", "abcd", {"x-amz-meta-name" => "document"})
       end
     end
@@ -215,6 +283,12 @@ module Awscr::S3
         expect_raises S3::NoSuchKey, "The resource you requested does not exist" do
           http.post("/")
         end
+
+        http = Http.new(SIGNER)
+
+        expect_raises S3::NoSuchKey, "The resource you requested does not exist" do
+          http.post("/")
+        end
       end
 
       it "handles bad responses" do
@@ -224,6 +298,12 @@ module Awscr::S3
         client = Client.new("us-east-1", "some_access_key", "some_secret_key")
 
         http = Http.new(SIGNER, client.endpoint)
+
+        expect_raises S3::Exception do
+          http.post("/")
+        end
+
+        http = Http.new(SIGNER)
 
         expect_raises S3::Exception do
           http.post("/")
@@ -252,6 +332,12 @@ module Awscr::S3
         expect_raises S3::NoSuchKey, "The resource you requested does not exist" do
           http.delete("/")
         end
+
+        http = Http.new(SIGNER)
+
+        expect_raises S3::NoSuchKey, "The resource you requested does not exist" do
+          http.delete("/")
+        end
       end
 
       it "handles bad responses" do
@@ -261,6 +347,12 @@ module Awscr::S3
         client = Client.new("us-east-1", "some_access_key", "some_secret_key")
 
         http = Http.new(SIGNER, client.endpoint)
+
+        expect_raises S3::Exception do
+          http.delete("/")
+        end
+
+        http = Http.new(SIGNER)
 
         expect_raises S3::Exception do
           http.delete("/")
