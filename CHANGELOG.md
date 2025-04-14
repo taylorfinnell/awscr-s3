@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Changed
+
+- Move endpoint to client and expose it. (#130, thanks @treagod)
+
 ### Chores
 
 - Add release and fix CI badges to README. (#135, thanks @treagod)
