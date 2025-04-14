@@ -4,13 +4,21 @@ require "uri"
 
 module Awscr::S3
   class Http
+    @[Deprecated("Use `Http.new(signer, endpoint)` instead")]
     def initialize(@signer : Awscr::Signer::Signers::Interface,
                    @region : String = standard_us_region,
                    @custom_endpoint : String? = nil)
       @endpoint = endpoint
     end
 
-    @endpoint : URI
+    def initialize(
+      @signer : Awscr::Signer::Signers::Interface,
+      @endpoint : URI,
+    )
+      @region = nil
+      @custom_endpoint = nil
+    end
+
     @client : HTTP::Client?
 
     # Issue a DELETE request to the *path* with optional *headers*

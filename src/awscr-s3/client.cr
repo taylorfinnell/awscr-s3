@@ -31,8 +31,19 @@ module Awscr::S3
   # ```
   class Client
     @signer : Awscr::Signer::Signers::Interface
+    getter endpoint : URI
+    getter region : String
 
-    def initialize(@region : String, @aws_access_key : String, @aws_secret_key : String, @aws_session_key : String? = nil, @endpoint : String? = nil, signer : Symbol = :v4)
+    def initialize(
+      @region : String,
+      @aws_access_key : String,
+      @aws_secret_key : String,
+      @aws_session_key : String? = nil,
+      endpoint : String? = nil,
+      signer : Symbol = :v4,
+    )
+      @endpoint = compute_endpoint(@region, endpoint)
+
       @signer = SignerFactory.get(
         version: signer,
         region: @region,
@@ -315,7 +326,15 @@ module Awscr::S3
 
     # :nodoc:
     private def http
-      Http.new(@signer, @region, @endpoint)
+      Http.new(@signer, @endpoint)
+    end
+
+    private def compute_endpoint(region : String, custom_endpoint : String?) : URI
+      return URI.parse(custom_endpoint) if custom_endpoint
+
+      return URI.parse("https://#{SERVICE_NAME}.amazonaws.com") if region == "us-east-1"
+
+      URI.parse("https://#{SERVICE_NAME}-#{region}.amazonaws.com")
     end
   end
 end
