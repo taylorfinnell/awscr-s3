@@ -12,7 +12,7 @@ describe Awscr::S3::DefaultHttpClientFactory do
     response = client.get("/test")
     response.body.should eq "ok"
 
-    signer.called.should be_true
+    signer.called?.should be_true
   end
 end
 
@@ -20,7 +20,7 @@ module Awscr::S3::DefaultHttpClientFactorySpec
   class SpySigner
     include Awscr::Signer::Signers::Interface
 
-    getter called = false
+    getter? called = false
 
     def sign(request : HTTP::Request)
       @called = true
