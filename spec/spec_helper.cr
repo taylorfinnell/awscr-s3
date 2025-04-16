@@ -18,3 +18,4 @@ Spec.after_each do
 end
 
 require "../src/awscr-s3"
+require "./support/**"

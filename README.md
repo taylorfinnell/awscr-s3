@@ -251,6 +251,60 @@ url = Awscr::S3::Presigned::Url.new(options)
 puts url.for(:get) # => "https://foo.ams3.digitaloceanspaces.com/test.txt?X-Amz-Expires=86400&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=ACCESSKEYEXAMPLE%2F20250313%2Funused%2Fs3%2Faws4_request&X-Amz-Date=20250313T235511Z&X-Amz-SignedHeaders=host&X-Amz-Signature=e7b17f3c335ed615bf68845f81c2091814f856b61d05cb5aae3ad664de0f1b6e"
 ```
 
+## Using a Custom HTTP Provider
+
+By default, `awscr-s3` creates a new standard `HTTP::Client` for each request. However, you may want more advanced connection management features, such as pooling or connection reuse. You can accomplish this by supplying your own `HttpClientFactory` to `Awscr::S3::Http` or `Awscr::S3::Client`.
+
+Below is a minimal (and not production-ready) demonstration:
+
+```crystal
+require "awscr-s3"
+require "http"
+
+class PoolingHttpClientFactory < Awscr::S3::HttpClientFactory
+  getter pool : Array(HTTP::Client)
+
+  def initialize(@pool_size : Int32 = 3)
+    @pool = [] of HTTP::Client
+    @created_count : Int32 = 0
+  end
+
+  def acquire_client(endpoint : URI, signer : Awscr::Signer::Signers::Interface) : HTTP::Client
+    if @pool.size > 0
+      @pool.pop_not_nil!
+    elsif @created_count < @pool_size
+      @created_count += 1
+      build_client(endpoint, signer)
+    else
+      raise "No available clients in pool (limit of #{@pool_size} reached)"
+    end
+  end
+
+  def release(client : HTTP::Client?)
+    return unless client
+    @pool << client
+  end
+
+  private def build_client(endpoint : URI, signer : Awscr::Signer::Signers::Interface) : HTTP::Client
+    client = HTTP::Client.new(endpoint)
+    if signer.is_a?(Awscr::Signer::Signers::V4)
+      client.before_request { |req| signer.as(Awscr::Signer::Signers::V4).sign(req, encode_path: false) }
+    else
+      client.before_request { |req| signer.sign(req) }
+    end
+    client
+  end
+end
+
+client = Awscr::S3::Client.new(
+  "nyc3",
+  "key",
+  "secret",
+  endpoint: "https://nyc3.digitaloceanspaces.com",
+  client_factory: PoolingHttpClientFactory.new,
+)
+```
+
 ## Developing `awscr-s3`
 
 To develop and run tests, use the following commands:

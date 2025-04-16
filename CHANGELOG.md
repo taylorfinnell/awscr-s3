@@ -5,6 +5,7 @@
 ### Changed
 
 - Move endpoint to client and expose it. (#130, thanks @treagod)
+- Introduce a factory-based mechanism for `Awscr::S3::Http`, allowing for custom connection strategies (e.g. pooling). (#XXX, thanks @treagod)
 
 ### Chores
 
@@ -14,6 +15,11 @@
 ### Removed
 
 - The presigned old interfaces without aws_session_key argument. (#137, thanks @miry)
+
+### Breaking
+
+- `Awscr::S3::Http` no longer caches a single `HTTP::Client` for all requests. By default, each request now acquires a fresh client via the new factory. If you relied on persistent keep-alives or a single client across requests, consider implementing a custom factory to retain the old behavior.
+
 
 ## [0.9.0] - 2025-04-12
 

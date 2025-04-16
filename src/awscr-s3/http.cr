@@ -7,19 +7,19 @@ module Awscr::S3
     @[Deprecated("Use `Http.new(signer, endpoint)` instead")]
     def initialize(@signer : Awscr::Signer::Signers::Interface,
                    @region : String = standard_us_region,
-                   @custom_endpoint : String? = nil)
+                   @custom_endpoint : String? = nil,
+                   @factory : HttpClientFactory = DefaultHttpClientFactory.new)
       @endpoint = endpoint
     end
 
     def initialize(
       @signer : Awscr::Signer::Signers::Interface,
       @endpoint : URI,
+      @factory : HttpClientFactory = DefaultHttpClientFactory.new,
     )
       @region = nil
       @custom_endpoint = nil
     end
-
-    @client : HTTP::Client?
 
     # Issue a DELETE request to the *path* with optional *headers*
     #
@@ -92,12 +92,14 @@ module Awscr::S3
       retries = 0
 
       loop do
-        resp = http.exec(method, path, headers, body)
+        client = @factory.acquire_client(@endpoint, @signer)
+        resp = client.exec(method, path, headers, body)
         return handle_response!(resp)
       rescue ex : IO::Error
         raise ex if retries > 2
-        @client = nil
         retries += 1
+      ensure
+        @factory.release(client)
       end
     end
 
@@ -105,13 +107,15 @@ module Awscr::S3
       retries = 0
 
       loop do
-        return http.exec(method, path, headers, body) do |resp|
+        client = @factory.acquire_client(@endpoint, @signer)
+        return client.exec(method, path, headers, body) do |resp|
           yield handle_response!(resp)
         end
       rescue ex : IO::Error
         raise ex if retries > 2
-        @client = nil
         retries += 1
+      ensure
+        @factory.release(client)
       end
     end
 
@@ -141,25 +145,6 @@ module Awscr::S3
     # :nodoc:
     private def default_endpoint : URI
       URI.parse("https://#{SERVICE_NAME}.amazonaws.com")
-    end
-
-    # :nodoc:
-    private def http
-      @client ||= create_client(@endpoint, @signer)
-    end
-
-    private def create_client(endpoint, signer)
-      HTTP::Client.new(endpoint).tap do |client|
-        # When we are using V4 we must tell the signer to skip encoding the path
-        # because we already did that
-        if signer.is_a?(Awscr::Signer::Signers::V4)
-          client.before_request do |request|
-            signer.as(Awscr::Signer::Signers::V4).sign(request, encode_path: false)
-          end
-        else
-          client.before_request { |request| signer.sign(request) }
-        end
-      end
     end
   end
 end
