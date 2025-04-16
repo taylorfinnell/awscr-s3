@@ -6,18 +6,8 @@ module Awscr::S3
   # for each request.
   class DefaultHttpClientFactory < HttpClientFactory
     # Acquires a new `HTTP::Client` instance configured for the given endpoint and signer.
-    def acquire_client(endpoint : URI, signer : Awscr::Signer::Signers::Interface) : HTTP::Client
-      client = HTTP::Client.new(endpoint)
-      attach_signer(client, signer)
-      client
-    end
-
-    private def attach_signer(client, signer)
-      if signer.is_a?(Awscr::Signer::Signers::V4)
-        client.before_request { |req| signer.as(Awscr::Signer::Signers::V4).sign(req, encode_path: false) }
-      else
-        client.before_request { |req| signer.sign(req) }
-      end
+    def acquire_raw_client(endpoint : URI, signer : Awscr::Signer::Signers::Interface) : HTTP::Client
+      HTTP::Client.new(endpoint)
     end
   end
 end

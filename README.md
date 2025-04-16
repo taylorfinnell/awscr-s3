@@ -263,18 +263,18 @@ require "http"
 
 class PoolingHttpClientFactory < Awscr::S3::HttpClientFactory
   getter pool : Array(HTTP::Client)
+  @created_count : Int32 = 0
 
   def initialize(@pool_size : Int32 = 3)
     @pool = [] of HTTP::Client
-    @created_count : Int32 = 0
   end
 
-  def acquire_client(endpoint : URI, signer : Awscr::Signer::Signers::Interface) : HTTP::Client
+  def acquire_raw_client(endpoint : URI, signer : Awscr::Signer::Signers::Interface) : HTTP::Client
     if @pool.size > 0
-      @pool.pop_not_nil!
+      @pool.pop.not_nil!
     elsif @created_count < @pool_size
       @created_count += 1
-      build_client(endpoint, signer)
+      HTTP::Client.new(endpoint)
     else
       raise "No available clients in pool (limit of #{@pool_size} reached)"
     end
@@ -284,25 +284,7 @@ class PoolingHttpClientFactory < Awscr::S3::HttpClientFactory
     return unless client
     @pool << client
   end
-
-  private def build_client(endpoint : URI, signer : Awscr::Signer::Signers::Interface) : HTTP::Client
-    client = HTTP::Client.new(endpoint)
-    if signer.is_a?(Awscr::Signer::Signers::V4)
-      client.before_request { |req| signer.as(Awscr::Signer::Signers::V4).sign(req, encode_path: false) }
-    else
-      client.before_request { |req| signer.sign(req) }
-    end
-    client
-  end
 end
-
-client = Awscr::S3::Client.new(
-  "nyc3",
-  "key",
-  "secret",
-  endpoint: "https://nyc3.digitaloceanspaces.com",
-  client_factory: PoolingHttpClientFactory.new,
-)
 ```
 
 ## Developing `awscr-s3`
