@@ -11,7 +11,7 @@ module Awscr::S3
     #
     # Override this method if you need custom logic beyond standard signing.
     def acquire_client(endpoint : URI, signer : Awscr::Signer::Signers::Interface) : HTTP::Client
-      client = acquire_raw_client(endpoint, signer)
+      client = acquire_raw_client(endpoint)
       attach_signer(client, signer)
       client
     end
@@ -20,7 +20,7 @@ module Awscr::S3
     #
     # Subclasses must implement this method to construct or retrieve a client instance.
     # The returned client is not expected to have a signing hook attached yet.
-    abstract def acquire_raw_client(endpoint : URI, signer : Awscr::Signer::Signers::Interface) : HTTP::Client
+    abstract def acquire_raw_client(endpoint : URI) : HTTP::Client
 
     # Releases the given HTTP client. This is called when the client is no longer needed.
     def release(client : HTTP::Client?)

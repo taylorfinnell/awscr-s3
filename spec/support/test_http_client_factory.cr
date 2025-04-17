@@ -4,7 +4,7 @@ class TestHttpClientFactory < Awscr::S3::HttpClientFactory
   getter acquired_count = 0
   getter released_count = 0
 
-  def acquire_raw_client(endpoint : URI, signer : Awscr::Signer::Signers::Interface) : HTTP::Client
+  def acquire_raw_client(endpoint : URI) : HTTP::Client
     @acquired_count += 1
     HTTP::Client.new(endpoint)
   end

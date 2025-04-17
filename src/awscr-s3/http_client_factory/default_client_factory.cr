@@ -6,7 +6,7 @@ module Awscr::S3
   # for each request.
   class DefaultHttpClientFactory < HttpClientFactory
     # Acquires a new `HTTP::Client` instance configured for the given endpoint and signer.
-    def acquire_raw_client(endpoint : URI, signer : Awscr::Signer::Signers::Interface) : HTTP::Client
+    def acquire_raw_client(endpoint : URI) : HTTP::Client
       HTTP::Client.new(endpoint)
     end
   end

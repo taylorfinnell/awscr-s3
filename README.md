@@ -269,7 +269,7 @@ class PoolingHttpClientFactory < Awscr::S3::HttpClientFactory
     @pool = [] of HTTP::Client
   end
 
-  def acquire_raw_client(endpoint : URI, signer : Awscr::Signer::Signers::Interface) : HTTP::Client
+  def acquire_raw_client(endpoint : URI) : HTTP::Client
     if @pool.size > 0
       @pool.pop.not_nil!
     elsif @created_count < @pool_size
