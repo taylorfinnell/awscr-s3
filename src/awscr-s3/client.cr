@@ -1,5 +1,6 @@
 require "./responses/*"
 require "./paginators/*"
+require "./http_client_factory/*"
 require "uri"
 require "xml/builder"
 require "digest"
@@ -34,6 +35,8 @@ module Awscr::S3
     getter endpoint : URI
     getter region : String
 
+    private getter http
+
     def initialize(
       @region : String,
       @aws_access_key : String,
@@ -41,6 +44,7 @@ module Awscr::S3
       @aws_session_key : String? = nil,
       endpoint : String? = nil,
       signer : Symbol = :v4,
+      client_factory : HttpClientFactory = DefaultHttpClientFactory.new,
     )
       @endpoint = compute_endpoint(@region, endpoint)
 
@@ -51,6 +55,7 @@ module Awscr::S3
         aws_secret_key: @aws_secret_key,
         aws_session_key: @aws_session_key
       )
+      @http = Http.new(@signer, @endpoint, client_factory)
     end
 
     # List s3 buckets
@@ -322,11 +327,6 @@ module Awscr::S3
       }
 
       Paginator::ListObjectsV2.new(http, params)
-    end
-
-    # :nodoc:
-    private def http
-      Http.new(@signer, @endpoint)
     end
 
     private def compute_endpoint(region : String, custom_endpoint : String?) : URI
