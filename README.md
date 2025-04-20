@@ -271,7 +271,7 @@ class PoolingHttpClientFactory < Awscr::S3::HttpClientFactory
 
   def acquire_raw_client(endpoint : URI) : HTTP::Client
     if @pool.size > 0
-      @pool.pop.not_nil!
+      @pool.pop
     elsif @created_count < @pool_size
       @created_count += 1
       HTTP::Client.new(endpoint)
