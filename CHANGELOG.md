@@ -5,7 +5,7 @@
 ### Changed
 
 - Move endpoint to client and expose it. (#130, thanks @treagod)
-- Introduce a factory-based mechanism for `Awscr::S3::Http`, allowing for custom connection strategies (e.g. pooling). (#XXX, thanks @treagod)
+- Introduce a factory-based mechanism for `Awscr::S3::Http`, allowing for custom connection strategies (e.g. pooling). (#139, thanks @treagod)
 
 ### Chores
 

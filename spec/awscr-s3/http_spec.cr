@@ -76,7 +76,7 @@ module Awscr::S3
 
     describe "client_factory" do
       it "calls `#acquire_client` and `#release` for each request" do
-        factory = TestHttpClientFactory.new
+        factory = HttpClientFactoryMock.new
         http = Http.new(SIGNER, URI.parse("https://s3.amazonaws.com"), factory)
 
         WebMock.stub(:get, "https://s3.amazonaws.com/path").to_return(status: 200)

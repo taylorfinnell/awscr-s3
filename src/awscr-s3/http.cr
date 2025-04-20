@@ -4,12 +4,12 @@ require "uri"
 
 module Awscr::S3
   class Http
-    @[Deprecated("Use `Http.new(signer, endpoint)` instead")]
+    @[Deprecated("Use `Http.new(signer, endpoint, factory)` instead")]
     def initialize(@signer : Awscr::Signer::Signers::Interface,
                    @region : String = standard_us_region,
-                   @custom_endpoint : String? = nil,
-                   @factory : HttpClientFactory = DefaultHttpClientFactory.new)
+                   @custom_endpoint : String? = nil,)
       @endpoint = endpoint
+      @factory = DefaultHttpClientFactory.new
     end
 
     def initialize(

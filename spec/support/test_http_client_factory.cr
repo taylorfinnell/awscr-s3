@@ -1,6 +1,6 @@
 require "./spec_helper"
 
-class TestHttpClientFactory < Awscr::S3::HttpClientFactory
+class HttpClientFactoryMock < Awscr::S3::HttpClientFactory
   getter acquired_count = 0
   getter released_count = 0
 
