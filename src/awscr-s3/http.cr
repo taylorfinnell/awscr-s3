@@ -4,21 +4,11 @@ require "uri"
 
 module Awscr::S3
   class Http
-    @[Deprecated("Use `Http.new(signer, endpoint, factory)` instead")]
-    def initialize(@signer : Awscr::Signer::Signers::Interface,
-                   @region : String = standard_us_region,
-                   @custom_endpoint : String? = nil,)
-      @endpoint = endpoint
-      @factory = DefaultHttpClientFactory.new
-    end
-
     def initialize(
       @signer : Awscr::Signer::Signers::Interface,
       @endpoint : URI,
       @factory : HttpClientFactory = DefaultHttpClientFactory.new,
     )
-      @region = nil
-      @custom_endpoint = nil
     end
 
     # Issue a DELETE request to the *path* with optional *headers*
@@ -128,23 +118,6 @@ module Awscr::S3
       else
         raise S3::Exception.new("server error: #{response.status_code}")
       end
-    end
-
-    # :nodoc:
-    private def endpoint : URI
-      return URI.parse(@custom_endpoint.to_s) if @custom_endpoint
-      return default_endpoint if @region == standard_us_region
-      URI.parse("https://#{SERVICE_NAME}-#{@region}.amazonaws.com")
-    end
-
-    # :nodoc:
-    private def standard_us_region
-      "us-east-1"
-    end
-
-    # :nodoc:
-    private def default_endpoint : URI
-      URI.parse("https://#{SERVICE_NAME}.amazonaws.com")
     end
   end
 end

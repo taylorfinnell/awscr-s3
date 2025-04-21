@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Removed
+
+- The deprecated HTTP initialization interface. (#144, thanks @miry)
+
 ## [0.10.0] - 2025-04-21
 
 ### Changed
