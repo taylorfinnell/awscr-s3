@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [0.10.0] - 2025-04-21
+
 ### Changed
 
 - Move endpoint to client and expose it. (#130, thanks @treagod)
@@ -19,7 +21,6 @@
 ### Breaking
 
 - `Awscr::S3::Http` no longer caches a single `HTTP::Client` for all requests. By default, each request now acquires a fresh client via the new factory. If you relied on persistent keep-alives or a single client across requests, consider implementing a custom factory to retain the old behavior.
-
 
 ## [0.9.0] - 2025-04-12
 
@@ -56,6 +57,7 @@
 
 - Adds `Awscr::S3::Client#copy_object(bucket, source, destination, headers)`. (#100, thanks @caspiano)
 
-[Unreleased]: https://github.com/taylorfinnell/awscr-s3/compare/v0.9.0...HEAD
+[Unreleased]: https://github.com/taylorfinnell/awscr-s3/compare/v0.10.0...HEAD
+[0.10.0]: https://github.com/taylorfinnell/awscr-s3/compare/v0.9.0...v0.10.0
 [0.9.0]: https://github.com/taylorfinnell/awscr-s3/compare/v0.8.3...v0.9.0
 [0.8.3]: https://github.com/taylorfinnell/awscr-s3/compare/v0.8.2...v0.8.3
