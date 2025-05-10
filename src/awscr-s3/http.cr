@@ -109,10 +109,10 @@ module Awscr::S3
         return handle_response!(resp)
       rescue ex : Awscr::S3::Exception
         raise ex
-      rescue ex # : IO::Error
+      rescue ex : IO::Error
         STDERR.flush
         STDERR.print "*******************\n"
-        STDERR.print "#{__FILE__}:#{__LINE__} > exec : '#{ex}`\n"
+        STDERR.print "#{__FILE__}:#{__LINE__} > exec : '#{ex}` '#{ex.target}'\n"
         ex.inspect_with_backtrace(STDERR)
         STDERR.print "----------------\n"
         STDERR.print "  cause: #{ex.cause}" if ex.cause
