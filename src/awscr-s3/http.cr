@@ -18,8 +18,21 @@ module Awscr::S3
     # http.delete("/")
     # ```
     def delete(path, headers : Hash(String, String) = Hash(String, String).new)
+      puts "\n\n> #{__FILE__}:#{__LINE__} delete"
+      puts "  headers = #{headers}"
       headers = HTTP::Headers.new.merge!(headers)
-      exec("DELETE", path, headers: headers)
+      puts "  headers = #{headers}"
+      r = exec("DELETE", path, headers: headers)
+      puts "  response = #{r}"
+      r
+      # rescue ex
+      #   STDERR.flush
+      #   STDERR.print "#{__FILE__}:#{__LINE__} > delete : Unhandled exception: '#{ex}'\n"
+      #   ex.inspect_with_backtrace(STDERR)
+      #   STDERR.print "----------------\n"
+      #   STDERR.print "  cause: #{ex.cause}" if ex.cause
+      #   STDERR.flush
+      #   raise ex
     end
 
     # Issue a POST request to the *path* with optional *headers*, and *body*
@@ -79,13 +92,31 @@ module Awscr::S3
     end
 
     private def exec(method : String, path : String, headers, body = nil)
+      STDERR.puts "\n\n> #{__FILE__}:#{__LINE__} exec"
       retries = 0
 
       loop do
+        STDERR.puts " > loop #{retries}"
         client = @factory.acquire_client(@endpoint, @signer)
+        STDERR.puts "   client = #{client}"
+        STDOUT.flush
         resp = client.exec(method, path, headers, body)
+        STDERR.print "#{__FILE__}:#{__LINE__} E:   resp = client.exec (#{resp})\n\n"
+        STDERR.puts ""
+        STDERR.puts "   resp = #{resp}"
+        STDERR.puts "   resp.body = #{resp.body}"
         return handle_response!(resp)
+      rescue ex : Awscr::S3::Exception
+        raise ex
       rescue ex : IO::Error
+        # STDERR.flush
+        # STDERR.print "*******************\n"
+        # STDERR.print "#{__FILE__}:#{__LINE__} > exec : '#{ex}` '#{ex.target}' '#{ex.target}'\n"
+        # STDERR.print "   STDOUT = #{STDOUT}\n"
+        # ex.inspect_with_backtrace(STDERR)
+        # STDERR.print "----------------\n"
+        # STDERR.print "  cause: #{ex.cause}" if ex.cause
+        # STDERR.flush
         Awscr::S3::Log.debug exception: ex, &.emit("Could not process a request", retries: retries, method: method, path: path)
         raise ex if retries > 2
         retries += 1
@@ -95,6 +126,7 @@ module Awscr::S3
     end
 
     private def exec(method : String, path : String, headers, body = nil, &)
+      puts "\n\n> #{__FILE__}:#{__LINE__} exec(&)"
       retries = 0
 
       loop do
@@ -103,6 +135,11 @@ module Awscr::S3
           yield handle_response!(resp)
         end
       rescue ex : IO::Error
+        STDERR.flush
+        STDERR.print "#{__FILE__}:#{__LINE__} > exec(&) : Unhandled exception #{ex.target}: #{ex}"
+        ex.inspect_with_backtrace(STDERR)
+        STDERR.print "\n\n > cause: #{ex.cause}" if ex.cause
+        STDERR.flush
         Awscr::S3::Log.debug exception: ex, &.emit("Could not process a request", retries: retries, method: method, path: path)
         raise ex if retries > 2
         retries += 1
