@@ -6,6 +6,10 @@
 
 - The deprecated HTTP initialization interface. (#144, thanks @miry)
 
+### Changed
+
+- The `bulk_delete` method now raises `ArgumentError` instead of `S3::Exception` when the number of keys is 0 or exceeds 1000. (#145, thanks @miry)
+
 ## [0.10.0] - 2025-04-21
 
 ### Changed
