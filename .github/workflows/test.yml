@@ -52,7 +52,7 @@ jobs:
         run: shards install
 
       - name: "[Test] Run specs"
-        run: crystal spec -v --error-trace --no-color
+        run: crystal spec -v --error-trace --no-color --error-on-warnings --order 59005 --time
 
       - name: "[Test] Compile files with release flag"
         run: crystal build --release --stats --progress src/awscr-s3.cr
