@@ -10,17 +10,13 @@ describe "minio flow", tags: "integration" do
   )
   bucket_name = "awscr-s3-test-#{UUID.random}"
 
+  before_all do
+    cleanup_buckets(client)
+    client.put_bucket(bucket_name)
+  end
+
   after_all do
-    list_buckets = client.list_buckets.buckets.map(&.name)
-    list_buckets.each do |bucket|
-      next if !bucket.starts_with?("awscr-s3-test-")
-      objects = [] of String
-      client.list_objects(bucket).each do |resp|
-        objects += resp.contents.map(&.key)
-      end
-      client.batch_delete(bucket, objects)
-      client.delete_bucket(bucket)
-    end
+    cleanup_buckets(client)
   end
 
   it "lists buckets" do
@@ -29,11 +25,12 @@ describe "minio flow", tags: "integration" do
   end
 
   it "creates a bucket" do
-    actual = client.put_bucket(bucket_name)
+    name = bucket_name + "createbucket"
+    actual = client.put_bucket(name)
     actual.should_not eq(nil)
 
     list_buckets = client.list_buckets.buckets.map(&.name)
-    list_buckets.should contain(bucket_name)
+    list_buckets.should contain(name)
   end
 
   it "deletes a bucket" do
@@ -97,5 +94,20 @@ describe "minio flow", tags: "integration" do
       resp.status_code.should eq(200)
       resp.body_io.gets.should eq("Howdy")
     end
+  end
+end
+
+def cleanup_buckets(client)
+  WebMock.allow_net_connect = true
+
+  list_buckets = client.list_buckets.buckets.map(&.name)
+  list_buckets.each do |bucket|
+    next if !bucket.starts_with?("awscr-s3-test-")
+    objects = [] of String
+    client.list_objects(bucket).each do |resp|
+      objects += resp.contents.map(&.key)
+    end
+    client.batch_delete(bucket, objects) if objects.size > 0
+    client.delete_bucket(bucket)
   end
 end
