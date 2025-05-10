@@ -78,7 +78,7 @@ module Awscr::S3
       end
     end
 
-    private def exec(method, path, headers, body = nil)
+    private def exec(method : String, path : String, headers, body = nil)
       retries = 0
 
       loop do
@@ -86,6 +86,7 @@ module Awscr::S3
         resp = client.exec(method, path, headers, body)
         return handle_response!(resp)
       rescue ex : IO::Error
+        Awscr::S3::Log.debug exception: ex, &.emit("Could not process a request", retries: retries, method: method, path: path)
         raise ex if retries > 2
         retries += 1
       ensure
@@ -93,7 +94,7 @@ module Awscr::S3
       end
     end
 
-    private def exec(method, path, headers, body = nil, &)
+    private def exec(method : String, path : String, headers, body = nil, &)
       retries = 0
 
       loop do
@@ -102,6 +103,7 @@ module Awscr::S3
           yield handle_response!(resp)
         end
       rescue ex : IO::Error
+        Awscr::S3::Log.debug exception: ex, &.emit("Could not process a request", retries: retries, method: method, path: path)
         raise ex if retries > 2
         retries += 1
       ensure

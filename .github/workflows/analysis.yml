@@ -13,13 +13,19 @@ jobs:
     steps:
       - name: "[Git] Checkout code"
         uses: actions/checkout@v4
+
       - uses: crystal-lang/install-crystal@v1
+        name: "[Setup] Install Crystal"
+
       - name: "[Setup] Install dependencies"
         run: shards install
+
       - name: "[Analysis] Run static analysis"
         run: ./bin/ameba
+
       - name: "[Analysis]  Check formatting"
         run: crystal tool format --check
+
       - name: "[Analysis] Yaml Linting"
         uses: ibiqlik/action-yamllint@v3
         with:

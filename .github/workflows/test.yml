@@ -17,7 +17,7 @@ jobs:
           - 1.13.3
           - 1.14.1
           - 1.15.1
-          - 1.16.1
+          - 1.16.2
         experimental: [false]
         include:
           - crystal_version: nightly
@@ -45,6 +45,7 @@ jobs:
         uses: actions/checkout@v4
 
       - uses: crystal-lang/install-crystal@v1
+        name: "[Setup] Install Crystal"
         with:
           crystal: ${{ matrix.crystal_version }}
 
@@ -54,6 +55,9 @@ jobs:
       - name: "[Test] Run specs"
         # NOTICE: Set order 1 until fix the problem with https://github.com/crystal-lang/crystal/issues/9065
         run: crystal spec -v --error-trace --no-color --error-on-warnings --order 59005 --time
+        env:
+          LOG_LEVEL: trace
+          CRYSTAL_WORKERS: 1
 
       - name: "[Test] Compile files with release flag"
         run: crystal build --release --stats --progress src/awscr-s3.cr
