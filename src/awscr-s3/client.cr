@@ -217,7 +217,9 @@ module Awscr::S3
     # p resp.success? # => true
     # ```
     def batch_delete(bucket, keys : Array(String))
-      raise S3::Exception.new("More than 1000 keys is not yet supported.") if keys.size > 1_000
+      size = keys.size
+      raise ArgumentError.new("Batch delete failed: no keys provided. Provide at least one key.") if size == 0
+      raise ArgumentError.new("Batch delete failed: maximum of 1000 keys allowed (got #{size}).") if size > 1_000
 
       body = ::XML.build do |xml|
         xml.element("Delete") do
@@ -236,6 +238,9 @@ module Awscr::S3
         "Content-Length" => body.bytesize.to_s,
       }
 
+      Awscr::S3::Log.with_context(body: body) do
+        Awscr::S3::Log.debug { "Deleting #{keys.size} key(s) from bucket '#{bucket}'" }
+      end
       resp = http.post("/#{bucket}?delete", body: body, headers: headers)
 
       Response::BatchDeleteOutput.from_response(resp)

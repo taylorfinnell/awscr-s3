@@ -96,12 +96,22 @@ module Awscr::S3
         result.deleted_objects.should eq([Response::BatchDeleteOutput::DeletedObject.new("testkey", "", "")])
       end
 
+      it "raises if zero keys" do
+        keys = [] of String
+
+        client = Client.new("us-east-1", "key", "secret")
+
+        expect_raises ArgumentError do
+          client.batch_delete("bucket", keys)
+        end
+      end
+
       it "raises if too many keys" do
         keys = ["test"] * 1001
 
         client = Client.new("us-east-1", "key", "secret")
 
-        expect_raises S3::Exception do
+        expect_raises ArgumentError do
           client.batch_delete("bucket", keys)
         end
       end
