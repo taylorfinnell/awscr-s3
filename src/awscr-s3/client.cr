@@ -176,9 +176,20 @@ module Awscr::S3
     # p resp # => true
     # ```
     def abort_multipart_upload(bucket : String, object : String, upload_id : String)
+      puts "\n\n> #{__FILE__}:#{__LINE__} abort_multipart_upload"
+      puts "  http = #{http}"
       resp = http.delete("/#{bucket}/#{Util.encode(object)}?uploadId=#{upload_id}")
+      puts "  resp = #{resp}"
 
       resp.status_code == 204
+    rescue ex
+      STDERR.flush
+      STDERR.print "#{__FILE__}:#{__LINE__} > abort_multipart_upload : Unhandled exception: #{ex}"
+      ex.inspect_with_backtrace(STDERR)
+      STDERR.print "----------------\n"
+      STDERR.print "  cause: #{ex.cause}" if ex.cause
+      STDERR.flush
+      raise ex
     end
 
     # Get information about a bucket, useful for determining if a bucket exists.
