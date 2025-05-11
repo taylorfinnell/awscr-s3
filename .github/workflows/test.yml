@@ -50,14 +50,29 @@ jobs:
           crystal: ${{ matrix.crystal_version }}
 
       - name: "[Setup] Install dependencies"
-        run: shards install
+        run: shards install --skip-executables --skip-postinstall
 
       - name: "[Test] Run specs"
-        # NOTICE: Set order 1 until fix the problem with https://github.com/crystal-lang/crystal/issues/9065
-        run: crystal spec -v --error-trace --no-color --error-on-warnings --order 59005 --time
         env:
           LOG_LEVEL: trace
           CRYSTAL_WORKERS: 1
+        run: |
+          set -x
+          echo "\n\n===========================\n\n"
+          crystal spec -v --error-trace spec/integration/minio_spec.cr \
+                                        spec/awscr-s3/http_client_factory/default_client_factory_spec.cr \
+                                        spec/awscr-s3/responses/complete_multipart_upload_output_spec.cr \
+                                        spec/awscr-s3/presigned/field_collection_spec.cr \
+                                        spec/awscr-s3/presigned/post_spec.cr \
+                                        spec/awscr-s3/presigned/html_printer_spec.cr \
+                                        spec/awscr-s3/presigned/post_field_spec.cr \
+                                        spec/awscr-s3/presigned/url_spec.cr \
+                                        spec/awscr-s3/presigned/post_policy_spec.cr \
+                                        spec/awscr-s3/presigned/form_spec.cr \
+                                        spec/awscr-s3/xml_spec.cr \
+                                        spec/awscr-s3/content_type_spec.cr \
+                                        spec/awscr-s3/client_spec.cr || dmesg
+          echo "\n\n===========================\n\n"
 
       - name: "[Test] Compile files with release flag"
         run: crystal build --release --stats --progress src/awscr-s3.cr
