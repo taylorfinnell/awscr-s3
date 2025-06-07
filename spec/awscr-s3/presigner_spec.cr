@@ -74,6 +74,23 @@ module Awscr
                 .should eq("https://examplebucket.s3.amazonaws.com/test.txt?X-Amz-Expires=86400&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAIOSFODNN7EXAMPLE%2F20130524%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20130524T000000Z&X-Amz-SignedHeaders=host&X-Amz-Signature=aeeed9bbccd4d02ee5c0109b86d86835f995330da4c265957d157751f604d404")
             end
           end
+
+          it "with force_path_style" do
+            Timecop.freeze(Time.utc(2013, 5, 24)) do
+              client = Client.new(
+                region: "unused",
+                endpoint: "http://127.0.0.1:9000",
+                aws_access_key: "AKIAIOSFODNN7EXAMPLE",
+                aws_secret_key: "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY",
+              )
+              presigner = Presigner.new(client)
+
+              presigned_url = presigner.presigned_url("examplebucket", "/test.txt", force_path_style: true)
+
+              presigned_url
+                .should eq("http://127.0.0.1:9000/examplebucket/test.txt?X-Amz-Expires=86400&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAIOSFODNN7EXAMPLE%2F20130524%2Funused%2Fs3%2Faws4_request&X-Amz-Date=20130524T000000Z&X-Amz-SignedHeaders=host&X-Amz-Signature=c4a84832797f4186a789b297af55d2c014cd687933995d72247ed339496d878f")
+            end
+          end
         end
       end
     end
