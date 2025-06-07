@@ -37,7 +37,6 @@ module Awscr::S3
 
     protected getter aws_access_key : String
     protected getter aws_secret_key : String
-    protected getter signer : Awscr::Signer::Signers::Interface
 
     private getter http
 
