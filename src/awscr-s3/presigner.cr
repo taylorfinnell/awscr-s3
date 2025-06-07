@@ -18,7 +18,7 @@ module Awscr::S3
       **kwargs,
     )
       opts = hash = {} of String => String
-      kwargs.each { |k, v| hash[k.to_s] = v.to_s }
+      kwargs.each { |k, v| hash[k.to_s.gsub("_", "-")] = v.to_s }
 
       presigned_url(
         bucket: bucket,
@@ -28,7 +28,6 @@ module Awscr::S3
         include_port: include_port,
         force_path_style: force_path_style,
         signer: signer,
-
         additional_options: opts,
       )
     end

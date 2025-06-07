@@ -75,6 +75,60 @@ module Awscr
             end
           end
 
+          it "inserts each option as a query param for v4" do
+            Timecop.freeze(Time.utc(2013, 5, 24)) do
+              client = Client.new(
+                region: "us-east-1",
+                aws_access_key: "AKIAIOSFODNN7EXAMPLE",
+                aws_secret_key: "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY",
+              )
+              presigner = Presigner.new(client)
+
+              url = presigner.presigned_url(
+                "examplebucket",
+                "/test.txt",
+                response_content_type: "text/plain",
+                x_id: "GetObject",
+              )
+
+              url.should match(/response-content-type=text%2Fplain/) # URL-encoded '/'
+              url.should match(/x-id=GetObject/)
+              url.should match(/X-Amz-Signature=[0-9a-f]{64}/)
+            end
+          end
+
+          it "additional_options has the same query params as kwargs" do
+            Timecop.freeze(Time.utc(2013, 5, 24)) do
+              client = Client.new(
+                region: "us-east-1",
+                aws_access_key: "AKIAIOSFODNN7EXAMPLE",
+                aws_secret_key: "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY",
+              )
+              presigner = Presigner.new(client)
+
+              kwargs_urls = presigner.presigned_url(
+                "examplebucket",
+                "/test.txt",
+                foo: "bar",
+                baz: "qux",
+              )
+              additional_options_url = presigner.presigned_url(
+                "examplebucket",
+                "/test.txt",
+                additional_options: {
+                  "baz" => "qux",
+                  "foo" => "bar",
+                }
+              )
+
+              kwargs_urls.should match(/foo=bar/)
+              additional_options_url.should match(/foo=bar/)
+
+              kwargs_urls.should match(/baz=qux/)
+              additional_options_url.should match(/baz=qux/)
+            end
+          end
+
           it "with force_path_style" do
             Timecop.freeze(Time.utc(2013, 5, 24)) do
               client = Client.new(
