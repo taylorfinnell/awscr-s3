@@ -9,6 +9,26 @@ module Awscr::S3
       @region = client.region
     end
 
+    def initialize(
+      @aws_access_key : String,
+      @aws_secret_key : String,
+      @endpoint : URI,
+      @region : String,
+    )
+    end
+
+    # Create a new presigned S3 POST HTML form for browser uploads.
+    #
+    # ### Example
+    # ```
+    # form = presigner.presigned_form(
+    #   bucket: "my-bucket",
+    #   key: "file.txt",
+    #   acl: "public-read",
+    #   content_type: "text/plain",
+    #   conditions: {"x-id" => "PutObject"}
+    # )
+    # ```
     def presigned_form(
       bucket : String,
       key : String? = nil,
@@ -30,12 +50,24 @@ module Awscr::S3
         success_action_status: success_action_status,
         signer: signer,
       ) do |policy|
-        conditions.each do |key, value|
-          policy.condition(key, value)
+        conditions.each do |c_key, value|
+          policy.condition(c_key, value)
         end
       end
     end
 
+    # Create a new presigned S3 POST form with full control over the policy.
+    #
+    # ### Example
+    # ```
+    # form = presigner.presigned_form("my-bucket", "helloworld.png") do |form|
+    #   form.expiration(Time.unix(Time.local.to_unix + 1000))
+    #   form.condition("acl", "public-read")
+    #   form.condition("Content-Type", "image/png")
+    #   form.condition("success_action_status", "201")
+    #   form.condition("x-id", "PutObject")
+    # end
+    # ```
     def presigned_form(
       bucket : String,
       key : String? = nil,
@@ -69,6 +101,16 @@ module Awscr::S3
       form
     end
 
+    # Create a presigned S3 URL using query parameters for a specific method.
+    #
+    # ### Example
+    # ```
+    # url = presigner.presigned_url(
+    #   "my-bucket",
+    #   "image.jpg",
+    #   response_content_disposition: "inline"
+    # )
+    # ```
     def presigned_url(
       bucket : String,
       key : String,
@@ -94,6 +136,20 @@ module Awscr::S3
       )
     end
 
+    # Create a presigned S3 URL with full control over query parameters.
+    #
+    # ### Example
+    # ```
+    # url = presigner.presigned_url(
+    #   "my-bucket",
+    #   "docs/manual.pdf",
+    #   method: :get,
+    #   additional_options: {
+    #     "response-content-disposition" => "inline",
+    #     "x-id"                         => "GetObject",
+    #   }
+    # )
+    # ```
     def presigned_url(
       bucket : String,
       key : String,

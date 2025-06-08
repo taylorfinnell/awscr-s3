@@ -2,6 +2,26 @@ require "../spec_helper"
 
 module Awscr::S3
   describe Presigner do
+    describe "#initialize" do
+      it "accepts a client" do
+        client = Client.new(
+          region: "ap-northeast-1",
+          aws_access_key: "AKIAIOSFODNN7EXAMPLE",
+          aws_secret_key: "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY",
+        )
+        Presigner.new(client)
+      end
+
+      it "accepts single arguments" do
+        Presigner.new(
+          region: "unused",
+          endpoint: URI.parse("http://127.0.0.1:9000"),
+          aws_access_key: "AKIAIOSFODNN7EXAMPLE",
+          aws_secret_key: "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY",
+        )
+      end
+    end
+
     describe "#presigned_form" do
       it "builds a form" do
         client = Client.new(
