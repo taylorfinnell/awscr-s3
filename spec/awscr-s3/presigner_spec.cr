@@ -2,6 +2,110 @@ require "../spec_helper"
 
 module Awscr::S3
   describe Presigner do
+    describe "#presigned_form" do
+      it "builds a form" do
+        client = Client.new(
+          region: "ap-northeast-1",
+          aws_access_key: "AKIAIOSFODNN7EXAMPLE",
+          aws_secret_key: "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY",
+        )
+        presigner = Presigner.new(client)
+        form = presigner.presigned_form(bucket: "2") { }
+
+        form.should be_a(Awscr::S3::Presigned::Form)
+        form.fields.size.should eq 6 # bucket, and all the sig and policy stuff
+      end
+
+      it "generates an HTML form with mandatory fields" do
+        client = Client.new(
+          region: "ap-northeast-1",
+          aws_access_key: "AKIAIOSFODNN7EXAMPLE",
+          aws_secret_key: "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY",
+        )
+        presigner = Presigner.new(client)
+        form = presigner.presigned_form(
+          bucket: "examplebucket",
+          key: "hello.txt",
+          acl: "public-read",
+          content_type: "text/plain",
+          success_action_status: "201"
+        )
+
+        html = form.to_html.to_s
+        html.should match(/name="key" value="hello\.txt"/)
+        html.should match(/name="acl" value="public-read"/)
+        html.should match(/name="Content-Type" value="text\/plain"/)
+        html.should match(/name="success_action_status" value="201"/)
+        html.should match(/<form action="http:\/\/examplebucket\.s3\.amazonaws\.com"/)
+      end
+
+      it "propagates arbitrary extra conditions" do
+        client = Client.new(
+          region: "ap-northeast-1",
+          aws_access_key: "AKIAIOSFODNN7EXAMPLE",
+          aws_secret_key: "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY",
+        )
+        presigner = Presigner.new(client)
+        form = presigner.presigned_form(
+          bucket: "examplebucket",
+          key: "hello.txt",
+          conditions: {"x-id" => "PutObject"}
+        )
+        fields = form.fields.map(&.key)
+        fields.should contain("x-id")
+      end
+
+      it "raises if expires exceeds 7 days" do
+        client = Client.new(
+          region: "ap-northeast-1",
+          aws_access_key: "AKIAIOSFODNN7EXAMPLE",
+          aws_secret_key: "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY",
+        )
+        presigner = Presigner.new(client)
+        expect_raises(ArgumentError) do
+          presigner.presigned_form(
+            bucket: "examplebucket",
+            key: "hello.txt",
+            expires: 700_000
+          )
+        end
+      end
+
+      it "yields the policy object so callers can add conditions" do
+        client = Client.new(
+          region: "ap-northeast-1",
+          aws_access_key: "AKIAIOSFODNN7EXAMPLE",
+          aws_secret_key: "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY",
+        )
+        presigner = Presigner.new(client)
+        form = presigner.presigned_form(
+          bucket: "examplebucket",
+          key: "hello.txt"
+        ) do |policy|
+          policy.condition("x-id", "PutObject")
+        end
+
+        field_keys = form.fields.map(&.key)
+        field_keys.should contain("x-id")
+      end
+
+      it "still honours top-level keyword args when a block is given" do
+        client = Client.new(
+          region: "ap-northeast-1",
+          aws_access_key: "AKIAIOSFODNN7EXAMPLE",
+          aws_secret_key: "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY",
+        )
+        presigner = Presigner.new(client)
+        form = presigner.presigned_form(
+          bucket: "examplebucket",
+          key: "hello.txt",
+          content_type: "text/plain"
+        ) { }
+
+        form.to_html.to_s.should match(/name="Content-Type" value="text\/plain"/)
+      end
+    end
+
     describe "#presigned_url" do
       it "allows signer versions" do
         client = Client.new(
