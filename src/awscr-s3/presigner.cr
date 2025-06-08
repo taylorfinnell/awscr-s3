@@ -29,8 +29,10 @@ module Awscr::S3
         content_type: content_type,
         success_action_status: success_action_status,
         signer: signer,
-        conditions: conditions
-      ) do |_policy|
+      ) do |policy|
+        conditions.each do |key, value|
+          policy.condition(key, value)
+        end
       end
     end
 
@@ -43,7 +45,6 @@ module Awscr::S3
       content_type : String? = nil,
       success_action_status : String? = nil,
       signer : Symbol = :v4,
-      conditions : Hash(String, String) = Hash(String, String).new,
       & : Awscr::S3::Presigned::Policy ->
     )
       raise ArgumentError.new("expires must be 1..604800") if expires <= 0 || expires > 604_800
@@ -61,8 +62,6 @@ module Awscr::S3
         f.condition("acl", acl) if acl
         f.condition("Content-Type", content_type) if content_type
         f.condition("success_action_status", success_action_status) if success_action_status
-
-        conditions.each { |k, v| f.condition(k, v) }
 
         yield f
       end
