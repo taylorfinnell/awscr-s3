@@ -173,11 +173,14 @@ module Awscr::S3
 
         client = Client.new("us-east-1", "key", "secret")
         result = client.start_multipart_upload("bucket", "object")
+        status = HTTP::Status.new(200)
 
         result.should eq(Response::StartMultipartUpload.new(
           "bucket",
           "object",
-          "FxtGq8otGhDtYJa5VYLpPOBQo2niM2a1YR8wgcwqHJ1F1Djflj339mEfpm7NbYOoIg.6bIPeXl2RB82LuAnUkTQUEz_ReIu2wOwawGc0Z4SLERxoXospqANXDazuDmRF"
+          "FxtGq8otGhDtYJa5VYLpPOBQo2niM2a1YR8wgcwqHJ1F1Djflj339mEfpm7NbYOoIg.6bIPeXl2RB82LuAnUkTQUEz_ReIu2wOwawGc0Z4SLERxoXospqANXDazuDmRF",
+          status,
+          "OK"
         ))
       end
 
@@ -218,12 +221,15 @@ module Awscr::S3
 
         client = Client.new("us-east-1", "key", "secret")
         result = client.complete_multipart_upload("bucket", "object", "upload_id", outputs)
+        status = HTTP::Status.new(200)
 
         result.should eq(
           Response::CompleteMultipartUpload.new(
             "https://s3.amazonaws.com/screensnapr-development/test",
             "test",
-            "\"7611c6414e4b58f22ff9f59a2c1767b7-2\""
+            "\"7611c6414e4b58f22ff9f59a2c1767b7-2\"",
+            status,
+            "OK",
           )
         )
       end
@@ -260,8 +266,9 @@ module Awscr::S3
 
         client = Client.new("us-east-1", "key", "secret")
         resp = client.put_object("mybucket", "object.txt", io)
+        status = HTTP::Status.new(200)
 
-        resp.should eq(Response::PutObjectOutput.new("etag"))
+        resp.should eq(Response::PutObjectOutput.new("etag", status, "OK"))
       end
 
       it "passes additional headers, when provided" do
@@ -357,11 +364,13 @@ module Awscr::S3
             "\"fba9dede5f27731c9771645a39863329\"", TEST_TIME_2),
         ]
 
+        status = HTTP::Status.new(200)
+
         objects.should eq([
           Response::ListObjectsV2.new("bucket", "", 1, 1, true, "token",
-            [expected_objects.first]),
+            [expected_objects.first], status, "OK"),
           Response::ListObjectsV2.new("bucket", "", 1, 1, false, "",
-            [expected_objects.last]),
+            [expected_objects.last], status, "OK"),
         ])
       end
 
@@ -402,9 +411,10 @@ module Awscr::S3
         ]
 
         client = Client.new("us-east-1", "key", "secret")
+        status = HTTP::Status.new(200)
 
         client.list_objects("blah").each do |output|
-          output.should eq(Response::ListObjectsV2.new("blah", "", 205, 1000, false, "", expected_objects))
+          output.should eq(Response::ListObjectsV2.new("blah", "", 205, 1000, false, "", expected_objects, status, "OK"))
         end
       end
     end
@@ -432,10 +442,13 @@ module Awscr::S3
 
         client = Client.new("us-east-1", "key", "secret")
         output = client.list_buckets
+        status = HTTP::Status.new(200)
 
         output.should eq(Response::ListAllMyBuckets.new([
           Bucket.new("quotes", Time.parse!("2006-02-03T16:45:09 +00:00", Response::ListAllMyBuckets::DATE_FORMAT)),
-        ]))
+        ],
+          status,
+          "OK"))
       end
     end
 
