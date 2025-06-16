@@ -16,7 +16,7 @@ module Awscr::S3::Response
     def initialize(
       @status : HTTP::Status,
       @status_message : String? = nil,
-      @headers : HTTP::Headers = HTTP::Headers.new
+      @headers : HTTP::Headers = HTTP::Headers.new,
     )
     end
 
