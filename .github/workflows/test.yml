@@ -54,7 +54,7 @@ jobs:
 
       - name: "[Test] Run specs"
         # NOTICE: Set order 1 until fix the problem with https://github.com/crystal-lang/crystal/issues/9065
-        run: scripts/run_batched_specs
+        run: crystal spec -v --error-trace --no-color --error-on-warnings --order 59005 --time
         env:
           LOG_LEVEL: trace
           CRYSTAL_WORKERS: 1
