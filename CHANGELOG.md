@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Added
+
+- Introduced a `Presigner` class to simplify generating presigned URLs and forms (#150, thanks @treagod)
+
 ### Removed
 
 - The deprecated HTTP initialization interface. (#144, thanks @miry)
