@@ -1,4 +1,3 @@
-require "./responses/*"
 require "./paginators/*"
 require "uri"
 

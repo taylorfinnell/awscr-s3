@@ -1,11 +1,6 @@
 module Awscr::S3::Response
-  class HeadObjectOutput
+  class HeadObjectOutput < Base
     DATE_FORMAT = "%a, %d %b %Y %H:%M:%S %Z"
-
-    # The body of the request object
-    getter status : HTTP::Status
-    getter status_message : String | Nil
-    getter headers : HTTP::Headers
 
     # Create a `GetObjectOutput` response from an
     # `HTTP::Client::Response` object
@@ -15,9 +10,6 @@ module Awscr::S3::Response
         status_message: response.status_message,
         headers: response.headers
       )
-    end
-
-    def initialize(@status, @status_message, @headers)
     end
 
     {% for f in ["Cache-Control", "Content-Disposition", "Content-Encoding", "Content-Language", "Content-Type"] %}

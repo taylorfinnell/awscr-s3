@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Added
+
+- Add `status`, `status_message` and `headers` attributes to all response objects (#151, thanks @treagod)
+
 ### Removed
 
 - The deprecated HTTP initialization interface. (#144, thanks @miry)

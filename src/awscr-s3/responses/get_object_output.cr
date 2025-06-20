@@ -1,7 +1,7 @@
 require "xml"
 
 module Awscr::S3::Response
-  class GetObjectOutput
+  class GetObjectOutput < Base
     # The body of the request object
     getter body
     # The headers returned along with the object response
@@ -10,10 +10,15 @@ module Awscr::S3::Response
     # Create a `GetObjectOutput` response from an
     # `HTTP::Client::Response` object
     def self.from_response(response)
-      new(response.body, response.headers)
+      new(response.body, response.status, response.status_message, response.headers)
     end
 
-    def initialize(@body : String, @headers : HTTP::Headers)
+    def initialize(
+      @body : String,
+      @status : HTTP::Status,
+      @status_message : String? = nil,
+      @headers : HTTP::Headers = HTTP::Headers.new,
+    )
     end
   end
 
@@ -27,10 +32,15 @@ module Awscr::S3::Response
     # Create a `GetObjectStream` response from an
     # `HTTP::Client::Response` object
     def self.from_response(response)
-      new(response.body_io, response.headers)
+      new(response.body_io, response.status, response.status_message, response.headers)
     end
 
-    def initialize(@body_io : IO, @headers : HTTP::Headers)
+    def initialize(
+      @body_io : IO,
+      @status : HTTP::Status,
+      @status_message : String? = nil,
+      @headers : HTTP::Headers = HTTP::Headers.new,
+    )
     end
   end
 end

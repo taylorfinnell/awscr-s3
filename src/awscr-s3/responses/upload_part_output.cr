@@ -1,7 +1,7 @@
 require "xml"
 
 module Awscr::S3::Response
-  class UploadPartOutput
+  struct UploadPartOutput
     # The etag of the uploaded part
     getter etag
 

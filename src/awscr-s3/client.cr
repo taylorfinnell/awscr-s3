@@ -1,3 +1,4 @@
+require "./responses/base"
 require "./responses/*"
 require "./paginators/*"
 require "./http_client_factory/*"

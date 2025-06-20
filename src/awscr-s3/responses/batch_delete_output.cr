@@ -1,6 +1,6 @@
 module Awscr::S3::Response
-  class BatchDeleteOutput
-    class DeletedObject
+  class BatchDeleteOutput < Base
+    struct DeletedObject
       # The key of the deleted object
       getter key
 
@@ -37,13 +37,17 @@ module Awscr::S3::Response
         objects << DeletedObject.new(key, code, msg)
       end
 
-      new(objects)
+      new(objects, response.status, response.status_message, response.headers)
     end
 
     @objects : Array(DeletedObject)
 
-    def initialize(objects)
-      @objects = objects
+    def initialize(
+      @objects : Array(DeletedObject),
+      @status : HTTP::Status,
+      @status_message : String? = nil,
+      @headers : HTTP::Headers = HTTP::Headers.new,
+    )
     end
 
     # Returns true if all objects were deleted, false otherwise.

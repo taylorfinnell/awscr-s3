@@ -2,7 +2,7 @@ require "xml"
 require "uri"
 
 module Awscr::S3::Response
-  class ListObjectsV2
+  class ListObjectsV2 < Base
     # :nodoc:
     DATE_FORMAT = "%FT%T"
 
@@ -28,14 +28,17 @@ module Awscr::S3::Response
         objects << Object.new(key, size, etag, last_modified)
       end
 
-      new(name, prefix, key_count.to_i? || 0, max_keys.to_i, truncated == "true", token, objects)
+      new(name, prefix, key_count.to_i? || 0, max_keys.to_i, truncated == "true", token, objects, response.status, response.status_message, response.headers)
     end
 
     # The list of obects
     getter contents
 
     def initialize(@name : String, @prefix : String, @key_count : Int32,
-                   @max_keys : Int32, @truncated : Bool, @continuation_token : String, @contents : Array(Object))
+                   @max_keys : Int32, @truncated : Bool, @continuation_token : String, @contents : Array(Object),
+                   @status : HTTP::Status,
+                   @status_message : String? = nil,
+                   @headers : HTTP::Headers = HTTP::Headers.new,)
     end
 
     # The continuation token for the subsequent response, if any

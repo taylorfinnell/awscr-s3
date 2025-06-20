@@ -6,14 +6,16 @@ module Awscr
       describe CompleteMultipartUpload do
         describe "equality" do
           it "is equal if key, location, and etag are equal" do
-            CompleteMultipartUpload.new("location", "key", "etag").should eq(
-              CompleteMultipartUpload.new("location", "key", "etag")
+            status = HTTP::Status.new(200)
+            CompleteMultipartUpload.new("location", "key", "etag", status, "OK").should eq(
+              CompleteMultipartUpload.new("location", "key", "etag", status, "OK")
             )
           end
 
           it "is not equal if key, location, or etag are diff" do
-            (CompleteMultipartUpload.new("location", "key", "etag1") ==
-              CompleteMultipartUpload.new("location", "key", "etag")).should be_false
+            status = HTTP::Status.new(200)
+            (CompleteMultipartUpload.new("location", "key", "etag1", status, "OK") ==
+              CompleteMultipartUpload.new("location", "key", "etag", status, "OK")).should be_false
           end
         end
       end
