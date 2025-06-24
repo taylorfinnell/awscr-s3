@@ -1,7 +1,7 @@
 require "xml"
 
 module Awscr::S3::Response
-  class ListAllMyBuckets
+  class ListAllMyBuckets < Base
     include Enumerable(Bucket)
 
     # :nodoc:
@@ -25,13 +25,18 @@ module Awscr::S3::Response
           owner)
       end
 
-      new(buckets)
+      new(buckets, response.status, response.status_message, response.headers)
     end
 
     # The array of buckets
     getter buckets
 
-    def initialize(@buckets : Array(Bucket))
+    def initialize(
+      @buckets : Array(Bucket),
+      @status : HTTP::Status,
+      @status_message : String? = nil,
+      @headers : HTTP::Headers = HTTP::Headers.new,
+    )
     end
 
     # Iterate over each bucket in the response
