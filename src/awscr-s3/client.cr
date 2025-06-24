@@ -36,6 +36,9 @@ module Awscr::S3
     getter endpoint : URI
     getter region : String
 
+    protected getter aws_access_key : String
+    protected getter aws_secret_key : String
+
     private getter http
 
     def initialize(
