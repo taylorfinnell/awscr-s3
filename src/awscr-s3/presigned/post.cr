@@ -12,6 +12,7 @@ module Awscr
           @aws_secret_key : String,
           @aws_session_key : String? = nil,
           @signer : Symbol = :v4,
+          @endpoint : String? = nil,
         )
           @policy = Policy.new
         end
@@ -37,7 +38,11 @@ module Awscr
         # Return the url to post to
         def url
           raise Exception.new("Invalid URL, no bucket field") unless bucket
-          "http://#{bucket}.s3.amazonaws.com"
+          if @endpoint
+            "#{@endpoint}/#{bucket}"
+          else
+            "http://#{bucket}.s3.amazonaws.com"
+          end
         end
 
         # Returns the fields, without signature fields
