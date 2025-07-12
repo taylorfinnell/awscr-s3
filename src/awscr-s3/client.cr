@@ -320,6 +320,22 @@ module Awscr::S3
       Response::HeadObjectOutput.from_response(resp)
     end
 
+    # Set the access control list (ACL) permissions for an object in a bucket
+    #
+    # ```
+    # client = Client.new("region", "key", "secret")
+    # resp = client.put_object_acl("bucket1", "obj", "private")
+    # p resp # => true
+    # ```
+    def put_object_acl(bucket, object : String, acl : String, headers : Hash(String, String) = Hash(String, String).new)
+      # Add the canned ACL to headers
+      headers["x-amz-acl"] = acl
+
+      resp = http.put("/#{bucket}/#{Util.encode(object)}?acl", "", headers)
+
+      resp.status_code == 200
+    end
+
     # List all the items in a bucket
     #
     # ```
