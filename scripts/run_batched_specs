@@ -10,7 +10,7 @@ while [ $i -lt $batch_number ]; do
   batch_files=$(echo "$spec_files" | tail -n +$(( $batch_size * $i + 1 )) | head -$batch_size)
 
   echo "Running batch $(($i + 1))..."
-  echo "$batch_files" | xargs crystal spec --no-color --error-on-warnings
+  echo "$batch_files" | xargs crystal spec --no-color --error-on-warnings --exclude-warnings=spec/awscr-s3/util_spec.cr
   i=$((i + 1))
   echo ""
 done

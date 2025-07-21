@@ -120,7 +120,7 @@ module Awscr::S3
     # ```
     def start_multipart_upload(bucket : String, object : String,
                                headers : Hash(String, String) = Hash(String, String).new)
-      resp = http.post("/#{bucket}/#{Util.encode(object)}?uploads", headers: headers)
+      resp = http.post("/#{bucket}/#{URI.encode_path(object)}?uploads", headers: headers)
 
       Response::StartMultipartUpload.from_response(resp)
     end
@@ -134,7 +134,7 @@ module Awscr::S3
     # ```
     def upload_part(bucket : String, object : String,
                     upload_id : String, part_number : Int32, part : IO | String)
-      resp = http.put("/#{bucket}/#{Util.encode(object)}?partNumber=#{part_number}&uploadId=#{upload_id}", part)
+      resp = http.put("/#{bucket}/#{URI.encode_path(object)}?partNumber=#{part_number}&uploadId=#{upload_id}", part)
 
       Response::UploadPartOutput.new(
         resp.headers["ETag"],
@@ -167,7 +167,7 @@ module Awscr::S3
         end
       end
 
-      resp = http.post("/#{bucket}/#{Util.encode(object)}?uploadId=#{upload_id}", body: body)
+      resp = http.post("/#{bucket}/#{URI.encode_path(object)}?uploadId=#{upload_id}", body: body)
       Response::CompleteMultipartUpload.from_response(resp)
     end
 
@@ -180,7 +180,7 @@ module Awscr::S3
     # p resp # => true
     # ```
     def abort_multipart_upload(bucket : String, object : String, upload_id : String)
-      resp = http.delete("/#{bucket}/#{Util.encode(object)}?uploadId=#{upload_id}")
+      resp = http.delete("/#{bucket}/#{URI.encode_path(object)}?uploadId=#{upload_id}")
 
       resp.status_code == 204
     end
@@ -208,7 +208,7 @@ module Awscr::S3
     # p resp # => true
     # ```
     def delete_object(bucket, object, headers : Hash(String, String) = Hash(String, String).new)
-      resp = http.delete("/#{bucket}/#{Util.encode(object)}", headers)
+      resp = http.delete("/#{bucket}/#{URI.encode_path(object)}", headers)
 
       resp.status_code == 204
     end
@@ -258,8 +258,8 @@ module Awscr::S3
     # ```
     def copy_object(bucket, source : String, destination : String,
                     headers : Hash(String, String) = {} of String => String)
-      headers["x-amz-copy-source"] = "/#{bucket}/#{Util.encode(source)}"
-      resp = http.put("/#{bucket}/#{Util.encode(destination)}", "", headers)
+      headers["x-amz-copy-source"] = "/#{bucket}/#{URI.encode_path(source)}"
+      resp = http.put("/#{bucket}/#{URI.encode_path(destination)}", "", headers)
       Response::CopyObjectOutput.from_response(resp)
     end
 
@@ -272,7 +272,7 @@ module Awscr::S3
     # ```
     def put_object(bucket, object : String, body : IO | String | Bytes,
                    headers : Hash(String, String) = Hash(String, String).new)
-      resp = http.put("/#{bucket}/#{Util.encode(object)}", body, headers)
+      resp = http.put("/#{bucket}/#{URI.encode_path(object)}", body, headers)
 
       Response::PutObjectOutput.from_response(resp)
     end
@@ -285,7 +285,7 @@ module Awscr::S3
     # p resp.body # => "MY DATA"
     # ```
     def get_object(bucket, object : String, headers : Hash(String, String) = Hash(String, String).new)
-      resp = http.get("/#{bucket}/#{Util.encode(object)}", headers: headers)
+      resp = http.get("/#{bucket}/#{URI.encode_path(object)}", headers: headers)
 
       Response::GetObjectOutput.from_response(resp)
     end
@@ -299,7 +299,7 @@ module Awscr::S3
     # end
     # ```
     def get_object(bucket, object : String, headers : Hash(String, String) = Hash(String, String).new, &)
-      http.get("/#{bucket}/#{Util.encode(object)}", headers: headers) do |resp|
+      http.get("/#{bucket}/#{URI.encode_path(object)}", headers: headers) do |resp|
         yield Response::GetObjectStream.from_response(resp)
       end
     end
@@ -316,7 +316,7 @@ module Awscr::S3
     # p resp.meta          # => {"my_tag" => "my_value"}
     # ```
     def head_object(bucket, object : String, headers : Hash(String, String) = Hash(String, String).new)
-      resp = http.head("/#{bucket}/#{Util.encode(object)}", headers: headers)
+      resp = http.head("/#{bucket}/#{URI.encode_path(object)}", headers: headers)
       Response::HeadObjectOutput.from_response(resp)
     end
 
