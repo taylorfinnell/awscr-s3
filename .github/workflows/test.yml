@@ -17,7 +17,8 @@ jobs:
           - 1.13.3
           - 1.14.1
           - 1.15.1
-          - 1.16.2
+          - 1.16.3
+          - latest
         experimental: [false]
         include:
           - crystal_version: nightly
