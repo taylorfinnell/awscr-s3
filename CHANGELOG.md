@@ -14,6 +14,7 @@
 ### Changed
 
 - The `bulk_delete` method now raises `ArgumentError` instead of `S3::Exception` when the number of keys is 0 or exceeds 1000. (#145, thanks @miry)
+- Replace all usages of `Util.encode` with the standard library method `URI.encode_path`. (#153, thanks @treagod)
 
 ## [0.10.0] - 2025-04-21
 
