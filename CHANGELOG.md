@@ -4,6 +4,7 @@
 
 ### Added
 
+- Add configurable multipart threshold/part size. (#155, thanks @dup2)
 - Introduced a `Presigner` class to simplify generating presigned URLs and forms. (#150, thanks @treagod)
 - Add `status`, `status_message` and `headers` attributes to all response objects. (#151, thanks @treagod)
 
