@@ -11,6 +11,8 @@ module Awscr::S3
 
   # :nodoc:
   private class MultipartFileUploader
+    MIN_PART_SIZE = (5 * 1024 * 1024).to_i64 # 5MB
+
     getter client
 
     @upload_id : String?
@@ -18,7 +20,7 @@ module Awscr::S3
     @object : String?
     @headers : Hash(String, String)?
 
-    def initialize(@client : Client, simultaneous : Int32 = 5)
+    def initialize(@client : Client, simultaneous : Int32 = 5, @minimum_part_size : Int64 = MIN_PART_SIZE)
       @pending = [] of Part
       @parts = [] of Response::UploadPartOutput
       @uploading = Channel(Nil).new(simultaneous)
@@ -59,7 +61,7 @@ module Awscr::S3
     end
 
     private def compute_default_part_size(source_size)
-      [(source_size // 10_000).ceil, 5 * 1024 * 1024].max
+      [(source_size // 10_000).ceil, @minimum_part_size].max
     end
 
     private def part_size(total_size, part_size, offset)
