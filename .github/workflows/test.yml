@@ -22,7 +22,6 @@ jobs:
       minio:
         # https://stackoverflow.com/questions/60849745/how-can-i-run-a-command-in-github-action-service-containers
         image: public.ecr.aws/bitnami/minio:latest
-        # image: minio/minio:latest-cicd
         env:
           MINIO_ROOT_USER: admin
           MINIO_ROOT_PASSWORD: password
