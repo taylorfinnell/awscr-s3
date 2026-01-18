@@ -13,13 +13,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        crystal_version:
-          - 1.13.3
-          - 1.14.1
-          - 1.15.1
-          - 1.16.3
-          - 1.17.1
-          - latest
+        crystal_version: ${{ github.event_name == 'schedule' && fromJSON('["latest"]') || fromJSON('["1.15.1", "1.16.3", "1.17.1", "1.18.2", "latest"]') }}
         experimental: [false]
         include:
           - crystal_version: nightly
@@ -40,6 +34,7 @@ jobs:
           --health-timeout=5s
           --health-retries=5
           --name minio-server
+
     name: Crystal ${{ matrix.crystal_version }}
     continue-on-error: ${{ matrix.experimental }}
     steps:
@@ -56,7 +51,7 @@ jobs:
 
       - name: "[Test] Run specs"
         # NOTICE: Set order 1 until fix the problem with https://github.com/crystal-lang/crystal/issues/9065
-        run: scripts/run_batched_specs
+        run: crystal spec || scripts/run_batched_specs
         env:
           LOG_LEVEL: trace
           CRYSTAL_WORKERS: 1
@@ -66,7 +61,7 @@ jobs:
 
       - name: "[Test] Smoke tests"
         env:
-          LOG_LEVEL: TRACE
+          LOG_LEVEL: trace
         run: |
           for example in examples/*.cr; do
             echo " > Processing $example..."
