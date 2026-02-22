@@ -374,6 +374,64 @@ module Awscr::S3
         ])
       end
 
+      it "encodes continuation tokens containing slashes" do
+        resp = <<-RESP
+        <?xml version="1.0" encoding="UTF-8"?>
+        <ListBucketResult xmlns="https://s3.amazonaws.com/doc/2006-03-01/">
+          <Name>bucket</Name>
+          <Prefix/>
+          <KeyCount>1</KeyCount>
+          <MaxKeys>1</MaxKeys>
+          <IsTruncated>true</IsTruncated>
+          <NextContinuationToken>metrics/2023_10/abc_bounces</NextContinuationToken>
+          <Contents>
+              <Key>my-image.jpg</Key>
+              <LastModified>2009-09-11T17:50:30.000Z</LastModified>
+              <ETag>"fba9dede5f27731c9771645a39863328"</ETag>
+              <Size>434234</Size>
+              <StorageClass>STANDARD</StorageClass>
+          </Contents>
+        </ListBucketResult>
+        RESP
+
+        resp2 = <<-RESP
+        <?xml version="1.0" encoding="UTF-8"?>
+        <ListBucketResult xmlns="https://s3.amazonaws.com/doc/2006-03-01/">
+          <Name>bucket</Name>
+          <Prefix/>
+          <KeyCount>1</KeyCount>
+          <MaxKeys>1</MaxKeys>
+          <IsTruncated>false</IsTruncated>
+          <Contents>
+              <Key>key2</Key>
+              <LastModified>2010-10-12T17:50:30.000Z</LastModified>
+              <ETag>"fba9dede5f27731c9771645a39863329"</ETag>
+              <Size>1337</Size>
+              <StorageClass>STANDARD</StorageClass>
+          </Contents>
+        </ListBucketResult>
+        RESP
+
+        # The continuation token must be percent-encoded in the URL:
+        # slashes must be %2F to match the V4 signer's canonical form
+        WebMock.stub(:get, "https://s3.amazonaws.com/bucket?list-type=2&max-keys=1&continuation-token=metrics%2F2023_10%2Fabc_bounces")
+          .to_return(body: resp2)
+
+        WebMock.stub(:get, "https://s3.amazonaws.com/bucket?list-type=2&max-keys=1")
+          .to_return(body: resp)
+
+        client = Client.new("us-east-1", "key", "secret")
+
+        objects = [] of Response::ListObjectsV2
+        client.list_objects("bucket", max_keys: 1).each do |output|
+          objects << output
+        end
+
+        objects.size.should eq(2)
+        objects.first.contents.first.key.should eq("my-image.jpg")
+        objects.last.contents.first.key.should eq("key2")
+      end
+
       it "supports basic case" do
         resp = <<-RESP
         <?xml version="1.0" encoding="UTF-8"?>
