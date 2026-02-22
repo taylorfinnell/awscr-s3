@@ -15,6 +15,7 @@
 ### Fixed
 
 - Close HTTP connections in `DefaultHttpClientFactory#release` to prevent CLOSE_WAIT socket leaks in long-running processes. (#160, thanks @usiegj00)
+- Fix `SignatureDoesNotMatch` on paginated `ListObjectsV2` requests by using `URI.encode_www_form` for query string values to match V4 signer encoding. (#161, thanks @usiegj00)
 
 ### Changed
 
