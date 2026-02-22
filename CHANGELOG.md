@@ -12,6 +12,10 @@
 
 - The deprecated HTTP initialization interface. (#144, thanks @miry)
 
+### Fixed
+
+- Fix `SignatureDoesNotMatch` on paginated `ListObjectsV2` requests by using `URI.encode_www_form` for query string values to match V4 signer encoding. (#161, thanks @usiegj00)
+
 ### Changed
 
 - The `bulk_delete` method now raises `ArgumentError` instead of `S3::Exception` when the number of keys is 0 or exceeds 1000. (#145, thanks @miry)
