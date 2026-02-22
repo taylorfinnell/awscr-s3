@@ -12,6 +12,10 @@
 
 - The deprecated HTTP initialization interface. (#144, thanks @miry)
 
+### Fixed
+
+- Close HTTP connections in `DefaultHttpClientFactory#release` to prevent CLOSE_WAIT socket leaks in long-running processes. (#160, thanks @usiegj00)
+
 ### Changed
 
 - The `bulk_delete` method now raises `ArgumentError` instead of `S3::Exception` when the number of keys is 0 or exceeds 1000. (#145, thanks @miry)
