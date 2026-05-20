@@ -281,6 +281,36 @@ module Awscr::S3
         client = Client.new("us-east-1", "key", "secret")
         client.put_object("mybucket", "object.txt", io, {"x-amz-meta-name" => "object"})
       end
+
+      it "sends If-None-Match header when if_none_match is provided" do
+        WebMock.stub(:put, "https://s3.amazonaws.com/mybucket/object.txt")
+          .with(body: "Hello", headers: {"Content-Length" => "5", "If-None-Match" => "*"})
+          .to_return(body: "", headers: {"ETag" => "etag"})
+
+        client = Client.new("us-east-1", "key", "secret")
+        resp = client.put_object("mybucket", "object.txt", "Hello", if_none_match: "*")
+        resp.etag.should eq("etag")
+      end
+
+      it "raises PreconditionFailed when object already exists with if_none_match" do
+        error_body = <<-XML
+          <?xml version="1.0" encoding="UTF-8"?>
+          <Error>
+            <Code>PreconditionFailed</Code>
+            <Message>At least one of the pre-conditions you specified did not hold</Message>
+          </Error>
+        XML
+
+        WebMock.stub(:put, "https://s3.amazonaws.com/mybucket/object.txt")
+          .with(body: "Hello", headers: {"Content-Length" => "5", "If-None-Match" => "*"})
+          .to_return(status: 412, body: error_body)
+
+        client = Client.new("us-east-1", "key", "secret")
+
+        expect_raises(PreconditionFailed) do
+          client.put_object("mybucket", "object.txt", "Hello", if_none_match: "*")
+        end
+      end
     end
 
     describe "copy_object" do

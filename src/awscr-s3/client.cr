@@ -270,8 +270,16 @@ module Awscr::S3
     # resp = client.put_object("bucket1", "obj", "MY DATA")
     # p resp.key # => "obj"
     # ```
+    #
+    # Conditional write (only if key does not exist):
+    #
+    # ```
+    # resp = client.put_object("bucket1", "obj", "MY DATA", if_none_match: "*")
+    # ```
     def put_object(bucket, object : String, body : IO | String | Bytes,
-                   headers : Hash(String, String) = Hash(String, String).new)
+                   headers : Hash(String, String) = Hash(String, String).new,
+                   if_none_match : String? = nil)
+      headers["If-None-Match"] = if_none_match if if_none_match
       resp = http.put("/#{bucket}/#{URI.encode_path(object)}", body, headers)
 
       Response::PutObjectOutput.from_response(resp)
