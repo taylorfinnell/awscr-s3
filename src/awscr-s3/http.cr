@@ -1,4 +1,5 @@
 require "./paginators/*"
+require "openssl"
 require "uri"
 
 module Awscr::S3
@@ -84,8 +85,9 @@ module Awscr::S3
         client = @factory.acquire_client(@endpoint, @signer)
         resp = client.exec(method, path, headers, body)
         return handle_response!(resp)
-      rescue ex : IO::Error
+      rescue ex : IO::Error | OpenSSL::SSL::Error
         Awscr::S3::Log.debug exception: ex, &.emit("Could not process a request", retries: retries, method: method, path: path)
+        @factory.reset if @factory.responds_to?(:reset)
         raise ex if retries > 2
         retries += 1
       ensure
@@ -101,8 +103,9 @@ module Awscr::S3
         return client.exec(method, path, headers, body) do |resp|
           yield handle_response!(resp)
         end
-      rescue ex : IO::Error
+      rescue ex : IO::Error | OpenSSL::SSL::Error
         Awscr::S3::Log.debug exception: ex, &.emit("Could not process a request", retries: retries, method: method, path: path)
+        @factory.reset if @factory.responds_to?(:reset)
         raise ex if retries > 2
         retries += 1
       ensure

@@ -45,7 +45,8 @@ module Awscr::S3
         @signed = true
       end
       client
-    rescue IO::Error
+    rescue IO::Error | OpenSSL::SSL::Error
+      @client.try(&.close) rescue nil
       client = HTTP::Client.new(endpoint)
       @client = client
       @endpoint = endpoint
@@ -61,7 +62,18 @@ module Awscr::S3
     end
 
     def release(client : HTTP::Client?)
-      # Keep the connection alive — don't close it
+      # Keep the connection alive — don't close it.
+      # If the caller caught an IO/SSL error and is retrying,
+      # the next acquire_client will get a fresh connection
+      # because we detect the closed state below.
+    end
+
+    # Reset the persistent connection so the next acquire creates a fresh one.
+    # Called by Http#exec when a request fails with IO::Error.
+    def reset
+      @client.try(&.close) rescue nil
+      @client = nil
+      @signed = false
     end
 
     def finalize
