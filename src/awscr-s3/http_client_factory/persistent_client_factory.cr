@@ -29,20 +29,34 @@ module Awscr::S3
   class PersistentHttpClientFactory < HttpClientFactory
     @client : HTTP::Client? = nil
     @endpoint : URI? = nil
+    @signed = false
 
-    def acquire_raw_client(endpoint : URI) : HTTP::Client
-      # If the endpoint changed or client is nil, create a new one
+    # Override acquire_client to avoid re-attaching the signer on every call.
+    def acquire_client(endpoint : URI, signer : Awscr::Signer::Signers::Interface) : HTTP::Client
       if @client.nil? || @endpoint != endpoint
         @client.try(&.close) rescue nil
         @client = HTTP::Client.new(endpoint)
         @endpoint = endpoint
+        @signed = false
       end
-      @client.not_nil!
+      client = @client.not_nil!
+      unless @signed
+        attach_signer(client, signer)
+        @signed = true
+      end
+      client
     rescue IO::Error
-      # Connection went stale — reconnect
       @client = HTTP::Client.new(endpoint)
       @endpoint = endpoint
+      @signed = false
+      attach_signer(@client.not_nil!, signer)
+      @signed = true
       @client.not_nil!
+    end
+
+    def acquire_raw_client(endpoint : URI) : HTTP::Client
+      # Not used — acquire_client is overridden
+      HTTP::Client.new(endpoint)
     end
 
     def release(client : HTTP::Client?)
