@@ -33,25 +33,26 @@ module Awscr::S3
 
     # Override acquire_client to avoid re-attaching the signer on every call.
     def acquire_client(endpoint : URI, signer : Awscr::Signer::Signers::Interface) : HTTP::Client
-      if @client.nil? || @endpoint != endpoint
+      if (client = @client).nil? || @endpoint != endpoint
         @client.try(&.close) rescue nil
-        @client = HTTP::Client.new(endpoint)
+        client = HTTP::Client.new(endpoint)
+        @client = client
         @endpoint = endpoint
         @signed = false
       end
-      client = @client.not_nil!
       unless @signed
         attach_signer(client, signer)
         @signed = true
       end
       client
     rescue IO::Error
-      @client = HTTP::Client.new(endpoint)
+      client = HTTP::Client.new(endpoint)
+      @client = client
       @endpoint = endpoint
       @signed = false
-      attach_signer(@client.not_nil!, signer)
+      attach_signer(client, signer)
       @signed = true
-      @client.not_nil!
+      client
     end
 
     def acquire_raw_client(endpoint : URI) : HTTP::Client

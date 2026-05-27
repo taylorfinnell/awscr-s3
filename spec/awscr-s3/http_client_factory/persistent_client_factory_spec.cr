@@ -40,6 +40,28 @@ describe Awscr::S3::PersistentHttpClientFactory do
     response.body.should eq "ok"
     signer.called?.should be_true
   end
+
+  it "does not accumulate before_request hooks on reused connections" do
+    # Regression test: the parent class's acquire_client calls attach_signer
+    # on every invocation. If the persistent factory doesn't override this,
+    # each acquire_client adds another before_request hook. After N calls,
+    # each request triggers the signer N times — causing S3
+    # SignatureDoesNotMatch errors from duplicate Authorization headers.
+    signer = PersistentSpec::CountingSigner.new
+    factory = Awscr::S3::PersistentHttpClientFactory.new
+    endpoint = URI.parse("https://example.com")
+
+    # Acquire the same client 5 times
+    5.times { factory.acquire_client(endpoint, signer) }
+
+    # Make a request — the signer's before_request hook should fire exactly once
+    WebMock.stub(:get, "https://example.com/test").to_return(status: 200, body: "ok")
+    signer.reset_count
+    factory.acquire_client(endpoint, signer).get("/test")
+
+    # If hooks accumulated, call_count would be 6 (5 from acquire + 1 for this call)
+    signer.call_count.should eq 1
+  end
 end
 
 module PersistentSpec
@@ -50,6 +72,26 @@ module PersistentSpec
 
     def sign(request : HTTP::Request)
       @called = true
+    end
+
+    def sign(string : String)
+    end
+
+    def presign(request)
+    end
+  end
+
+  class CountingSigner
+    include Awscr::Signer::Signers::Interface
+
+    getter call_count = 0
+
+    def sign(request : HTTP::Request)
+      @call_count += 1
+    end
+
+    def reset_count
+      @call_count = 0
     end
 
     def sign(string : String)
