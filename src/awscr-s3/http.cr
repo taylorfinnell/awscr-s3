@@ -87,7 +87,7 @@ module Awscr::S3
         return handle_response!(resp)
       rescue ex : IO::Error | OpenSSL::SSL::Error
         Awscr::S3::Log.debug exception: ex, &.emit("Could not process a request", retries: retries, method: method, path: path)
-        @factory.reset if @factory.responds_to?(:reset)
+        @factory.reset
         raise ex if retries > 2
         retries += 1
       ensure
@@ -105,7 +105,7 @@ module Awscr::S3
         end
       rescue ex : IO::Error | OpenSSL::SSL::Error
         Awscr::S3::Log.debug exception: ex, &.emit("Could not process a request", retries: retries, method: method, path: path)
-        @factory.reset if @factory.responds_to?(:reset)
+        @factory.reset
         raise ex if retries > 2
         retries += 1
       ensure

@@ -27,6 +27,13 @@ module Awscr::S3
       # No-op
     end
 
+    # Resets the factory state (e.g., closes persistent connections).
+    # Called by Http#exec when a request fails, allowing the factory to
+    # reconnect on the next acquire.
+    def reset
+      # No-op for factories that create fresh clients per request
+    end
+
     protected def attach_signer(client, signer)
       if signer.is_a?(Awscr::Signer::Signers::V4)
         client.before_request { |req| signer.as(Awscr::Signer::Signers::V4).sign(req, encode_path: false) }
