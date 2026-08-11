@@ -21,7 +21,7 @@ jobs:
     services:
       minio:
         # https://stackoverflow.com/questions/60849745/how-can-i-run-a-command-in-github-action-service-containers
-        image: public.ecr.aws/bitnami/minio:latest
+        image: quay.io/minio/minio
         env:
           MINIO_ROOT_USER: admin
           MINIO_ROOT_PASSWORD: password
@@ -34,6 +34,8 @@ jobs:
           --health-timeout=5s
           --health-retries=5
           --name minio-server
+          --entrypoint /usr/bin/minio
+        command: server /data
 
     name: Crystal ${{ matrix.crystal_version }}
     continue-on-error: ${{ matrix.experimental }}
