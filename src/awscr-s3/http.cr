@@ -84,6 +84,16 @@ module Awscr::S3
         client = @factory.acquire_client(@endpoint, @signer)
         resp = client.exec(method, path, headers, body)
         return handle_response!(resp)
+      rescue ex : IO::EOFError
+        # Since Crystal 1.21.0, the HTTP client raises IO::EOFError when the connection is closed
+        # (https://github.com/crystal-lang/crystal/pull/16981). Closing our client explicitly here,
+        # forces the connection pool to create a new one.
+        client.try &.close
+
+        Awscr::S3::Log.debug exception: ex, &.emit("Could not process a request (connection closed)",
+          retries: retries, method: method, path: path)
+        raise ex if retries > 2
+        retries += 1
       rescue ex : IO::Error
         Awscr::S3::Log.debug exception: ex, &.emit("Could not process a request", retries: retries, method: method, path: path)
         raise ex if retries > 2
