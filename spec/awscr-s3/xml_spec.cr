@@ -26,7 +26,7 @@ module Awscr::S3
               <StorageClass>STANDARD</StorageClass>
           </Contents>
         </ListBucketResult>
-      RESP
+        RESP
 
       xml = XML.new(resp)
 
@@ -49,7 +49,7 @@ module Awscr::S3
             </Bucket>
           </Buckets>
         </ListAllMyBucketsResult>
-      RESP
+        RESP
 
       xml = XML.new(resp)
       xml.array("ListAllMyBucketsResult/Buckets/Bucket") do |node|
@@ -69,7 +69,7 @@ module Awscr::S3
             </Bucket>
           </Buckets>
         </ListAllMyBucketsResult>
-      RESP
+        RESP
 
       xml = XML.new(resp)
       xml.array("ListAllMyBucketsResult/Buckets/Bucket") do |node|

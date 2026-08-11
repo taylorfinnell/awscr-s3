@@ -58,7 +58,7 @@ module Awscr
         describe "[]" do
           it "returns nil if no key found" do
             fields = FieldCollection.new
-            fields["k"].should eq nil
+            fields["k"].should be_nil
           end
 
           it "can return a key value" do

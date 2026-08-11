@@ -18,7 +18,7 @@ module Awscr
         end
 
         # The expiration time of the `Policy`.
-        def expiration(time : Time | Nil)
+        def expiration(time : Time?)
           @expiration = time
         end
 

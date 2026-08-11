@@ -7,7 +7,7 @@ module Fixtures
         <Key>#{key}</Key>
         <UploadId>#{upload_id}</UploadId>
       </InitiateMultipartUploadResult>
-    RESP
+      RESP
   end
 
   def self.complete_multipart_upload_response
@@ -19,6 +19,6 @@ module Fixtures
         <Key>test</Key>
         <ETag>"7611c6414e4b58f22ff9f59a2c1767b7-2"</ETag>
       </CompleteMultipartUploadResult>
-    RESP_BODY
+      RESP_BODY
   end
 end

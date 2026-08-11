@@ -76,8 +76,8 @@ module Awscr
             end
 
             WebMock.stub(:post, "http://fake host/").to_return do |request|
-              request.headers.not_nil!["Content-Type"].nil?.should eq false
-              request.body.nil?.should eq false
+              request.headers.not_nil!["Content-Type"].nil?.should be_false
+              request.body.nil?.should be_false
 
               HTTP::Client::Response.new(200, body: "")
             end
@@ -107,8 +107,8 @@ module Awscr
             end
 
             WebMock.stub(:post, "http://fake host/").to_return do |request|
-              request.headers.not_nil!["Content-Type"].nil?.should eq false
-              request.body.nil?.should eq false
+              request.headers.not_nil!["Content-Type"].nil?.should be_false
+              request.body.nil?.should be_false
 
               HTTP::Client::Response.new(200, body: "")
             end

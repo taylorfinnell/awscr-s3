@@ -25,4 +25,4 @@ development_dependencies:
     branch: master
   ameba:
     github: crystal-ameba/ameba
-    version: 1.6.4
+    commit: f22db143abd884b4e08c2fcd91d99cf187fb56d1

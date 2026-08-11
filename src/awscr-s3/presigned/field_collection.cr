@@ -35,12 +35,12 @@ module Awscr
         # Access a key, by name, from the field collection. Returns the key if
         # found, otherwise returns nil.
         def [](key)
-          self.find { |field| clean_key(field.key) == clean_key(key) }.try(&.value)
+          find { |field| clean_key(field.key) == clean_key(key) }.try(&.value)
         end
 
         # Convert the collection to a hash in the form of key => value.
         def to_hash
-          self.reduce({} of String => String) do |hash, field|
+          reduce({} of String => String) do |hash, field|
             hash[field.key] = field.value
             hash
           end

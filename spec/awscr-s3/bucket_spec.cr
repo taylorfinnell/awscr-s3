@@ -11,19 +11,19 @@ module Awscr::S3
     it "not equal to another bucket if name and creation time differ" do
       time = Time.local
       bucket = Bucket.new("test2", time)
-      (Bucket.new("test", Time.unix(Time.local.to_unix + 123)) == bucket).should eq(false)
+      (Bucket.new("test", Time.unix(Time.local.to_unix + 123)) == bucket).should be_false
     end
 
     it "has the same name as the string provided" do
       time = Time.local
       bucket = Bucket.new("test3", time)
-      (bucket == "test3").should eq(true)
+      (bucket == "test3").should be_true
     end
 
     it "has not the same name as the string provided" do
       time = Time.local
       bucket = Bucket.new("test4", time)
-      (bucket == "abcdef").should eq(false)
+      (bucket == "abcdef").should be_false
     end
 
     it "has a name" do

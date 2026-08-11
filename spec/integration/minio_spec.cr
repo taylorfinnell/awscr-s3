@@ -21,13 +21,13 @@ describe "minio flow", tags: "integration" do
 
   it "lists buckets" do
     actual = client.list_buckets
-    actual.should_not eq(nil)
+    actual.should_not be_nil
   end
 
   it "creates a bucket" do
     name = bucket_name + "createbucket"
     actual = client.put_bucket(name)
-    actual.should_not eq(nil)
+    actual.should_not be_nil
 
     list_buckets = client.list_buckets.buckets.map(&.name)
     list_buckets.should contain(name)
@@ -36,14 +36,14 @@ describe "minio flow", tags: "integration" do
   it "deletes a bucket" do
     client.put_bucket("awcr-s3-test-deletes-bucket")
     response = client.delete_bucket("awcr-s3-test-deletes-bucket")
-    response.should eq(true)
+    response.should be_true
   end
 
   it "creates an object and reads it" do
     key = "foo"
     body = "Content of the Key"
     actual = client.put_object(bucket_name, key, body)
-    actual.etag.should_not eq(nil)
+    actual.etag.should_not be_nil
 
     response = client.head_object(bucket_name, key)
     response.meta.should be_empty
@@ -64,7 +64,7 @@ describe "minio flow", tags: "integration" do
     actual.should contain("list_obj_b")
 
     response = client.batch_delete(bucket_name, ["list_obj_a", "list_obj_b"])
-    response.success?.should eq(true)
+    response.success?.should be_true
   end
 
   it "download object with presigned url" do
@@ -75,7 +75,7 @@ describe "minio flow", tags: "integration" do
     object = "/#{UUID.random}"
 
     response = client.put_object(bucket_name, object, "Howdy")
-    response.etag.should_not eq(nil)
+    response.etag.should_not be_nil
 
     options = Awscr::S3::Presigned::Url::Options.new(
       aws_access_key: ENV.fetch("S3_KEY", "admin"),

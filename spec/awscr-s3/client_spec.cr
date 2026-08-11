@@ -58,7 +58,7 @@ module Awscr::S3
               <Message>Access Denied</Message>
             </Deleted>
           </DeleteResult>
-        XML
+          XML
 
         WebMock.stub(:post, "https://s3.amazonaws.com/bucket?delete")
           .with(body: "<?xml version=\"1.0\"?>\n<Delete><Object><Key>testkey</Key></Object></Delete>\n", headers: {"Content-MD5" => "Slga5acph5mH0Gagq5P2BQ==", "Content-Length" => "75"})
@@ -81,7 +81,7 @@ module Awscr::S3
               <Key>testkey</Key>
             </Deleted>
           </DeleteResult>
-        XML
+          XML
 
         WebMock.stub(:post, "https://s3.amazonaws.com/bucket?delete")
           .with(body: "<?xml version=\"1.0\"?>\n<Delete><Object><Key>testkey</Key></Object></Delete>\n", headers: {"Content-MD5" => "Slga5acph5mH0Gagq5P2BQ==", "Content-Length" => "75"})
@@ -286,12 +286,12 @@ module Awscr::S3
     describe "copy_object" do
       it "can copy an object from source to destination" do
         resp = <<-RESP
-        <?xml version="1.0" encoding="UTF-8"?>
-        <CopyObjectResult>
-            <LastModified>2009-10-28T22:32:00</LastModified>
-            <ETag>&quot;etag&quot;</ETag>
-        <CopyObjectResult>
-        RESP
+          <?xml version="1.0" encoding="UTF-8"?>
+          <CopyObjectResult>
+              <LastModified>2009-10-28T22:32:00</LastModified>
+              <ETag>&quot;etag&quot;</ETag>
+          <CopyObjectResult>
+          RESP
 
         WebMock.stub(:put, "https://s3.amazonaws.com/mybucket/destination?")
           .with(body: "", headers: {"x-amz-copy-source" => "/mybucket/source"})
@@ -308,41 +308,41 @@ module Awscr::S3
     describe "list_objects" do
       it "handles pagination" do
         resp = <<-RESP
-        <?xml version="1.0" encoding="UTF-8"?>
-        <ListBucketResult xmlns="https://s3.amazonaws.com/doc/2006-03-01/">
-          <Name>bucket</Name>
-          <Prefix/>
-          <KeyCount>1</KeyCount>
-          <MaxKeys>1</MaxKeys>
-          <IsTruncated>true</IsTruncated>
-          <NextContinuationToken>token</NextContinuationToken
-          <Contents>
-              <Key>my-image.jpg</Key>
-              <LastModified>2009-09-11T17:50:30.000Z</LastModified>
-              <ETag>"fba9dede5f27731c9771645a39863328"</ETag>
-              <Size>434234</Size>
-              <StorageClass>STANDARD</StorageClass>
-          </Contents>
-        </ListBucketResult>
-        RESP
+          <?xml version="1.0" encoding="UTF-8"?>
+          <ListBucketResult xmlns="https://s3.amazonaws.com/doc/2006-03-01/">
+            <Name>bucket</Name>
+            <Prefix/>
+            <KeyCount>1</KeyCount>
+            <MaxKeys>1</MaxKeys>
+            <IsTruncated>true</IsTruncated>
+            <NextContinuationToken>token</NextContinuationToken
+            <Contents>
+                <Key>my-image.jpg</Key>
+                <LastModified>2009-09-11T17:50:30.000Z</LastModified>
+                <ETag>"fba9dede5f27731c9771645a39863328"</ETag>
+                <Size>434234</Size>
+                <StorageClass>STANDARD</StorageClass>
+            </Contents>
+          </ListBucketResult>
+          RESP
 
         resp2 = <<-RESP
-        <?xml version="1.0" encoding="UTF-8"?>
-        <ListBucketResult xmlns="https://s3.amazonaws.com/doc/2006-03-01/">
-          <Name>bucket</Name>
-          <Prefix/>
-          <KeyCount>1</KeyCount>
-          <MaxKeys>1</MaxKeys>
-          <IsTruncated>false</IsTruncated>
-          <Contents>
-              <Key>key2</Key>
-              <LastModified>2010-10-12T17:50:30.000Z</LastModified>
-              <ETag>"fba9dede5f27731c9771645a39863329"</ETag>
-              <Size>1337</Size>
-              <StorageClass>STANDARD</StorageClass>
-          </Contents>
-        </ListBucketResult>
-        RESP
+          <?xml version="1.0" encoding="UTF-8"?>
+          <ListBucketResult xmlns="https://s3.amazonaws.com/doc/2006-03-01/">
+            <Name>bucket</Name>
+            <Prefix/>
+            <KeyCount>1</KeyCount>
+            <MaxKeys>1</MaxKeys>
+            <IsTruncated>false</IsTruncated>
+            <Contents>
+                <Key>key2</Key>
+                <LastModified>2010-10-12T17:50:30.000Z</LastModified>
+                <ETag>"fba9dede5f27731c9771645a39863329"</ETag>
+                <Size>1337</Size>
+                <StorageClass>STANDARD</StorageClass>
+            </Contents>
+          </ListBucketResult>
+          RESP
 
         WebMock.stub(:get, "https://s3.amazonaws.com/bucket?list-type=2&max-keys=1&continuation-token=token")
           .to_return(body: resp2)
@@ -376,41 +376,41 @@ module Awscr::S3
 
       it "encodes continuation tokens containing slashes" do
         resp = <<-RESP
-        <?xml version="1.0" encoding="UTF-8"?>
-        <ListBucketResult xmlns="https://s3.amazonaws.com/doc/2006-03-01/">
-          <Name>bucket</Name>
-          <Prefix/>
-          <KeyCount>1</KeyCount>
-          <MaxKeys>1</MaxKeys>
-          <IsTruncated>true</IsTruncated>
-          <NextContinuationToken>metrics/2023_10/abc_bounces</NextContinuationToken>
-          <Contents>
-              <Key>my-image.jpg</Key>
-              <LastModified>2009-09-11T17:50:30.000Z</LastModified>
-              <ETag>"fba9dede5f27731c9771645a39863328"</ETag>
-              <Size>434234</Size>
-              <StorageClass>STANDARD</StorageClass>
-          </Contents>
-        </ListBucketResult>
-        RESP
+          <?xml version="1.0" encoding="UTF-8"?>
+          <ListBucketResult xmlns="https://s3.amazonaws.com/doc/2006-03-01/">
+            <Name>bucket</Name>
+            <Prefix/>
+            <KeyCount>1</KeyCount>
+            <MaxKeys>1</MaxKeys>
+            <IsTruncated>true</IsTruncated>
+            <NextContinuationToken>metrics/2023_10/abc_bounces</NextContinuationToken>
+            <Contents>
+                <Key>my-image.jpg</Key>
+                <LastModified>2009-09-11T17:50:30.000Z</LastModified>
+                <ETag>"fba9dede5f27731c9771645a39863328"</ETag>
+                <Size>434234</Size>
+                <StorageClass>STANDARD</StorageClass>
+            </Contents>
+          </ListBucketResult>
+          RESP
 
         resp2 = <<-RESP
-        <?xml version="1.0" encoding="UTF-8"?>
-        <ListBucketResult xmlns="https://s3.amazonaws.com/doc/2006-03-01/">
-          <Name>bucket</Name>
-          <Prefix/>
-          <KeyCount>1</KeyCount>
-          <MaxKeys>1</MaxKeys>
-          <IsTruncated>false</IsTruncated>
-          <Contents>
-              <Key>key2</Key>
-              <LastModified>2010-10-12T17:50:30.000Z</LastModified>
-              <ETag>"fba9dede5f27731c9771645a39863329"</ETag>
-              <Size>1337</Size>
-              <StorageClass>STANDARD</StorageClass>
-          </Contents>
-        </ListBucketResult>
-        RESP
+          <?xml version="1.0" encoding="UTF-8"?>
+          <ListBucketResult xmlns="https://s3.amazonaws.com/doc/2006-03-01/">
+            <Name>bucket</Name>
+            <Prefix/>
+            <KeyCount>1</KeyCount>
+            <MaxKeys>1</MaxKeys>
+            <IsTruncated>false</IsTruncated>
+            <Contents>
+                <Key>key2</Key>
+                <LastModified>2010-10-12T17:50:30.000Z</LastModified>
+                <ETag>"fba9dede5f27731c9771645a39863329"</ETag>
+                <Size>1337</Size>
+                <StorageClass>STANDARD</StorageClass>
+            </Contents>
+          </ListBucketResult>
+          RESP
 
         # The continuation token must be percent-encoded in the URL:
         # slashes must be %2F to match the V4 signer's canonical form
@@ -434,29 +434,29 @@ module Awscr::S3
 
       it "supports basic case" do
         resp = <<-RESP
-        <?xml version="1.0" encoding="UTF-8"?>
-        <ListBucketResult xmlns="https://s3.amazonaws.com/doc/2006-03-01/">
-          <Name>blah</Name>
-          <Prefix/>
-          <KeyCount>205</KeyCount>
-          <MaxKeys>1000</MaxKeys>
-          <IsTruncated>false</IsTruncated>
-          <Contents>
-              <Key>my-image.jpg</Key>
-              <LastModified>2009-09-11T17:50:30.000Z</LastModified>
-              <ETag>&quot;fba9dede5f27731c9771645a39863328&quot;</ETag>
-              <Size>434234</Size>
-              <StorageClass>STANDARD</StorageClass>
-          </Contents>
-          <Contents>
-              <Key>key2</Key>
-              <LastModified>2010-10-12T17:50:30.000Z</LastModified>
-              <ETag>&quot;fba9dede5f27731c9771645a39863329&quot;</ETag>
-              <Size>1337</Size>
-              <StorageClass>STANDARD</StorageClass>
-          </Contents>
-        </ListBucketResult>
-        RESP
+          <?xml version="1.0" encoding="UTF-8"?>
+          <ListBucketResult xmlns="https://s3.amazonaws.com/doc/2006-03-01/">
+            <Name>blah</Name>
+            <Prefix/>
+            <KeyCount>205</KeyCount>
+            <MaxKeys>1000</MaxKeys>
+            <IsTruncated>false</IsTruncated>
+            <Contents>
+                <Key>my-image.jpg</Key>
+                <LastModified>2009-09-11T17:50:30.000Z</LastModified>
+                <ETag>&quot;fba9dede5f27731c9771645a39863328&quot;</ETag>
+                <Size>434234</Size>
+                <StorageClass>STANDARD</StorageClass>
+            </Contents>
+            <Contents>
+                <Key>key2</Key>
+                <LastModified>2010-10-12T17:50:30.000Z</LastModified>
+                <ETag>&quot;fba9dede5f27731c9771645a39863329&quot;</ETag>
+                <Size>1337</Size>
+                <StorageClass>STANDARD</StorageClass>
+            </Contents>
+          </ListBucketResult>
+          RESP
 
         WebMock.stub(:get, "https://s3.amazonaws.com/blah?list-type=2")
           .to_return(body: resp)
@@ -480,20 +480,20 @@ module Awscr::S3
     describe "list_buckets" do
       it "returns buckets on success" do
         resp = <<-RESP
-        <?xml version="1.0" encoding="UTF-8"?>
-        <ListAllMyBucketsResult xmlns="https://s3.amazonaws.com/doc/2006-03-01">
-          <Owner>
-            <ID>bcaf1ffd86f461ca5fb16fd081034f</ID>
-            <DisplayName>webfile</DisplayName>
-          </Owner>
-          <Buckets>
-            <Bucket>
-              <Name>quotes</Name>
-              <CreationDate>2006-02-03T16:45:09.000Z</CreationDate>
-            </Bucket>
-          </Buckets>
-        </ListAllMyBucketsResult>
-        RESP
+          <?xml version="1.0" encoding="UTF-8"?>
+          <ListAllMyBucketsResult xmlns="https://s3.amazonaws.com/doc/2006-03-01">
+            <Owner>
+              <ID>bcaf1ffd86f461ca5fb16fd081034f</ID>
+              <DisplayName>webfile</DisplayName>
+            </Owner>
+            <Buckets>
+              <Bucket>
+                <Name>quotes</Name>
+                <CreationDate>2006-02-03T16:45:09.000Z</CreationDate>
+              </Bucket>
+            </Buckets>
+          </ListAllMyBucketsResult>
+          RESP
 
         WebMock.stub(:get, "https://s3.amazonaws.com/?")
           .to_return(body: resp)

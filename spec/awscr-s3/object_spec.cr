@@ -11,7 +11,7 @@ module Awscr::S3
 
     it "not equal to another object key size and etag" do
       object = Object.new("test2", 123, "etag", OBJECT_TEST_TIME)
-      (Object.new("test", 123, "asd", OBJECT_TEST_TIME) == object).should eq(false)
+      (Object.new("test", 123, "asd", OBJECT_TEST_TIME) == object).should be_false
     end
 
     it "has key" do

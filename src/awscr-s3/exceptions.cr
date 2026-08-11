@@ -1,5 +1,5 @@
 module Awscr::S3
-  private EXCEPTIONS = %w(
+  private EXCEPTIONS = %w[
     AccountProblem
     AllAccessDisabled
     AmbiguousGrantByEmailAddress
@@ -78,7 +78,7 @@ module Awscr::S3
     TooManyBuckets
     UnexpectedContent
     UnresolvableGrantByEmailAddress
-    UserKeyMustBeSpecified)
+    UserKeyMustBeSpecified]
 
   # Exception raised when S3 gives us a non 200 http status code. The error
   # will have a specific message from S3.
@@ -93,8 +93,8 @@ module Awscr::S3
 
         case code
           {% for error, i in EXCEPTIONS %}
-          when {{error}}
-            {{error.id}}.new(message)
+          when {{ error }}
+            {{ error.id }}.new(message)
           {% end %}
         else
           new("#{code}: #{message}")
@@ -105,7 +105,7 @@ module Awscr::S3
 
   {% for error in EXCEPTIONS %}
     # :nodoc:
-    class {{error.id}} < Exception
+    class {{ error.id }} < Exception
     end
   {% end %}
 end

@@ -11,7 +11,7 @@ module Awscr::S3
       <Resource>/mybucket/myfoto.jpg</Resource>
       <RequestId>4442587FB7D0A2F9</RequestId>
     </Error>
-  BODY
+    BODY
 
   describe Http do
     describe "initialize" do

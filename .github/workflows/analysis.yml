@@ -19,7 +19,7 @@ jobs:
         run: shards install
 
       - name: "[Analysis] Run static analysis"
-        run: ./bin/ameba
+        run: crystal run lib/ameba/bin/ameba.cr
 
       - name: "[Analysis]  Check formatting"
         run: crystal tool format --check
