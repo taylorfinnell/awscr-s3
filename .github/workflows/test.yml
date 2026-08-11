@@ -13,7 +13,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        crystal_version: ${{ github.event_name == 'schedule' && fromJSON('["latest"]') || fromJSON('["1.15.1", "1.16.3", "1.17.1", "1.18.2", "latest"]') }}
+        crystal_version: ${{ github.event_name == 'schedule' && fromJSON('["latest"]') || fromJSON('["1.15.1", "1.16.3", "1.17.1", "1.18.2", "1.19.2", "1.20.3", "latest"]') }}
         experimental: [false]
         include:
           - crystal_version: nightly
