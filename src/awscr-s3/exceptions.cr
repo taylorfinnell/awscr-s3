@@ -1,3 +1,5 @@
+require "http/status"
+
 module Awscr::S3
   private EXCEPTIONS = %w[
     AccountProblem
@@ -83,6 +85,14 @@ module Awscr::S3
   # Exception raised when S3 gives us a non 200 http status code. The error
   # will have a specific message from S3.
   class Exception < ::Exception
+    # The HTTP status of the response that raised this, or `nil` when it
+    # didn't come from a response (e.g. an unknown signer version).
+    getter status : HTTP::Status?
+
+    def initialize(message : String? = nil, @status : HTTP::Status? = nil)
+      super(message)
+    end
+
     # Creates a `S3::Exception` from an `HTTP::Client::Response`
     def self.from_response(response)
       {% begin %}
@@ -94,10 +104,10 @@ module Awscr::S3
         case code
           {% for error, i in EXCEPTIONS %}
           when {{ error }}
-            {{ error.id }}.new(message)
+            {{ error.id }}.new(message, response.status)
           {% end %}
         else
-          new("#{code}: #{message}")
+          new("#{code}: #{message}", response.status)
         end
       {% end %}
     end
