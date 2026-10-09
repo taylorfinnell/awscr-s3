@@ -90,6 +90,7 @@ jobs:
       #   env:
       #     LOG_LEVEL: trace
       #   run: |
+      #     lstk aws s3api create-bucket --bucket examplebucket
       #     for example in examples/*.cr; do
       #       echo " > Processing $example..."
       #       crystal run --debug $example
