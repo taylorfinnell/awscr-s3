@@ -13,25 +13,43 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        crystal_version: ${{ github.event_name == 'schedule' && fromJSON('["latest"]') || fromJSON('["1.15.1", "1.16.3", "1.17.1", "1.18.2", "1.19.2", "1.20.3", "latest"]') }}
+        #crystal_version: ${{ github.event_name == 'schedule' && fromJSON('["latest"]') || fromJSON('["1.15.1", "1.16.3", "1.17.1", "1.18.2", "1.19.2", "1.20.3", "latest"]') }}
+        crystal_version: ${{ github.event_name == 'schedule' && fromJSON('["latest"]') || fromJSON('["latest"]') }}
         experimental: [false]
         include:
           - crystal_version: nightly
             experimental: true
 
-    services:
-      s3:
-        # https://stackoverflow.com/questions/60849745/how-can-i-run-a-command-in-github-action-service-containers
-        image: cgr.dev/chainguard/minio
-        env:
-          MINIO_ROOT_USER: admin
-          MINIO_ROOT_PASSWORD: password
-        ports:
-          - 9000:9000
-        options: >-
-          --name minio-server
-          --entrypoint /usr/bin/minio
-        command: server /data
+    # services:
+    #   s3:
+    #     # https://stackoverflow.com/questions/60849745/how-can-i-run-a-command-in-github-action-service-containers
+    #     image: cgr.dev/chainguard/minio
+    #     env:
+    #       MINIO_ROOT_USER: admin
+    #       MINIO_ROOT_PASSWORD: password
+    #     ports:
+    #       - 9000:9000
+    #     options: >-
+    #       --name minio-server
+    #       --entrypoint /usr/bin/minio
+    #     command: server /data
+    #   minio:
+    #     # https://stackoverflow.com/questions/60849745/how-can-i-run-a-command-in-github-action-service-containers
+    #     image: cgr.dev/chainguard/minio
+    #     env:
+    #       MINIO_ROOT_USER: admin
+    #       MINIO_ROOT_PASSWORD: password
+    #     ports:
+    #       - 9000:9000
+    #     # https://github.com/orgs/community/discussions/26688
+    #     options: >-
+    #       --health-cmd "curl -s http://localhost:9000/minio/health/live"
+    #       --health-interval=10s
+    #       --health-timeout=5s
+    #       --health-retries=5
+    #       --name minio-server
+    #       --entrypoint /usr/bin/minio
+    #     command: server /data
 
     name: Crystal ${{ matrix.crystal_version }}
     continue-on-error: ${{ matrix.experimental }}
@@ -47,6 +65,17 @@ jobs:
       - name: "[Setup] Install dependencies"
         run: shards install
 
+      - name: Install lstk
+        run: npm install -g @localstack/lstk
+
+      - name: Configure the AWS profile
+        run: lstk setup aws
+
+      - name: Start LocalStack
+        run: lstk start
+        env:
+          LOCALSTACK_AUTH_TOKEN: ${{ secrets.LOCALSTACK_AUTH_TOKEN }}
+
       - name: "[Test] Run specs"
         # NOTICE: Set order 1 until fix the problem with https://github.com/crystal-lang/crystal/issues/9065
         run: crystal spec || scripts/run_batched_specs
@@ -56,3 +85,13 @@ jobs:
 
       - name: "[Test] Compile files with release flag"
         run: crystal build --release --stats --progress src/awscr-s3.cr
+
+      # - name: "[Test] Smoke tests"
+      #   env:
+      #     LOG_LEVEL: trace
+      #   run: |
+      #     lstk aws s3api create-bucket --bucket examplebucket
+      #     for example in examples/*.cr; do
+      #       echo " > Processing $example..."
+      #       crystal run --debug $example
+      #     done

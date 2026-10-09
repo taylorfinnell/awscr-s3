@@ -13,15 +13,18 @@ HOST    = "#{BUCKET}.#{SERVICE}.amazonaws.com"
 object = "/#{UUID.random}"
 
 options = Awscr::S3::Presigned::Url::Options.new(
+  aws_access_key: KEY,
+  aws_secret_key: SECRET,
   region: REGION,
   object: object,
   bucket: BUCKET,
-  aws_access_key: KEY,
-  aws_secret_key: SECRET,
+  endpoint: ENV.fetch("AWS_ENDPOINT_URL", "http://localhost:4566"),
+  force_path_style: true,
   additional_options: {
     "x-amz-acl"    => "public-read",
     "Content-Type" => "image/png",
-  })
+  }
+)
 
 url = Awscr::S3::Presigned::Url.new(options)
 puts "url: #{url.for(:get)}"
