@@ -2,7 +2,7 @@
 
 services:
   minio:
-    image: quay.io/minio/minio
+    image: cgr.dev/chainguard/minio
     ports:
       - 9000:9000
       - 9001:9001
