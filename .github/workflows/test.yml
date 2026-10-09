@@ -65,18 +65,6 @@ jobs:
       - name: "[Setup] Install dependencies"
         run: shards install
 
-      - name: "[Test] Run specs"
-        # NOTICE: Set order 1 until fix the problem with https://github.com/crystal-lang/crystal/issues/9065
-        run: crystal spec || scripts/run_batched_specs
-        env:
-          LOG_LEVEL: trace
-          CRYSTAL_WORKERS: 1
-
-      - name: "[Test] Compile files with release flag"
-        run: crystal build --release --stats --progress src/awscr-s3.cr
-<<<<<<< HEAD
-=======
-
       - name: Install lstk
         run: npm install -g @localstack/lstk
 
@@ -88,12 +76,21 @@ jobs:
         env:
           LOCALSTACK_AUTH_TOKEN: ${{ secrets.LOCALSTACK_AUTH_TOKEN }}
 
-      - name: "[Test] Smoke tests"
+      - name: "[Test] Run specs"
+        # NOTICE: Set order 1 until fix the problem with https://github.com/crystal-lang/crystal/issues/9065
+        run: crystal spec || scripts/run_batched_specs
         env:
           LOG_LEVEL: trace
-        run: |
-          for example in examples/*.cr; do
-            echo " > Processing $example..."
-            crystal run --debug $example
-          done
->>>>>>> f278ad5 (Initialize localstack)
+          CRYSTAL_WORKERS: 1
+
+      - name: "[Test] Compile files with release flag"
+        run: crystal build --release --stats --progress src/awscr-s3.cr
+
+      # - name: "[Test] Smoke tests"
+      #   env:
+      #     LOG_LEVEL: trace
+      #   run: |
+      #     for example in examples/*.cr; do
+      #       echo " > Processing $example..."
+      #       crystal run --debug $example
+      #     done
