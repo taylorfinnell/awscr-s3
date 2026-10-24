@@ -21,17 +21,12 @@ jobs:
 
     services:
       s3:
-        # https://stackoverflow.com/questions/60849745/how-can-i-run-a-command-in-github-action-service-containers
-        image: cgr.dev/chainguard/minio
-        env:
-          MINIO_ROOT_USER: admin
-          MINIO_ROOT_PASSWORD: password
+        image: docker.io/rustfs/rustfs
         ports:
           - 9000:9000
-        options: >-
-          --name minio-server
-          --entrypoint /usr/bin/minio
-        command: server /data
+        env:
+          RUSTFS_ACCESS_KEY: admin
+          RUSTFS_SECRET_KEY: password
 
     name: Crystal ${{ matrix.crystal_version }}
     continue-on-error: ${{ matrix.experimental }}

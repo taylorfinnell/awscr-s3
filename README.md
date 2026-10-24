@@ -296,7 +296,7 @@ To develop and run tests, use the following commands:
 To run all types of tests (unit and integration) by default, use:
 
 ```shell
-$ crystal spec
+crystal spec
 ```
 
 ### Unit Tests
@@ -305,22 +305,21 @@ To run **only** the unit tests and exclude integration tests,
 use the `--tag` filter to exclude the integration tests:
 
 ```shell
-$ crystal spec --tag '~integration'
+crystal spec --tag '~integration'
 ```
 
 ### Integration Tests
 
-Integration tests test `awscr-s3` against local S3 implementations, such as MinIO.
-Before running the integration tests, ensure that the necessary dependencies (like the MinIO server) are running.
+Integration tests test `awscr-s3` against local S3 implementations, such as RustFS or SeaweedFS.
 
-1. Start the MinIO server and any required services using Docker Compose:
+1. Start the RustFS server and any required services using Container Solution Compose:
 
    ```shell
-   $ docker compose -f spec/integration/compose.yml up -d
+   docker compose -f spec/integration/compose.yml up -d
    ```
 
 2. Once the dependencies are up, run the integration tests:
 
    ```shell
-   $ crystal spec --tag 'integration'
+   crystal spec --tag 'integration'
    ```

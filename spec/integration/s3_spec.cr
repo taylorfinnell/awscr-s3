@@ -1,12 +1,12 @@
 require "../spec_helper"
 require "http/client"
 
-describe "minio flow", tags: "integration" do
+describe "seaweedfs flow", tags: "integration" do
   client = Awscr::S3::Client.new(
     region: "unused",
     aws_access_key: ENV.fetch("S3_KEY", "admin"),
     aws_secret_key: ENV.fetch("S3_SECRET", "password"),
-    endpoint: ENV.fetch("S3_ENDPOINT", "http://127.0.0.1:9000")
+    endpoint: ENV.fetch("S3_ENDPOINT", S3_ENDPOINT)
   )
   bucket_name = "awscr-s3-test-#{UUID.random}"
 
@@ -21,13 +21,13 @@ describe "minio flow", tags: "integration" do
 
   it "lists buckets" do
     actual = client.list_buckets
-    actual.should_not be_nil
+    actual.buckets.should_not be_empty
   end
 
   it "creates a bucket" do
-    name = bucket_name + "createbucket"
+    name = bucket_name + "-createbucket"
     actual = client.put_bucket(name)
-    actual.should_not be_nil
+    actual.should be_true
 
     list_buckets = client.list_buckets.buckets.map(&.name)
     list_buckets.should contain(name)
@@ -81,14 +81,14 @@ describe "minio flow", tags: "integration" do
       aws_access_key: ENV.fetch("S3_KEY", "admin"),
       aws_secret_key: ENV.fetch("S3_SECRET", "password"),
       region: "unused",
-      endpoint: ENV.fetch("S3_ENDPOINT", "http://127.0.0.1:9000"),
+      endpoint: ENV.fetch("S3_ENDPOINT", S3_ENDPOINT),
       bucket: bucket_name,
       force_path_style: true,
       object: object
     )
 
     url = Awscr::S3::Presigned::Url.new(options).for(:get)
-    url.should contain("http://127.0.0.1:9000/#{bucket_name}#{object}")
+    url.should contain("/#{bucket_name}#{object}")
 
     HTTP::Client.get(url) do |resp|
       resp.status_code.should eq(200)

@@ -79,7 +79,7 @@ module Awscr::S3
     #
     # ```
     # client = Client.new("region", "key", "secret")
-    # resp = client.create_bucket("test")
+    # resp = client.put_bucket("test")
     # p resp # => true
     # ```
     def put_bucket(bucket, region : String? = nil, headers : Hash(String, String) = Hash(String, String).new)

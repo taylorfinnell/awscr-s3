@@ -1,12 +1,10 @@
 # yaml-language-server: $schema=https://raw.githubusercontent.com/compose-spec/compose-spec/master/schema/compose-spec.json
 
 services:
-  minio:
-    image: cgr.dev/chainguard/minio
+  rustfs:
+    image: docker.io/rustfs/rustfs
     ports:
       - 9000:9000
-      - 9001:9001
     environment:
-      - MINIO_ROOT_USER=admin
-      - MINIO_ROOT_PASSWORD=password
-    command: server /data --console-address ":9001"
+      RUSTFS_ACCESS_KEY: admin
+      RUSTFS_SECRET_KEY: password

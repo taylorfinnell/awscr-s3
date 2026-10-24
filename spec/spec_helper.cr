@@ -17,5 +17,9 @@ Spec.after_each do
   Timecop.return
 end
 
+S3_HOST         = "127.0.0.1:9000"
+S3_ENDPOINT     = "http://#{S3_HOST}"
+S3_ENDPOINT_URL = URI.parse(S3_ENDPOINT)
+
 require "../src/awscr-s3"
 require "./support/**"

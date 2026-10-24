@@ -15,7 +15,7 @@ module Awscr::S3
       it "accepts single arguments" do
         Presigner.new(
           region: "unused",
-          endpoint: URI.parse("http://127.0.0.1:9000"),
+          endpoint: S3_ENDPOINT_URL,
           aws_access_key: "AKIAIOSFODNN7EXAMPLE",
           aws_secret_key: "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY",
         )
@@ -256,7 +256,7 @@ module Awscr::S3
           Timecop.freeze(Time.utc(2013, 5, 24)) do
             client = Client.new(
               region: "unused",
-              endpoint: "http://127.0.0.1:9000",
+              endpoint: "http://127.0.0.1:8333",
               aws_access_key: "AKIAIOSFODNN7EXAMPLE",
               aws_secret_key: "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY",
             )
@@ -265,7 +265,7 @@ module Awscr::S3
             presigned_url = presigner.presigned_url("examplebucket", "/test.txt", force_path_style: true)
 
             presigned_url
-              .should eq("http://127.0.0.1:9000/examplebucket/test.txt?X-Amz-Expires=86400&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAIOSFODNN7EXAMPLE%2F20130524%2Funused%2Fs3%2Faws4_request&X-Amz-Date=20130524T000000Z&X-Amz-SignedHeaders=host&X-Amz-Signature=c4a84832797f4186a789b297af55d2c014cd687933995d72247ed339496d878f")
+              .should eq("http://127.0.0.1:8333/examplebucket/test.txt?X-Amz-Expires=86400&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAIOSFODNN7EXAMPLE%2F20130524%2Funused%2Fs3%2Faws4_request&X-Amz-Date=20130524T000000Z&X-Amz-SignedHeaders=host&X-Amz-Signature=6bd4e73f441c0f5f1ee28e5e95b06de5fb331149bc5c8bad1f74307053dd8687")
           end
         end
       end
