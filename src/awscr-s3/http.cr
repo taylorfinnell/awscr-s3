@@ -127,7 +127,7 @@ module Awscr::S3
       if response.body_io? || !response.body?.try(&.empty?)
         raise S3::Exception.from_response(response)
       else
-        raise S3::Exception.new("server error: #{response.status_code}")
+        raise S3::Exception.new("server error: #{response.status_code}", response.status)
       end
     end
   end

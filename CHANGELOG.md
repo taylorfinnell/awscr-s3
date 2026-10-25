@@ -7,6 +7,7 @@
 - Add configurable multipart threshold/part size. (#155, thanks @dup2)
 - Introduced a `Presigner` class to simplify generating presigned URLs and forms. (#150, thanks @treagod)
 - Add `status`, `status_message` and `headers` attributes to all response objects. (#151, thanks @treagod)
+- Add `status` to `S3::Exception` and its subclasses, so callers can tell a missing object (404) from other errors, including on responses without a body such as `HEAD`. (#113)
 
 ### Removed
 
