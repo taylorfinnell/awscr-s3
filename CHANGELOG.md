@@ -2,11 +2,14 @@
 
 ## [Unreleased]
 
+## [0.11.0] - 2026-10-25
+
 ### Added
 
 - Add configurable multipart threshold/part size. (#155, thanks @dup2)
 - Introduced a `Presigner` class to simplify generating presigned URLs and forms. (#150, thanks @treagod)
 - Add `status`, `status_message` and `headers` attributes to all response objects. (#151, thanks @treagod)
+- Handle `IO::EOFError` when connections are closed (#164, thanks @philipp-classen)
 
 ### Removed
 
@@ -77,7 +80,8 @@
 
 - Adds `Awscr::S3::Client#copy_object(bucket, source, destination, headers)`. (#100, thanks @caspiano)
 
-[Unreleased]: https://github.com/taylorfinnell/awscr-s3/compare/v0.10.0...HEAD
+[Unreleased]: https://github.com/taylorfinnell/awscr-s3/compare/v0.11.0...HEAD
+[0.11.0]: https://github.com/taylorfinnell/awscr-s3/compare/v0.10.0...v0.11.0
 [0.10.0]: https://github.com/taylorfinnell/awscr-s3/compare/v0.9.0...v0.10.0
 [0.9.0]: https://github.com/taylorfinnell/awscr-s3/compare/v0.8.3...v0.9.0
 [0.8.3]: https://github.com/taylorfinnell/awscr-s3/compare/v0.8.2...v0.8.3
