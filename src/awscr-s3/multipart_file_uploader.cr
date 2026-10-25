@@ -1,16 +1,6 @@
 module Awscr::S3
   # :nodoc:
-  private class Part
-    getter offset
-    getter size
-    getter number
-
-    def initialize(@offset : Int64, @size : Int32, @number : Int32)
-    end
-  end
-
-  # :nodoc:
-  private class MultipartFileUploader
+  class MultipartFileUploader
     MIN_PART_SIZE = (5 * 1024 * 1024).to_i64 # 5MB
 
     getter client
@@ -19,12 +9,21 @@ module Awscr::S3
     @bucket : String?
     @object : String?
     @headers : Hash(String, String)?
+    @error : ::Exception?
+    @mutex : Mutex
+    @completed : Channel(Nil)
+    @retries : Int32?
 
-    def initialize(@client : Client, simultaneous : Int32 = 5, @minimum_part_size : Int64 = MIN_PART_SIZE)
-      @pending = [] of Part
+    def initialize(
+      @client : Client,
+      @simultaneous : Int32 = 5,
+      @minimum_part_size : Int64 = MIN_PART_SIZE,
+      @retries : Int32? = nil,
+    )
       @parts = [] of Response::UploadPartOutput
-      @uploading = Channel(Nil).new(simultaneous)
       @completed = Channel(Nil).new
+      @mutex = Mutex.new
+      @error = nil
     end
 
     # Uploads an *object* to a *bucket*, in multiple parts
@@ -32,74 +31,85 @@ module Awscr::S3
       @bucket = bucket
       @object = object
       @headers = headers
+      @parts.clear
+      @error = nil
       @upload_id = start_upload
 
-      build_pending_parts(io)
-      upload_pending(io)
+      part_size = compute_part_size(io)
+      upload_stream(io, part_size)
       complete_upload
     end
 
-    private def build_pending_parts(io)
-      offset = 0_i64
-      size = io.size
-      default_part_size = compute_default_part_size(io.size)
-      number = 1
-
-      loop do
-        @pending << Part.new(
-          offset: offset,
-          size: part_size(size, default_part_size, offset).to_i32,
-          number: number
-        )
-
-        offset += default_part_size
-
-        number += 1
-
-        break if offset >= size
-      end
-    end
-
-    private def compute_default_part_size(source_size)
-      [(source_size // 10_000).ceil, @minimum_part_size].max
-    end
-
-    private def part_size(total_size, part_size, offset)
-      if offset + part_size > total_size
-        total_size - offset
-      else
-        part_size
-      end
-    end
-
-    private def upload_pending(io)
-      spawn do
-        @pending.each do |part|
-          @uploading.send(nil)
-          read_part(part, io)
+    private def compute_part_size(io) : Int64
+      if io.responds_to?(:size)
+        begin
+          [(io.size.to_i64 // 10_000).ceil, @minimum_part_size].max
+        rescue
+          @minimum_part_size
         end
+      else
+        @minimum_part_size
       end
-      @pending.size.times { @completed.receive }
     end
 
-    private def read_part(part, io)
-      bytes = Bytes.new(part.size)
-      io.skip(part.offset)
-      io.read(bytes)
-      io.rewind
-      spawn upload_part(bytes, part)
+    private def upload_stream(io, part_size)
+      buffer_pool = Channel(Bytes).new(@simultaneous)
+      @simultaneous.times { buffer_pool.send(Bytes.new(part_size)) }
+
+      in_flight = 0
+      part_number = 1
+
+      while @error.nil?
+        buffer = buffer_pool.receive
+        bytes_read = 0
+        while bytes_read < part_size
+          read = io.read(buffer[bytes_read..-1])
+          break if read == 0
+          bytes_read += read
+        end
+
+        if bytes_read == 0 && part_number > 1
+          buffer_pool.send(buffer)
+          break
+        end
+
+        chunk = buffer[0, bytes_read]
+        current_part = part_number
+        part_number += 1
+        in_flight += 1
+
+        spawn upload_single_part(buffer_pool, buffer, chunk, current_part)
+
+        break if bytes_read < part_size
+      end
+
+      in_flight.times { @completed.receive }
+
+      if err = @error
+        begin
+          client.abort_multipart_upload(bucket, object, upload_id)
+        rescue
+        end
+        raise err
+      end
     end
 
-    private def upload_part(bytes, part)
-      @parts << client.upload_part(
+    private def upload_single_part(buffer_pool, buffer, chunk, current_part)
+      part_io = IO::Memory.new(chunk, writable: false)
+      resp = client.upload_part(
         bucket,
         object,
         upload_id,
-        part.number,
-        IO::Memory.new(bytes)
+        current_part,
+        part_io,
+        headers: {"X-Amz-Content-Sha256" => "UNSIGNED-PAYLOAD"},
+        retries: @retries
       )
+      @mutex.synchronize { @parts << resp }
+    rescue ex
+      @mutex.synchronize { @error ||= ex }
     ensure
-      @uploading.receive
+      buffer_pool.send(buffer)
       @completed.send(nil)
     end
 
@@ -108,12 +118,13 @@ module Awscr::S3
         bucket,
         object,
         upload_id,
-        @parts.sort_by(&.part_number)
+        @parts.sort_by(&.part_number),
+        retries: @retries
       )
     end
 
     private def start_upload
-      resp = client.start_multipart_upload(bucket, object, headers)
+      resp = client.start_multipart_upload(bucket, object, headers, retries: @retries)
       resp.upload_id
     end
 
