@@ -55,7 +55,7 @@ git tag -s "$RELEASE_VERSION" # Use changelog text as the tag message
 ### Push Changes
 
 ```shell
-$ git push origin master --follow-tags
+git push origin master --follow-tags
 ```
 
 ## Verify Release

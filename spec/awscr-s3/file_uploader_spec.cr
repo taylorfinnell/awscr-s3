@@ -123,5 +123,45 @@ module Awscr::S3
         tempfile.delete
       end
     end
+
+    describe "when the input is a non-seekable stream (like a pipe)" do
+      it "uploads small stream in one call when Content-Length is provided and below threshold" do
+        WebMock.stub(:put, "https://s3.amazonaws.com/bucket/object?")
+          .with(headers: {"Content-Length" => "100"})
+          .to_return(status: 200, body: "", headers: {"ETag" => "etag"})
+
+        client = Client.new("us-east-1", "key", "secret")
+        uploader = FileUploader.new(client)
+
+        r, w = IO.pipe
+        w.write(Bytes.new(100, 65_u8))
+        w.close
+
+        uploader.upload("bucket", "object", r, {"Content-Length" => "100"}).should be_true
+      end
+
+      it "uploads stream via multipart upload when size is unknown upfront" do
+        WebMock.stub(:post, "https://s3.amazonaws.com/bucket/object")
+          .with(query: {"uploads" => ""})
+          .to_return(status: 200, body: Fixtures.start_multipart_upload_response(upload_id: "pipe123"))
+
+        WebMock.stub(:put, "https://s3.amazonaws.com/bucket/object")
+          .with(query: {"partNumber" => "1", "uploadId" => "pipe123"})
+          .to_return(status: 200, body: "", headers: {"ETag" => "etag"})
+
+        WebMock.stub(:post, "https://s3.amazonaws.com/bucket/object?uploadId=pipe123")
+          .with(body: "<?xml version=\"1.0\"?>\n<CompleteMultipartUpload><Part><PartNumber>1</PartNumber><ETag>etag</ETag></Part></CompleteMultipartUpload>\n")
+          .to_return(status: 200, body: Fixtures.complete_multipart_upload_response)
+
+        client = Client.new("us-east-1", "key", "secret")
+        uploader = FileUploader.new(client)
+
+        r, w = IO.pipe
+        w.write("data from pipe".to_slice)
+        w.close
+
+        uploader.upload("bucket", "object", r).should be_true
+      end
+    end
   end
 end

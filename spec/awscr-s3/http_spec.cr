@@ -205,6 +205,100 @@ module Awscr::S3
         http = Http.new(SIGNER, client.endpoint)
         http.put("/document", "abcd", {"x-amz-meta-name" => "document"})
       end
+
+      it "accepts explicit Content-Length header for streaming IO without #size" do
+        WebMock.stub(:put, "https://s3.amazonaws.com/stream")
+          .with(headers: {"Content-Length" => "100"})
+          .to_return(status: 200)
+
+        client = Client.new("us-east-1", "some_access_key", "some_secret_key")
+        http = Http.new(SIGNER, client.endpoint)
+
+        r, w = IO.pipe
+        w.write(Bytes.new(100, 65_u8))
+        w.close
+
+        resp = http.put("/stream", r, {"Content-Length" => "100"})
+        resp.status_code.should eq(200)
+      end
+
+      it "sets X-Amz-Content-Sha256 to UNSIGNED-PAYLOAD for non-seekable streams" do
+        WebMock.stub(:put, "https://s3.amazonaws.com/stream-unsigned")
+          .with(headers: {"X-Amz-Content-Sha256" => "UNSIGNED-PAYLOAD", "Content-Length" => "5"})
+          .to_return(status: 200)
+
+        client = Client.new("us-east-1", "some_access_key", "some_secret_key")
+        http = Http.new(SIGNER, client.endpoint)
+
+        r, w = IO.pipe
+        w.write("hello".to_slice)
+        w.close
+
+        resp = http.put("/stream-unsigned", r, {"Content-Length" => "5"})
+        resp.status_code.should eq(200)
+      end
+    end
+
+    describe "retries" do
+      it "does not retry when retries is 0" do
+        calls = 0
+        WebMock.stub(:get, "https://s3.amazonaws.com/fail")
+          .to_return do
+            calls += 1
+            raise IO::Error.new("connection reset")
+          end
+
+        client = Client.new("us-east-1", "key", "secret")
+        http = Http.new(SIGNER, client.endpoint)
+
+        expect_raises(IO::Error, "connection reset") do
+          http.get("/fail", retries: 0)
+        end
+        calls.should eq(1)
+      end
+
+      it "rewinds rewindable body between retries" do
+        calls = 0
+        body = IO::Memory.new("test body")
+
+        WebMock.stub(:put, "https://s3.amazonaws.com/retry")
+          .to_return do
+            calls += 1
+            if calls == 1
+              raise IO::Error.new("connection reset")
+            else
+              HTTP::Client::Response.new(200)
+            end
+          end
+
+        client = Client.new("us-east-1", "key", "secret")
+        http = Http.new(SIGNER, client.endpoint)
+
+        resp = http.put("/retry", body, retries: 2)
+        resp.status_code.should eq(200)
+        calls.should eq(2)
+      end
+
+      it "raises clear error when retrying non-rewindable body" do
+        calls = 0
+        r, w = IO.pipe
+        w.write(Bytes.new(10, 65_u8))
+        w.close
+
+        WebMock.stub(:put, "https://s3.amazonaws.com/stream-retry")
+          .to_return do
+            calls += 1
+            raise IO::Error.new("connection reset")
+          end
+
+        client = Client.new("us-east-1", "key", "secret")
+        http = Http.new(SIGNER, client.endpoint)
+
+        expect_raises(S3::Exception, /Cannot retry request: body IO cannot be rewound/) do
+          http.put("/stream-retry", r, {"Content-Length" => "10"}, retries: 2)
+        end
+        calls.should eq(1)
+      end
     end
 
     describe "post" do

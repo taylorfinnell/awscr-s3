@@ -5,6 +5,8 @@ services:
     image: docker.io/rustfs/rustfs
     ports:
       - 9000:9000
+      - 9001:9001
     environment:
       RUSTFS_ACCESS_KEY: admin
       RUSTFS_SECRET_KEY: password
+      RUSTFS_CONSOLE_ENABLE: "true"
