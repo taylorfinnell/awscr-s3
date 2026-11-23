@@ -95,7 +95,14 @@ module Awscr::S3
     end
 
     private def upload_single_part(buffer_pool, buffer, chunk, current_part)
-      part_io = IO::Memory.new(chunk, writable: false)
+      # `IO::Memory`'s read-only flag was named `writeable` until Crystal 1.21,
+      # where it was renamed to `writable`.
+      part_io =
+        {% if compare_versions(Crystal::VERSION, "1.21.0") >= 0 %}
+          IO::Memory.new(chunk, writable: false)
+        {% else %}
+          IO::Memory.new(chunk, writeable: false)
+        {% end %}
       resp = client.upload_part(
         bucket,
         object,
