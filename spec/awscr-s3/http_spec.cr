@@ -129,6 +129,50 @@ module Awscr::S3
       end
     end
 
+    describe "error status" do
+      it "is set on an error with an XML body" do
+        WebMock.stub(:get, "https://s3.amazonaws.com/sup?")
+          .to_return(status: 404, body: ERROR_BODY)
+
+        client = Client.new("us-east-1", "some_access_key", "some_secret_key")
+        http = Http.new(SIGNER, client.endpoint)
+
+        error = expect_raises(S3::NoSuchKey) { http.get("/sup") }
+        error.status.should eq HTTP::Status::NOT_FOUND
+      end
+
+      it "is set on an error without a body, such as a HEAD of a missing object" do
+        WebMock.stub(:head, "https://s3.amazonaws.com/missing?")
+          .to_return(status: 404)
+
+        client = Client.new("us-east-1", "some_access_key", "some_secret_key")
+        http = Http.new(SIGNER, client.endpoint)
+
+        error = expect_raises(S3::Exception) { http.head("/missing") }
+        error.status.should eq HTTP::Status::NOT_FOUND
+      end
+
+      it "is set on a streamed GET" do
+        WebMock.stub(:get, "https://s3.amazonaws.com/sup?")
+          .to_return(status: 503, body: <<-BODY)
+            <?xml version="1.0" encoding="UTF-8"?>
+            <Error><Code>SlowDown</Code><Message>Please reduce your request rate.</Message></Error>
+            BODY
+
+        client = Client.new("us-east-1", "some_access_key", "some_secret_key")
+        http = Http.new(SIGNER, client.endpoint)
+
+        error = expect_raises(S3::SlowDown, "Please reduce your request rate.") do
+          http.get("/sup") { |_| }
+        end
+        error.status.should eq HTTP::Status::SERVICE_UNAVAILABLE
+      end
+
+      it "is nil when the error didn't come from a response" do
+        S3::Exception.new("Unknown signer version: v9").status.should be_nil
+      end
+    end
+
     describe "head" do
       it "handles aws specific errors" do
         WebMock.stub(:head, "https://s3.amazonaws.com/?")

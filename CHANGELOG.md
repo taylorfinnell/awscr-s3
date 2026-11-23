@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Added
+
+- Add `status` to `S3::Exception` and its subclasses, so callers can tell a missing object (404) from other errors, including on responses without a body such as `HEAD`. (#168, thanks @trans)
+
 ## [0.11.0] - 2026-10-25
 
 ### Added
