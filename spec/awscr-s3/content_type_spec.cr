@@ -1,5 +1,10 @@
 require "../spec_helper"
 
+# An `IO` that responds to `#path`, but has none.
+private class NilPathIO < IO::Memory
+  getter path : String?
+end
+
 module Awscr::S3
   describe ContentType do
     describe "when the io isn't a file" do
@@ -29,7 +34,7 @@ module Awscr::S3
 
     describe "when the io has nil as path" do
       it "returns the default Content-Type" do
-        io = UNIXSocket.new(fd: 1)
+        io = NilPathIO.new("document")
         ContentType.get(io).should be(ContentType::DEFAULT)
       end
     end
