@@ -13,7 +13,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        crystal_version: ${{ github.event_name == 'schedule' && fromJSON('["latest"]') || fromJSON('["1.15.1", "1.16.3", "1.17.1", "1.18.2", "1.19.2", "1.20.3", "latest"]') }}
+        crystal_version: ${{ github.event_name == 'schedule' && fromJSON('["latest"]') || fromJSON('["1.15.1", "1.16.3", "1.17.1", "1.18.2", "1.19.2", "1.20.3", "1.21.1", "latest"]') }}
         experimental: [false]
         include:
           - crystal_version: nightly
@@ -44,7 +44,7 @@ jobs:
 
       - name: "[Test] Run specs"
         # NOTICE: Set order 1 until fix the problem with https://github.com/crystal-lang/crystal/issues/9065
-        run: crystal spec || scripts/run_batched_specs
+        run: crystal spec --error-trace || scripts/run_batched_specs
         env:
           LOG_LEVEL: trace
           CRYSTAL_WORKERS: 1

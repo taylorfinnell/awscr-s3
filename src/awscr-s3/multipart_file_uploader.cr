@@ -95,7 +95,10 @@ module Awscr::S3
     end
 
     private def upload_single_part(buffer_pool, buffer, chunk, current_part)
-      part_io = IO::Memory.new(chunk, writable: false)
+      # Positional args: the parameter was renamed from `writeable` to
+      # `writable` in Crystal 1.5, so avoid the named argument for
+      # compatibility with older compilers.
+      part_io = IO::Memory.new(chunk, false)
       resp = client.upload_part(
         bucket,
         object,
