@@ -24,6 +24,9 @@ jobs:
           auto-key-retrieve
           EOF
 
+      - name: Import release signing key
+        run: gpg --batch --import release-signing-key.asc
+
       - name: Verify tag signature
         run: |
           # NOTE: Solve the problem with Github action checkout

@@ -50,6 +50,20 @@ export RELEASE_VERSION="vX.Y.Z"
 
 git commit -a -S -m "Release ${RELEASE_VERSION}"
 git tag -s "$RELEASE_VERSION" # Use changelog text as the tag message
+
+Ensure the signing key is published and verifiable before pushing:
+
+```shell
+gpg --keyserver hkps://keys.openpgp.org --send-keys <KEY_ID>
+```
+
+Confirm the key can be retrieved and the tag verifies in a clean keyring:
+
+```shell
+rm -rf /tmp/verify-gnupg && mkdir -p /tmp/verify-gnupg
+GNUPGHOME=/tmp/verify-gnupg gpg --keyserver hkps://keys.openpgp.org --recv-keys <KEY_ID>
+GNUPGHOME=/tmp/verify-gnupg git tag -v "$RELEASE_VERSION"
+```
 ```
 
 ### Push Changes

@@ -2,8 +2,11 @@
 
 ## [Unreleased]
 
+## [0.12.0] - 2026-11-27
+
 ### Added
 
+- Stream large file uploads with a low memory footprint. (#171, thanks @miry)
 - Add `status` to `S3::Exception` and its subclasses, so callers can tell a missing object (404) from other errors, including on responses without a body such as `HEAD`. (#168, thanks @trans)
 
 ## [0.11.0] - 2026-10-25
@@ -84,7 +87,8 @@
 
 - Adds `Awscr::S3::Client#copy_object(bucket, source, destination, headers)`. (#100, thanks @caspiano)
 
-[Unreleased]: https://github.com/taylorfinnell/awscr-s3/compare/v0.11.0...HEAD
+[Unreleased]: https://github.com/taylorfinnell/awscr-s3/compare/v0.12.0...HEAD
+[0.12.0]: https://github.com/taylorfinnell/awscr-s3/compare/v0.11.0...v0.12.0
 [0.11.0]: https://github.com/taylorfinnell/awscr-s3/compare/v0.10.0...v0.11.0
 [0.10.0]: https://github.com/taylorfinnell/awscr-s3/compare/v0.9.0...v0.10.0
 [0.9.0]: https://github.com/taylorfinnell/awscr-s3/compare/v0.8.3...v0.9.0
